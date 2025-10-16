@@ -3,7 +3,7 @@ import { CartContext } from '../context/CartContext';
 import CartItem from './CartItem';
 
 const Cart = () => {
-  const { cart } = useContext(CartContext);
+  const { cart, getTotalPrice } = useContext(CartContext);
 
   return (
     <div>
@@ -11,7 +11,10 @@ const Cart = () => {
       {cart.length === 0 ? (
         <p>Your cart is empty</p>
       ) : (
-        cart.map(item => <CartItem key={item.id_producto} item={item} />)
+        <>
+          {cart.map(item => <CartItem key={item.id_producto} item={item} />)}
+          <h3>Total: ${getTotalPrice()}</h3>
+        </>
       )}
     </div>
   );

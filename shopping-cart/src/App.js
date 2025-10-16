@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import Navbar from './components/Navbar';
 import ProductList from './components/ProductList';
 import Cart from './components/Cart';
 import { CartProvider } from './context/CartContext';
@@ -8,15 +9,15 @@ function App() {
   return (
     <CartProvider>
       <div className="App">
-        <h1>E-commerce</h1>
-        <div className="container">
+        <Navbar />
+        <main className="main-content">
           <div className="product-list">
             <ProductList />
           </div>
-          <div className="cart">
+          <aside className="cart">
             <Cart />
-          </div>
-        </div>
+          </aside>
+        </main>
       </div>
     </CartProvider>
   );

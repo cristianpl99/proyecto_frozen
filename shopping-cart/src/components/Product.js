@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
 import { CartContext } from '../context/CartContext';
+import './Product.css';
 
 const Product = ({ product }) => {
   const { addToCart } = useContext(CartContext);
 
   return (
-    <div>
+    <div className="product-card">
       <h3>{product.nombre}</h3>
       <p>{product.descripcion}</p>
       <p>${product.precio}</p>
