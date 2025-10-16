@@ -7,27 +7,24 @@
 .main-content {
   display: flex;
   flex: 1;
+  padding: 2rem;
+  gap: 2rem;
 }
 
 .product-list {
   flex: 3;
-  padding: 1rem;
 }
 
 .cart {
   flex: 1;
-  border-left: 1px solid #ddd;
-  padding: 1rem;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .main-content {
     flex-direction: column;
-  }
-
-  .cart {
-    border-left: none;
-    border-top: 1px solid #ddd;
   }
 }

@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #e9ecef;
   padding: 1rem 0;
 }
 
@@ -12,6 +12,7 @@
 
 .cart-item-details h4 {
   margin: 0 0 5px 0;
+  font-weight: 500;
 }
 
 .cart-item-actions {
@@ -20,20 +21,20 @@
 }
 
 .cart-item-actions button {
-  background: #ddd;
+  background: #e9ecef;
   border: none;
   cursor: pointer;
   padding: 5px 10px;
   margin: 0 5px;
+  border-radius: 4px;
 }
 
 .cart-item-actions .remove-btn {
-  background: #ff6b6b;
-  color: white;
-  border-radius: 4px;
+  background: #dc3545;
+  color: var(--white);
   transition: background-color 0.3s;
 }
 
 .cart-item-actions .remove-btn:hover {
-  background: #ff4c4c;
+  background: #c82333;
 }
