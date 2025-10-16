@@ -15,6 +15,10 @@ const renderApp = () => {
 
 test('renders navbar with title', () => {
   renderApp();
-  const titleElement = screen.getByText(/Frozen SRL/i);
+  const titleElement = screen.getByText((content, element) => {
+    return element.tagName.toLowerCase() === 'div' &&
+           element.classList.contains('navbar-title') &&
+           /Frozen Pyme/i.test(content);
+  });
   expect(titleElement).toBeInTheDocument();
 });

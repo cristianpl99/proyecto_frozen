@@ -5,11 +5,20 @@ import './ProductList.css';
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
     fetch('http://frozenback-test.up.railway.app/api/productos/productos/')
       .then(response => response.json())
-      .then(data => setProducts(data.results));
+      .then(data => {
+        setProducts(data.results);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        console.error("Error fetching products:", error);
+        setIsLoading(false);
+      });
   }, []);
 
   const filteredProducts = products.filter(product =>
@@ -28,9 +37,13 @@ const ProductList = () => {
         />
       </div>
       <div className="product-list-container">
-        {filteredProducts.map(product => (
-          <Product key={product.id_producto} product={product} />
-        ))}
+        {isLoading ? (
+          <p>Cargando productos...</p>
+        ) : (
+          filteredProducts.map(product => (
+            <Product key={product.id_producto} product={product} />
+          ))
+        )}
       </div>
     </div>
   );

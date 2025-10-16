@@ -25,7 +25,7 @@ const Navbar = () => {
           <SnowflakeIcon color="white" size={32} />
         </div>
         <div className="navbar-title">
-          Frozen SRL
+          Frozen Pyme
         </div>
         <div className="navbar-login">
           <form>

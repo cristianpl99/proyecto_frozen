@@ -6,6 +6,7 @@ import Cart from './components/Cart';
 import { CartProvider } from './context/CartContext';
 import { ToastProvider } from './context/ToastContext';
 import ToastContainer from './components/ToastContainer';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             </aside>
           </main>
           <ToastContainer />
+          <Footer />
         </div>
       </CartProvider>
     </ToastProvider>
