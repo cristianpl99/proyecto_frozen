@@ -13,6 +13,9 @@
 
 .product-list {
   flex: 3;
+  background: linear-gradient(to right, #e0f7fa, #b2ebf2);
+  padding: 2rem;
+  border-radius: 10px;
 }
 
 .cart {

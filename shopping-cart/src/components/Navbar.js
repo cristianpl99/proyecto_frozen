@@ -42,6 +42,7 @@ const Navbar = () => {
                 <span className="icon-span"><PasswordIcon /></span>
               </div>
             </div>
+            <button type="button" className="register-btn">Registrarse</button>
             <button type="submit">Login</button>
           </form>
         </div>

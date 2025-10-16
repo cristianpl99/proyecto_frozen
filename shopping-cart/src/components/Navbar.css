@@ -1,5 +1,5 @@
 .navbar {
-  background: var(--white);
+  background: linear-gradient(90deg, #0072ff, #00c6ff);
   height: 80px;
   display: flex;
   justify-content: center;
@@ -86,6 +86,16 @@
   cursor: pointer;
   align-self: flex-end;
   transition: background-color 0.3s;
+}
+
+.navbar-login .register-btn {
+  background-color: transparent;
+  border: 1px solid var(--primary-blue);
+  color: var(--primary-blue);
+}
+
+.navbar-login .register-btn:hover {
+  background-color: rgba(0, 123, 255, 0.1);
 }
 
 .navbar-login button:hover {
