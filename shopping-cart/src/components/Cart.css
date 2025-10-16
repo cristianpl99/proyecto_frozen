@@ -3,6 +3,7 @@
   align-items: center;
   gap: 10px;
   font-weight: 500;
+  color: var(--main-text-gray);
 }
 
 .cart-total {
@@ -15,13 +16,13 @@
 }
 
 .cart-svg-icon {
-  color: var(--primary-blue);
+  color: var(--primary-button-blue);
 }
 
 .pay-btn {
-  background-color: var(--accent-green);
+  background-color: var(--pay-button-green);
   border: none;
-  color: var(--white);
+  color: var(--card-background);
   padding: 10px 20px;
   text-align: center;
   text-decoration: none;
@@ -33,5 +34,5 @@
 }
 
 .pay-btn:hover {
-  background-color: #218838;
+  background-color: #1a8f3e;
 }

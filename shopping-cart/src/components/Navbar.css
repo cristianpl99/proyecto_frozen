@@ -1,5 +1,5 @@
 .navbar {
-  background: linear-gradient(90deg, #0072ff, #00c6ff);
+  background: var(--header-blue);
   height: 80px;
   display: flex;
   justify-content: center;
@@ -24,10 +24,11 @@
 .navbar-logo {
   flex: 1;
   justify-content: flex-start;
+  color: var(--card-background);
 }
 
 .navbar-title {
-  color: var(--dark-gray);
+  color: var(--card-background);
   font-weight: 700;
   font-size: 1.5rem;
   text-align: center;
@@ -54,7 +55,7 @@
 .input-group label {
   font-size: 0.8rem;
   margin-bottom: 2px;
-  color: var(--dark-gray);
+  color: var(--card-background);
 }
 
 .input-with-icon-right {
@@ -62,10 +63,10 @@
 }
 
 .input-with-icon-right input {
-  background: var(--light-gray);
-  border: 1px solid #ccc;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
-  color: var(--dark-gray);
+  color: var(--card-background);
   padding: 8px 30px 8px 12px;
 }
 
@@ -74,15 +75,16 @@
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  color: #888;
+  color: var(--card-background);
+  opacity: 0.7;
 }
 
 .navbar-login button {
   padding: 8px 12px;
   border-radius: 4px;
   border: none;
-  background-color: var(--primary-blue);
-  color: var(--white);
+  background-color: var(--primary-button-blue);
+  color: var(--card-background);
   cursor: pointer;
   align-self: flex-end;
   transition: background-color 0.3s;
@@ -90,16 +92,15 @@
 
 .navbar-login .register-btn {
   background-color: transparent;
-  border: 1px solid var(--primary-blue);
-  color: var(--primary-blue);
+  border: 1px solid var(--card-background);
 }
 
 .navbar-login .register-btn:hover {
-  background-color: rgba(0, 123, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .navbar-login button:hover {
-    background-color: #0056b3;
+    background-color: #1a3a9c;
 }
 
 @media screen and (max-width: 768px) {

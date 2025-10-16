@@ -1,9 +1,11 @@
 :root {
-  --primary-blue: #007bff;
-  --accent-green: #28a745;
-  --light-gray: #f8f9fa;
-  --dark-gray: #343a40;
-  --white: #ffffff;
+  --background-general: #F4F7FB;
+  --header-blue: #0A74DA;
+  --primary-button-blue: #1D4ED8;
+  --pay-button-green: #16A34A;
+  --main-text-gray: #1E293B;
+  --card-background: #FFFFFF;
+  --card-shadow: rgba(0,0,0,0.08);
 }
 
 body {
@@ -11,8 +13,8 @@ body {
   font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(to right, #eef2f3, #8e9eab);
-  color: var(--dark-gray);
+  background: var(--background-general);
+  color: var(--main-text-gray);
 }
 
 code {

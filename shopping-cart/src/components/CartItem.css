@@ -13,6 +13,7 @@
 .cart-item-details h4 {
   margin: 0 0 5px 0;
   font-weight: 500;
+  color: var(--main-text-gray);
 }
 
 .cart-item-actions {
@@ -27,11 +28,12 @@
   padding: 5px 10px;
   margin: 0 5px;
   border-radius: 4px;
+  color: var(--main-text-gray);
 }
 
 .cart-item-actions .remove-btn {
   background: #dc3545;
-  color: var(--white);
+  color: var(--card-background);
   transition: background-color 0.3s;
 }
 
