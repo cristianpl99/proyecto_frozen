@@ -1,0 +1,57 @@
+.product-card {
+  background: var(--card-background);
+  border-radius: 10px;
+  box-shadow: 0 4px 15px var(--card-shadow);
+  margin: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px var(--card-shadow);
+}
+
+.product-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--main-text-gray);
+}
+
+.product-card p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.product-card .price {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary-button-blue);
+  margin-bottom: 1rem;
+}
+
+.product-card button {
+  background-color: var(--primary-button-blue);
+  color: var(--card-background);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.product-card button:hover {
+  background-color: #1a3a9c;
+}
+
+.product-card button.added {
+  background-color: var(--pay-button-green);
+  cursor: not-allowed;
+}
