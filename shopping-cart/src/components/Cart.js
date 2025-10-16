@@ -1,19 +1,23 @@
 import React, { useContext } from 'react';
 import { CartContext } from '../context/CartContext';
 import CartItem from './CartItem';
+import './Cart.css';
 
 const Cart = () => {
   const { cart, getTotalPrice } = useContext(CartContext);
 
   return (
-    <div>
-      <h2>Shopping Cart</h2>
+    <div className="cart-container">
+      <h2><span role="img" aria-label="cart-icon">🛒</span> Shopping Cart</h2>
       {cart.length === 0 ? (
         <p>Your cart is empty</p>
       ) : (
         <>
           {cart.map(item => <CartItem key={item.id_producto} item={item} />)}
-          <h3>Total: ${getTotalPrice()}</h3>
+          <div className="cart-total">
+            <h3>Total: ${getTotalPrice()}</h3>
+            <button className="pay-btn">Pagar</button>
+          </div>
         </>
       )}
     </div>
