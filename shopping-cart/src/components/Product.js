@@ -10,7 +10,7 @@ const Product = ({ product }) => {
       <h3>{product.nombre}</h3>
       <p>{product.descripcion}</p>
       <p>${product.precio}</p>
-      <button onClick={() => addToCart(product)}>Add to Cart</button>
+      <button onClick={() => addToCart(product)}>Agregar al Carrito</button>
     </div>
   );
 };

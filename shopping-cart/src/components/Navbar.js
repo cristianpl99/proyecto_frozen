@@ -11,13 +11,19 @@ const Navbar = () => {
         </div>
         <div className="navbar-login">
           <form>
-            <div className="input-with-icon">
-              <span role="img" aria-label="email-icon">📧</span>
-              <input type="email" placeholder="Email" />
+            <div className="input-group">
+              <label htmlFor="email">Email</label>
+              <div className="input-with-icon-right">
+                <input id="email" type="email" />
+                <span role="img" aria-label="email-icon">📧</span>
+              </div>
             </div>
-            <div className="input-with-icon">
-              <span role="img" aria-label="password-icon">🔒</span>
-              <input type="password" placeholder="Password" />
+            <div className="input-group">
+              <label htmlFor="password">Password</label>
+              <div className="input-with-icon-right">
+                <input id="password" type="password" />
+                <span role="img" aria-label="password-icon">🔒</span>
+              </div>
             </div>
             <button type="submit">Login</button>
           </form>

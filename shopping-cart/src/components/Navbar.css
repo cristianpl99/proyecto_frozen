@@ -1,5 +1,6 @@
 .navbar {
-  background: linear-gradient(90deg, #89f7fe 0%, #66a6ff 100%);
+  background: linear-gradient(90deg, rgba(137, 247, 254, 0.8) 0%, rgba(102, 166, 255, 0.8) 100%);
+  backdrop-filter: blur(5px);
   height: 80px;
   display: flex;
   justify-content: center;
@@ -9,36 +10,75 @@
   top: 0;
   z-index: 999;
   color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .navbar-container {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   height: 80px;
-  z-index: 1;
   width: 100%;
   padding: 0 24px;
   max-width: 1100px;
 }
 
 .navbar-logo {
-  justify-self: start;
   cursor: pointer;
   display: flex;
   align-items: center;
-  margin-left: 24px;
   font-weight: bold;
-  text-decoration: none;
-}
-
-.navbar-login {
-  display: flex;
-  align-items: center;
 }
 
 .navbar-login form {
   display: flex;
   align-items: center;
+  gap: 15px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  font-size: 0.8rem;
+  margin-bottom: 2px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.input-with-icon-right {
+  position: relative;
+}
+
+.input-with-icon-right input {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  color: white;
+  padding: 8px 30px 8px 12px;
+}
+
+.input-with-icon-right input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.input-with-icon-right span {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.7;
+}
+
+.navbar-login button {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.3);
+  color: white;
+  cursor: pointer;
+  align-self: flex-end;
 }
 
 @media screen and (max-width: 768px) {
@@ -51,50 +91,6 @@
   .navbar-login form {
     flex-direction: column;
     width: 100%;
+    gap: 10px;
   }
-
-  .navbar-login input {
-    margin: 5px 0;
-    width: calc(100% - 24px);
-  }
-
-  .navbar-login button {
-    width: 100%;
-    margin-top: 5px;
-  }
-}
-
-.input-with-icon {
-  position: relative;
-  display: flex;
-  align-items: center;
-  margin: 0 5px;
-}
-
-.input-with-icon span {
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #aaa;
-}
-
-.input-with-icon input {
-  padding-left: 30px;
-  border-radius: 4px;
-  border: 1px solid #fff;
-  padding: 8px 12px 8px 30px;
-}
-
-.navbar-login input {
-  margin: 0;
-}
-
-.navbar-login button {
-  padding: 8px 12px;
-  border-radius: 4px;
-  border: none;
-  background-color: #66a6ff;
-  color: white;
-  cursor: pointer;
 }

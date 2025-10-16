@@ -31,4 +31,9 @@
   background: #ff6b6b;
   color: white;
   border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.cart-item-actions .remove-btn:hover {
+  background: #ff4c4c;
 }
