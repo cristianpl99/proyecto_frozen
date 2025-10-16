@@ -9,7 +9,6 @@
   position: sticky;
   top: 0;
   z-index: 999;
-  color: white;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -24,10 +23,22 @@
 }
 
 .navbar-logo {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
+  flex: 1;
+  justify-content: flex-start;
+}
+
+.navbar-title {
+  color: black;
   font-weight: bold;
+  font-size: 1.5rem;
+  text-align: center;
+  flex: 1;
+}
+
+.navbar-login {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .navbar-login form {
@@ -44,7 +55,7 @@
 .input-group label {
   font-size: 0.8rem;
   margin-bottom: 2px;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(0, 0, 0, 0.7);
 }
 
 .input-with-icon-right {
@@ -53,30 +64,31 @@
 
 .input-with-icon-right input {
   background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 4px;
-  color: white;
+  color: black;
   padding: 8px 30px 8px 12px;
 }
 
 .input-with-icon-right input::placeholder {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(0, 0, 0, 0.5);
 }
 
-.input-with-icon-right span {
+.input-with-icon-right .icon-span {
   position: absolute;
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  opacity: 0.7;
+  color: grey;
+  opacity: 0.6;
 }
 
 .navbar-login button {
   padding: 8px 12px;
   border-radius: 4px;
   border: none;
-  background-color: rgba(255, 255, 255, 0.3);
-  color: white;
+  background-color: rgba(0, 0, 0, 0.1);
+  color: black;
   cursor: pointer;
   align-self: flex-end;
 }
@@ -86,6 +98,10 @@
     flex-direction: column;
     height: auto;
     padding: 10px;
+  }
+
+  .navbar-title {
+    order: -1; /* Move title to the top on mobile */
   }
 
   .navbar-login form {
