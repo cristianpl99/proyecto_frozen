@@ -1,0 +1,18 @@
+.App {
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.product-list {
+  width: 60%;
+}
+
+.cart {
+  width: 30%;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
