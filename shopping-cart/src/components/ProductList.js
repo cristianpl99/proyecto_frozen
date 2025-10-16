@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Product from './Product';
+import Modal from './Modal';
 import './ProductList.css';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     setIsLoading(true);
@@ -20,6 +22,14 @@ const ProductList = () => {
         setIsLoading(false);
       });
   }, []);
+
+  const handleProductClick = (product) => {
+    setSelectedProduct(product);
+  };
+
+  const closeModal = () => {
+    setSelectedProduct(null);
+  };
 
   const filteredProducts = products.filter(product =>
     product.nombre.toLowerCase().includes(searchTerm.toLowerCase())
@@ -41,10 +51,18 @@ const ProductList = () => {
           <p>Cargando productos...</p>
         ) : (
           filteredProducts.map(product => (
-            <Product key={product.id_producto} product={product} />
+            <Product key={product.id_producto} product={product} onProductClick={handleProductClick} />
           ))
         )}
       </div>
+      <Modal show={selectedProduct !== null} onClose={closeModal}>
+        {selectedProduct && (
+          <div>
+            <h2>{selectedProduct.nombre}</h2>
+            <p>{selectedProduct.descripcion}</p>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };

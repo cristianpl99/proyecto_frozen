@@ -43,8 +43,10 @@ const Navbar = () => {
                 <span className="icon-span"><PasswordIcon /></span>
               </div>
             </div>
-            <button type="button" className="register-btn">Registrarse</button>
-            <button type="submit">Login</button>
+            <div className="button-group">
+              <button type="submit">Login</button>
+              <button type="button" className="register-btn">Registrarse</button>
+            </div>
           </form>
         </div>
       </div>
