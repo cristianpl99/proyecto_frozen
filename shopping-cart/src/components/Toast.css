@@ -21,7 +21,7 @@
 }
 
 .toast-success {
-  background-color: var(--accent-green);
+  background-color: var(--pay-button-green);
 }
 
 .toast-error {

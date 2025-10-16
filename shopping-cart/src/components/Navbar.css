@@ -79,6 +79,12 @@
   opacity: 0.7;
 }
 
+.button-group {
+  display: flex;
+  gap: 10px;
+  align-self: flex-end;
+}
+
 .navbar-login button {
   padding: 8px 12px;
   border-radius: 4px;
@@ -86,7 +92,6 @@
   background-color: var(--primary-button-blue);
   color: var(--card-background);
   cursor: pointer;
-  align-self: flex-end;
   transition: background-color 0.3s;
 }
 

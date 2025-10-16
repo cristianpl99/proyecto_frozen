@@ -2,11 +2,12 @@ import React, { useContext, useState } from 'react';
 import { CartContext } from '../context/CartContext';
 import './Product.css';
 
-const Product = ({ product }) => {
+const Product = ({ product, onProductClick }) => {
   const { addToCart } = useContext(CartContext);
   const [isAdded, setIsAdded] = useState(false);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e) => {
+    e.stopPropagation(); // Prevent modal from opening when clicking the button
     addToCart(product);
     setIsAdded(true);
     setTimeout(() => {
@@ -15,9 +16,8 @@ const Product = ({ product }) => {
   };
 
   return (
-    <div className="product-card">
+    <div className="product-card" onClick={() => onProductClick(product)}>
       <h3>{product.nombre}</h3>
-      <p>{product.descripcion}</p>
       <p className="price">${product.precio}</p>
       <button onClick={handleAddToCart} disabled={isAdded} className={isAdded ? 'added' : ''}>
         {isAdded ? '✔ Agregado' : 'Agregar al Carrito'}
