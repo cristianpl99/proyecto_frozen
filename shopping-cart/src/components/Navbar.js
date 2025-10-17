@@ -21,7 +21,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <div className="navbar-logo">
-          <img src="/favicon_frozen.png" alt="Frozen Pyme Logo" style={{ height: '64px' }} />
+          <img src="/favicon_frozen.png" alt="Frozen Pyme Logo" style={{ height: '73.6px' }} />
         </div>
         <div className="navbar-title">
           Frozen PyME
