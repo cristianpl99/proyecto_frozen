@@ -55,3 +55,14 @@
   background-color: var(--pay-button-green);
   cursor: not-allowed;
 }
+
+.product-card button.out-of-stock {
+  background-color: #dc3545; /* Red color */
+  cursor: not-allowed;
+}
+
+.stock-info {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-bottom: 1rem;
+}

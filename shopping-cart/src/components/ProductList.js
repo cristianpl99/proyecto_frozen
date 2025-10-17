@@ -10,17 +10,34 @@ const ProductList = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
-    setIsLoading(true);
-    fetch('http://frozenback-test.up.railway.app/api/productos/productos/')
-      .then(response => response.json())
-      .then(data => {
-        setProducts(data.results);
+    const fetchProductsAndStock = async () => {
+      setIsLoading(true);
+      try {
+        const productResponse = await fetch('http://frozenback-test.up.railway.app/api/productos/productos/');
+        const productData = await productResponse.json();
+        const products = productData.results;
+
+        const stockPromises = products.map(product =>
+          fetch(`https://frozenback-test.up.railway.app/api/stock/cantidad-disponible/${product.id_producto}/`)
+            .then(res => res.json())
+        );
+
+        const stockData = await Promise.all(stockPromises);
+
+        const productsWithStock = products.map((product, index) => ({
+          ...product,
+          stock: stockData[index]
+        }));
+
+        setProducts(productsWithStock);
+      } catch (error) {
+        console.error("Error fetching product or stock data:", error);
+      } finally {
         setIsLoading(false);
-      })
-      .catch(error => {
-        console.error("Error fetching products:", error);
-        setIsLoading(false);
-      });
+      }
+    };
+
+    fetchProductsAndStock();
   }, []);
 
   const handleProductClick = (product) => {

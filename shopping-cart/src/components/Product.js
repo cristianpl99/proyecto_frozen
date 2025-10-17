@@ -15,12 +15,24 @@ const Product = ({ product, onProductClick }) => {
     }, 2000);
   };
 
+  const stockInfo = product.stock;
+  const isOutOfStock = stockInfo && stockInfo.cantidad_disponible === 0;
+
   return (
     <div className="product-card" onClick={() => onProductClick(product)}>
       <h3>{product.nombre}</h3>
       <p className="price">${product.precio}</p>
-      <button onClick={handleAddToCart} disabled={isAdded} className={isAdded ? 'added' : ''}>
-        {isAdded ? '✔ Agregado' : 'Agregar al Carrito'}
+      {stockInfo && (
+        <div className="stock-info">
+          Disponible: {stockInfo.cantidad_disponible} {stockInfo.unidad_medida}
+        </div>
+      )}
+      <button
+        onClick={handleAddToCart}
+        disabled={isAdded || isOutOfStock}
+        className={`${isAdded ? 'added' : ''} ${isOutOfStock ? 'out-of-stock' : ''}`}
+      >
+        {isOutOfStock ? 'Agotado' : (isAdded ? '✔ Agregado' : 'Agregar al Carrito')}
       </button>
     </div>
   );
