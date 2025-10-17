@@ -9,16 +9,30 @@ import ToastContainer from './components/ToastContainer';
 import Footer from './components/Footer';
 
 function App() {
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const navbarRef = React.useRef(null);
+  const [mainContentPadding, setMainContentPadding] = React.useState(0);
+
+  React.useEffect(() => {
+    const updatePadding = () => {
+      if (navbarRef.current) {
+        setMainContentPadding(navbarRef.current.offsetHeight);
+      }
+    };
+
+    updatePadding();
+    window.addEventListener('resize', updatePadding);
+
+    return () => window.removeEventListener('resize', updatePadding);
+  }, []);
 
   return (
     <ToastProvider>
       <CartProvider>
         <div className="App">
-          <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-          <main className="main-content">
+          <Navbar ref={navbarRef} />
+          <main className="main-content" style={{ paddingTop: mainContentPadding }}>
             <div className="product-list">
-              <ProductList searchTerm={searchTerm} />
+              <ProductList />
             </div>
             <aside className="cart">
               <Cart />

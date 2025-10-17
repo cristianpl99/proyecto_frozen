@@ -16,23 +16,15 @@ const PasswordIcon = () => (
 );
 
 
-const Navbar = ({ searchTerm, setSearchTerm }) => {
+const Navbar = React.forwardRef((props, ref) => {
   return (
-    <nav className="navbar">
+    <nav className="navbar" ref={ref}>
       <div className="navbar-container">
         <div className="navbar-logo">
           <img src="/favicon_frozen.png" alt="Frozen Pyme Logo" />
         </div>
         <div className="navbar-title">
           Frozen Pyme
-        </div>
-        <div className="navbar-search">
-          <input
-            type="text"
-            placeholder="Buscar..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
         </div>
         <div className="navbar-login">
           <form>
@@ -59,6 +51,6 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
       </div>
     </nav>
   );
-};
+});
 
 export default Navbar;
