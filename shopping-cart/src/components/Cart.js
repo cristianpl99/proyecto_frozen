@@ -46,7 +46,9 @@ const Cart = () => {
               <span>Total:</span>
               <span>${total.toFixed(2)}</span>
             </div>
-            <button className="pay-btn">Pagar</button>
+            <div className="pay-btn-container">
+              <button className="pay-btn">Pagar</button>
+            </div>
           </div>
         </>
       )}
