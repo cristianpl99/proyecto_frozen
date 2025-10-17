@@ -22,9 +22,15 @@
 }
 
 .navbar-logo {
-  flex: 1;
+  display: flex;
+  align-items: center;
   justify-content: flex-start;
   color: var(--card-background);
+}
+
+.navbar-logo img {
+  height: 40px;
+  width: auto;
 }
 
 .navbar-title {
@@ -108,15 +114,49 @@
     background-color: #1a3a9c;
 }
 
-@media screen and (max-width: 768px) {
+.navbar-search {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+}
+
+.navbar-search input {
+  width: 100%;
+  max-width: 400px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+@media screen and (max-width: 960px) {
   .navbar-container {
-    flex-direction: column;
-    height: auto;
+    flex-wrap: wrap;
+    justify-content: center;
     padding: 10px;
+    height: auto;
+    gap: 10px;
+  }
+
+  .navbar-logo {
+    order: 1;
   }
 
   .navbar-title {
-    order: -1;
+    order: 2;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .navbar-search {
+    order: 3;
+    width: 100%;
+  }
+
+  .navbar-login {
+    order: 4;
+    width: 100%;
+    margin-top: 10px;
   }
 
   .navbar-login form {

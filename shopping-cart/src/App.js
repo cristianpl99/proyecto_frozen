@@ -9,14 +9,16 @@ import ToastContainer from './components/ToastContainer';
 import Footer from './components/Footer';
 
 function App() {
+  const [searchTerm, setSearchTerm] = React.useState('');
+
   return (
     <ToastProvider>
       <CartProvider>
         <div className="App">
-          <Navbar />
+          <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
           <main className="main-content">
             <div className="product-list">
-              <ProductList />
+              <ProductList searchTerm={searchTerm} />
             </div>
             <aside className="cart">
               <Cart />

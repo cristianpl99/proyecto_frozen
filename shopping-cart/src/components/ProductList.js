@@ -3,9 +3,8 @@ import Product from './Product';
 import Modal from './Modal';
 import './ProductList.css';
 
-const ProductList = () => {
+const ProductList = ({ searchTerm }) => {
   const [products, setProducts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
@@ -37,15 +36,6 @@ const ProductList = () => {
 
   return (
     <div>
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Buscar productos..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-input"
-        />
-      </div>
       <div className="product-list-container">
         {isLoading ? (
           <p>Cargando productos...</p>

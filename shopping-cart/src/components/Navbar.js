@@ -1,6 +1,5 @@
 import React from 'react';
 import './Navbar.css';
-import SnowflakeIcon from './SnowflakeIcon';
 
 const EmailIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -17,15 +16,23 @@ const PasswordIcon = () => (
 );
 
 
-const Navbar = () => {
+const Navbar = ({ searchTerm, setSearchTerm }) => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
         <div className="navbar-logo">
-          <SnowflakeIcon color="white" size={32} />
+          <img src="/favicon_frozen.png" alt="Frozen Pyme Logo" />
         </div>
         <div className="navbar-title">
           Frozen Pyme
+        </div>
+        <div className="navbar-search">
+          <input
+            type="text"
+            placeholder="Buscar..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
         <div className="navbar-login">
           <form>
