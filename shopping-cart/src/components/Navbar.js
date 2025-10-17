@@ -1,6 +1,5 @@
 import React from 'react';
 import './Navbar.css';
-import SnowflakeIcon from './SnowflakeIcon';
 
 const EmailIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -22,7 +21,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <div className="navbar-logo">
-          <SnowflakeIcon color="white" size={32} />
+          <img src="/favicon_frozen.png" alt="Frozen Pyme Logo" style={{ height: '32px' }} />
         </div>
         <div className="navbar-title">
           Frozen Pyme
