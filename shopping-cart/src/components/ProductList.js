@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { CartContext } from '../context/CartContext';
 import Product from './Product';
 import Modal from './Modal';
 import './ProductList.css';
@@ -8,6 +9,7 @@ const ProductList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const { cart } = useContext(CartContext);
 
   useEffect(() => {
     const fetchProductsAndStock = async () => {
@@ -48,9 +50,23 @@ const ProductList = () => {
     setSelectedProduct(null);
   };
 
-  const filteredProducts = products.filter(product =>
-    product.nombre.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredProducts = products
+    .map(product => {
+      const itemInCart = cart.find(item => item.id_producto === product.id_producto);
+      const quantityInCart = itemInCart ? itemInCart.quantity : 0;
+      const availableStock = product.stock.cantidad_disponible - quantityInCart;
+
+      return {
+        ...product,
+        stock: {
+          ...product.stock,
+          cantidad_disponible: availableStock
+        }
+      };
+    })
+    .filter(product =>
+      product.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
   return (
     <div>
