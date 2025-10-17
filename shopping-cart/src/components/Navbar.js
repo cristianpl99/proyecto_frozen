@@ -21,10 +21,10 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <div className="navbar-logo">
-          <img src="/favicon_frozen.png" alt="Frozen Pyme Logo" style={{ height: '32px' }} />
+          <img src="/favicon_frozen.png" alt="Frozen Pyme Logo" style={{ height: '64px' }} />
         </div>
         <div className="navbar-title">
-          Frozen Pyme
+          Frozen PyME
         </div>
         <div className="navbar-login">
           <form>
