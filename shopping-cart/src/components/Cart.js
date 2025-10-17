@@ -33,7 +33,14 @@ const Cart = () => {
             </div>
             <div className="summary-row">
               <span>Costo de Envío:</span>
-              <span>${shippingCost.toFixed(2)}</span>
+              {shippingCost === 0 ? (
+                <span className="bonificado">Bonificado</span>
+              ) : (
+                <span>${shippingCost.toFixed(2)}</span>
+              )}
+            </div>
+            <div className="shipping-info">
+              Envio Gratis superando los $5000
             </div>
             <div className="summary-row total-row">
               <span>Total:</span>

@@ -23,6 +23,20 @@
   font-size: 1.2rem;
 }
 
+.shipping-info {
+  font-style: italic;
+  font-size: 0.8rem;
+  color: #6c757d;
+  text-align: right;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.bonificado {
+  color: var(--pay-button-green);
+  font-weight: bold;
+}
+
 .cart-svg-icon {
   color: var(--primary-button-blue);
 }
