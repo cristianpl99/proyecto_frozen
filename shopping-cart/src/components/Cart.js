@@ -14,6 +14,10 @@ const CartIcon = () => (
 const Cart = () => {
   const { cart, getTotalPrice } = useContext(CartContext);
 
+  const subtotal = parseFloat(getTotalPrice());
+  const shippingCost = subtotal > 5000 ? 0 : 1000;
+  const total = subtotal + shippingCost;
+
   return (
     <div className="cart-container">
       <h2><CartIcon /> Carrito de Compras</h2>
@@ -22,8 +26,19 @@ const Cart = () => {
       ) : (
         <>
           {cart.map(item => <CartItem key={item.id_producto} item={item} />)}
-          <div className="cart-total">
-            <h3>Total: ${getTotalPrice()}</h3>
+          <div className="cart-summary">
+            <div className="summary-row">
+              <span>Subtotal:</span>
+              <span>${subtotal.toFixed(2)}</span>
+            </div>
+            <div className="summary-row">
+              <span>Costo de Envío:</span>
+              <span>${shippingCost.toFixed(2)}</span>
+            </div>
+            <div className="summary-row total-row">
+              <span>Total:</span>
+              <span>${total.toFixed(2)}</span>
+            </div>
             <button className="pay-btn">Pagar</button>
           </div>
         </>

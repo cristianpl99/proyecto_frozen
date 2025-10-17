@@ -6,13 +6,21 @@
   color: var(--main-text-gray);
 }
 
-.cart-total {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.cart-summary {
   margin-top: 1rem;
   border-top: 2px solid #e9ecef;
   padding-top: 1rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.total-row {
+  font-weight: bold;
+  font-size: 1.2rem;
 }
 
 .cart-svg-icon {
