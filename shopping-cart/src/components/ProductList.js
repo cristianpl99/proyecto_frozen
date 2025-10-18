@@ -88,14 +88,12 @@ const ProductList = () => {
           ))
         )}
       </div>
-      <Modal show={selectedProduct !== null} onClose={closeModal}>
-        {selectedProduct && (
-          <div>
-            <h2>{selectedProduct.nombre}</h2>
-            <p>{selectedProduct.descripcion}</p>
-          </div>
-        )}
-      </Modal>
+      <Modal
+        show={selectedProduct !== null}
+        onClose={closeModal}
+        title={selectedProduct ? selectedProduct.nombre : ''}
+        description={selectedProduct ? selectedProduct.descripcion : ''}
+      />
     </div>
   );
 };

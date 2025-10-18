@@ -18,22 +18,33 @@ const Product = ({ product, onProductClick }) => {
   const stockInfo = product.stock;
   const isOutOfStock = stockInfo && stockInfo.cantidad_disponible === 0;
 
+  const cardStyle = product.imagenes && product.imagenes[0] ? {
+    backgroundImage: `url(data:image/jpeg;base64,${product.imagenes[0].imagen_base64})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    position: 'relative',
+    zIndex: 1,
+  } : {};
+
   return (
-    <div className="product-card" onClick={() => onProductClick(product)}>
-      <h3>{product.nombre}</h3>
-      <p className="price">${product.precio}</p>
-      {stockInfo && (
-        <div className="stock-info">
-          Disponible: {stockInfo.cantidad_disponible} {stockInfo.unidad_medida}
-        </div>
-      )}
-      <button
-        onClick={handleAddToCart}
-        disabled={isAdded || isOutOfStock}
-        className={`${isAdded ? 'added' : ''} ${isOutOfStock ? 'out-of-stock' : ''}`}
-      >
-        {isOutOfStock ? 'Producto Agotado' : (isAdded ? '✔ Agregado' : 'Agregar al Carrito')}
-      </button>
+    <div className="product-card" style={cardStyle} onClick={() => onProductClick(product)}>
+      <div className="product-card-content">
+        <h3>{product.nombre}</h3>
+        <p className="price">${product.precio}</p>
+        {stockInfo && (
+          <div className="stock-info">
+            Disponible: {stockInfo.cantidad_disponible} {stockInfo.unidad_medida}
+          </div>
+        )}
+        <button
+          onClick={handleAddToCart}
+          disabled={isAdded || isOutOfStock}
+          className={`${isAdded ? 'added' : ''} ${isOutOfStock ? 'out-of-stock' : ''}`}
+        >
+          {isOutOfStock ? 'Producto Agotado' : (isAdded ? '✔ Agregado' : 'Agregar al Carrito')}
+        </button>
+      </div>
     </div>
   );
 };
