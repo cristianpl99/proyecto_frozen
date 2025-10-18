@@ -22,12 +22,20 @@ const AddressIcon = () => (
     </svg>
 );
 
+const EmailIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="darkgray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+        <polyline points="22,6 12,13 2,6"></polyline>
+    </svg>
+);
+
 const RegisterForm = ({ onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
     lastName: '',
     cuit: '',
     address: '',
+    email: '',
   });
 
   const [errors, setErrors] = useState({});
@@ -47,6 +55,11 @@ const RegisterForm = ({ onClose }) => {
     if (!formData.lastName) newErrors.lastName = 'El apellido es obligatorio';
     if (!formData.cuit) newErrors.cuit = 'El CUIT es obligatorio';
     if (!formData.address) newErrors.address = 'La dirección es obligatoria';
+    if (!formData.email) {
+      newErrors.email = 'El email es obligatorio';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'El formato del email no es válido';
+    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -112,6 +125,21 @@ const RegisterForm = ({ onClose }) => {
               <span className="icon"><CuitIcon /></span>
             </div>
             {errors.cuit && <p className="error-message">{errors.cuit}</p>}
+          </div>
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <div className="input-with-icon">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+              <span className="icon"><EmailIcon /></span>
+            </div>
+            {errors.email && <p className="error-message">{errors.email}</p>}
           </div>
           <div className="form-group">
             <label htmlFor="address">Dirección de Entrega</label>
