@@ -16,7 +16,7 @@ const PasswordIcon = () => (
 );
 
 
-const Navbar = () => {
+const Navbar = ({ onRegisterClick }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -57,7 +57,7 @@ const Navbar = () => {
             </div>
             <div className="button-group">
               <button type="submit">Login</button>
-              <button type="button" className="register-btn">Registrarse</button>
+              <button type="button" className="register-btn" onClick={onRegisterClick}>Registrarse</button>
             </div>
           </form>
         </div>
