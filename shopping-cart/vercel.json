@@ -10,8 +10,14 @@
   "routes": [
     {
       "src": "/static/(.*)",
-      "headers": { "cache-control": "public,max-age=31536000,immutable" },
+      "headers": {
+        "cache-control": "public,max-age=31536000,immutable"
+      },
       "dest": "/static/$1"
+    },
+    {
+      "src": "/(favicon\\.ico|favicon\\.png|favicon_frozen\\.png|favicon_frozen_v2\\.png|logo\\.png|.*\\.(css|js|svg|jpg|jpeg|gif|webp))",
+      "dest": "/$1"
     },
     {
       "src": "/(.*)",
@@ -19,5 +25,6 @@
     }
   ]
 }
+
 
 
