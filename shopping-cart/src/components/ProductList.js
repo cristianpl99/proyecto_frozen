@@ -16,7 +16,7 @@ const ProductList = () => {
     const fetchProductsAndStock = async () => {
       setIsLoading(true);
       try {
-        const productResponse = await fetch('http://frozenback-test.up.railway.app/api/productos/productos/');
+        const productResponse = await fetch('https://frozenback-test.up.railway.app/api/productos/productos/');
         const productData = await productResponse.json();
         const products = productData.results;
 
