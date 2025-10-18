@@ -1,5 +1,8 @@
 .navbar {
-  background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   height: 80px;
   display: flex;
   justify-content: center;
@@ -24,11 +27,11 @@
 .navbar-logo {
   flex: 1;
   justify-content: flex-start;
-  color: var(--main-text-gray);
+  color: var(--card-background);
 }
 
 .navbar-title {
-  color: var(--main-text-gray);
+  color: var(--card-background);
   font-weight: 700;
   font-size: 1.5rem;
   text-align: center;
@@ -55,7 +58,7 @@
 .input-group label {
   font-size: 0.8rem;
   margin-bottom: 2px;
-  color: var(--main-text-gray);
+  color: var(--card-background);
 }
 
 .input-with-icon-right {
@@ -63,10 +66,10 @@
 }
 
 .input-with-icon-right input {
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
-  color: var(--main-text-gray);
+  color: var(--card-background);
   padding: 8px 30px 8px 12px;
 }
 
@@ -75,7 +78,7 @@
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--main-text-gray);
+  color: var(--card-background);
   opacity: 0.7;
 }
 

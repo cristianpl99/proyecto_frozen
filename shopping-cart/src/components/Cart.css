@@ -7,11 +7,18 @@
 .cart-container h2 {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   font-weight: 600;
   color: var(--main-text-gray);
   font-size: 1.8rem;
   margin-bottom: 1.5rem;
+}
+
+.cart-empty {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--main-text-gray);
 }
 
 .cart-summary {
