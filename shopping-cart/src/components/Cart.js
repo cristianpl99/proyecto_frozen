@@ -28,7 +28,7 @@ const Cart = () => {
     }
 
     const orderData = {
-      id_cliente: "Usuario Web",
+      id_cliente: 4,
       fecha_entrega: new Date().toISOString(),
       id_prioridad: 1,
       productos: cart.map(item => ({
