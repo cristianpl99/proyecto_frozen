@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
 }
 
 .main-content {
@@ -13,7 +14,7 @@
 
 .product-list {
   flex: 3;
-  background: linear-gradient(to right, #e0f7fa, #b2ebf2);
+  background: transparent;
   padding: 2rem;
   border-radius: 10px;
 }

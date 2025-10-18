@@ -58,19 +58,21 @@
 }
 
 .product-card button {
-  background-color: var(--primary-button-blue);
+  background: linear-gradient(45deg, var(--primary-button-blue), #1a3a9c);
   color: var(--card-background);
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
+  padding: 12px 24px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 1rem;
-  font-weight: 500;
-  transition: background-color 0.3s;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .product-card button:hover {
-  background-color: #1a3a9c;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
 .product-card button.added {

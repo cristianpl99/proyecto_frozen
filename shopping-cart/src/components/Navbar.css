@@ -1,5 +1,8 @@
 .navbar {
-  background: var(--header-blue);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   height: 80px;
   display: flex;
   justify-content: center;
@@ -28,7 +31,7 @@
 }
 
 .navbar-title {
-  color: var(--card-background);
+  color: var(--main-text);
   font-weight: 700;
   font-size: 1.5rem;
   text-align: center;
@@ -47,6 +50,10 @@
   gap: 15px;
 }
 
+.menu-icon {
+  display: none;
+}
+
 .input-group {
   display: flex;
   flex-direction: column;
@@ -55,7 +62,7 @@
 .input-group label {
   font-size: 0.8rem;
   margin-bottom: 2px;
-  color: var(--card-background);
+  color: var(--main-text);
 }
 
 .input-with-icon-right {
@@ -64,9 +71,9 @@
 
 .input-with-icon-right input {
   background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--main-text);
   border-radius: 4px;
-  color: var(--card-background);
+  color: var(--main-text);
   padding: 8px 30px 8px 12px;
 }
 
@@ -75,7 +82,7 @@
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--card-background);
+  color: var(--main-text);
   opacity: 0.7;
 }
 
@@ -96,8 +103,9 @@
 }
 
 .navbar-login .register-btn {
-  background-color: transparent;
-  border: 1px solid var(--card-background);
+  background-color: #a1c4fd;
+  border: 1px solid var(--primary-button-blue);
+  color: var(--primary-button-blue);
 }
 
 .navbar-login .register-btn:hover {
@@ -108,20 +116,31 @@
     background-color: #1a3a9c;
 }
 
-@media screen and (max-width: 768px) {
-  .navbar-container {
-    flex-direction: column;
-    height: auto;
-    padding: 10px;
+@media screen and (max-width: 992px) {
+  .menu-icon {
+    display: block;
+    cursor: pointer;
+    color: var(--main-text);
   }
 
-  .navbar-title {
-    order: -1;
+  .navbar-login {
+    display: none;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 2rem;
+  }
+
+  .navbar-login.active {
+    display: block;
   }
 
   .navbar-login form {
     flex-direction: column;
-    width: 100%;
-    gap: 10px;
+    gap: 1.5rem;
   }
 }

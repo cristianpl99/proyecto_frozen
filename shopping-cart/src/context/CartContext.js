@@ -5,19 +5,7 @@ export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const { addToast } = useContext(ToastContext);
-  const [cart, setCart] = useState(() => {
-    try {
-      const localData = localStorage.getItem('cart');
-      return localData ? JSON.parse(localData) : [];
-    } catch (error) {
-      console.error("Could not parse cart data from localStorage", error);
-      return [];
-    }
-  });
-
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }, [cart]);
+  const [cart, setCart] = useState([]);
 
   const addToCart = (product) => {
     setCart((prevCart) => {
