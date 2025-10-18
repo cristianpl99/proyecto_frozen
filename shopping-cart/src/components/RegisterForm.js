@@ -29,6 +29,13 @@ const EmailIcon = () => (
     </svg>
 );
 
+const PasswordIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="darkgray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+    </svg>
+);
+
 const RegisterForm = ({ onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -36,6 +43,7 @@ const RegisterForm = ({ onClose }) => {
     cuit: '',
     address: '',
     email: '',
+    password: '',
   });
 
   const [errors, setErrors] = useState({});
@@ -60,6 +68,7 @@ const RegisterForm = ({ onClose }) => {
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'El formato del email no es válido';
     }
+    if (!formData.password) newErrors.password = 'La contraseña es obligatoria';
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -140,6 +149,21 @@ const RegisterForm = ({ onClose }) => {
               <span className="icon"><EmailIcon /></span>
             </div>
             {errors.email && <p className="error-message">{errors.email}</p>}
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Contraseña</label>
+            <div className="input-with-icon">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+              <span className="icon"><PasswordIcon /></span>
+            </div>
+            {errors.password && <p className="error-message">{errors.password}</p>}
           </div>
           <div className="form-group">
             <label htmlFor="address">Dirección de Entrega</label>
