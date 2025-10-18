@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { CartContext } from '../context/CartContext';
+import { ToastContext } from '../context/ToastContext';
 import CartItem from './CartItem';
 import ProgressBar from './ProgressBar';
 import './Cart.css';
@@ -13,11 +14,49 @@ const CartIcon = () => (
 );
 
 const Cart = () => {
-  const { cart, getTotalPrice } = useContext(CartContext);
+  const { cart, getTotalPrice, clearCart } = useContext(CartContext);
+  const { addToast } = useContext(ToastContext);
 
   const subtotal = parseFloat(getTotalPrice());
   const shippingCost = subtotal > 5000 ? 0 : 1000;
   const total = subtotal + shippingCost;
+
+  const handlePagar = async () => {
+    if (cart.length === 0) {
+      addToast('Tu carrito está vacío', 'error');
+      return;
+    }
+
+    const orderData = {
+      id_cliente: 4,
+      fecha_entrega: new Date().toISOString(),
+      id_prioridad: 1,
+      productos: cart.map(item => ({
+        id_producto: item.id_producto.toString(),
+        cantidad: item.quantity,
+        unidad_medida: item.unidad_medida || '',
+      })),
+    };
+
+    try {
+      const response = await fetch('https://frozenback-test.up.railway.app/api/ventas/ordenes-venta/crear/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (response.ok) {
+        addToast('Orden de venta creada con éxito', 'success');
+        clearCart();
+      } else {
+        addToast('Error al crear la orden de venta', 'error');
+      }
+    } catch (error) {
+      addToast('Error de red al crear la orden de venta', 'error');
+    }
+  };
 
   return (
     <div className="cart-container">
@@ -55,7 +94,7 @@ const Cart = () => {
               <span>${total.toFixed(2)}</span>
             </div>
             <div className="pay-btn-container">
-              <button className="pay-btn">Pagar</button>
+              <button className="pay-btn" onClick={handlePagar}>Pagar</button>
             </div>
           </div>
         </>
