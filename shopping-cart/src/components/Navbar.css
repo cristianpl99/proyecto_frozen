@@ -50,6 +50,10 @@
   gap: 15px;
 }
 
+.menu-icon {
+  display: none;
+}
+
 .input-group {
   display: flex;
   flex-direction: column;
@@ -111,20 +115,31 @@
     background-color: #1a3a9c;
 }
 
-@media screen and (max-width: 768px) {
-  .navbar-container {
-    flex-direction: column;
-    height: auto;
-    padding: 10px;
+@media screen and (max-width: 992px) {
+  .menu-icon {
+    display: block;
+    cursor: pointer;
+    color: var(--card-background);
   }
 
-  .navbar-title {
-    order: -1;
+  .navbar-login {
+    display: none;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 2rem;
+  }
+
+  .navbar-login.active {
+    display: block;
   }
 
   .navbar-login form {
     flex-direction: column;
-    width: 100%;
-    gap: 10px;
+    gap: 1.5rem;
   }
 }
