@@ -39,7 +39,7 @@ const Cart = () => {
     };
 
     try {
-      const response = await fetch('http://frozenback-test.up.railway.app/api/ventas/ordenes-venta/crear/', {
+      const response = await fetch('https://frozenback-test.up.railway.app/api/ventas/ordenes-venta/crear/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
