@@ -16,7 +16,7 @@ const PasswordIcon = () => (
 );
 
 
-const Navbar = () => {
+const Navbar = ({ onRegisterClick }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -27,7 +27,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <div className="navbar-logo">
-          <img src="/favicon_frozen.png" alt="Frozen Pyme Logo" style={{ height: '73.6px' }} />
+          <img src="/favicon_frozen2.png" alt="Frozen Pyme Logo" style={{ height: '73.6px' }} />
         </div>
         <div className="navbar-title">
           Frozen PyME
@@ -57,7 +57,7 @@ const Navbar = () => {
             </div>
             <div className="button-group">
               <button type="submit">Login</button>
-              <button type="button" className="register-btn">Registrarse</button>
+              <button type="button" className="register-btn" onClick={onRegisterClick}>Registrarse</button>
             </div>
           </form>
         </div>
