@@ -2,21 +2,21 @@ import React, { useState } from 'react';
 import './RegisterForm.css';
 
 const UserIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="gray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="darkgray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
         <circle cx="12" cy="7" r="4"></circle>
     </svg>
 );
 
 const CuitIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="gray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="darkgray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="4" width="20" height="16" rx="2"></rect>
         <path d="M6 10h4m-4 4h4m6-4h4m-4 4h4"></path>
     </svg>
 );
 
 const AddressIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="gray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="darkgray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
         <circle cx="12" cy="10" r="3"></circle>
     </svg>
@@ -30,6 +30,8 @@ const RegisterForm = ({ onClose }) => {
     address: '',
   });
 
+  const [errors, setErrors] = useState({});
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -40,8 +42,18 @@ const RegisterForm = ({ onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form data submitted:', formData);
-    onClose();
+    const newErrors = {};
+    if (!formData.name) newErrors.name = 'El nombre es obligatorio';
+    if (!formData.lastName) newErrors.lastName = 'El apellido es obligatorio';
+    if (!formData.cuit) newErrors.cuit = 'El CUIT es obligatorio';
+    if (!formData.address) newErrors.address = 'La dirección es obligatoria';
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+    } else {
+      console.log('Form data submitted:', formData);
+      onClose();
+    }
   };
 
   return (
@@ -49,8 +61,11 @@ const RegisterForm = ({ onClose }) => {
       <div className="register-form-container">
         <button className="close-button" onClick={onClose}>X</button>
         <div className="form-title">
-          <img src="/favicon_frozen.png" alt="logo" className="form-logo"/>
-          <h2>Formulario de Registro</h2>
+          <img src="/favicon_frozen2.png" alt="logo" className="form-logo"/>
+          <div>
+            <h2>Crear Cuenta</h2>
+            <p className="form-subtitle">Registrate para acceder a promociones y finalizar tu compra</p>
+          </div>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -66,6 +81,7 @@ const RegisterForm = ({ onClose }) => {
               />
               <span className="icon"><UserIcon /></span>
             </div>
+            {errors.name && <p className="error-message">{errors.name}</p>}
           </div>
           <div className="form-group">
             <label htmlFor="lastName">Apellido</label>
@@ -80,6 +96,7 @@ const RegisterForm = ({ onClose }) => {
               />
               <span className="icon"><UserIcon /></span>
             </div>
+            {errors.lastName && <p className="error-message">{errors.lastName}</p>}
           </div>
           <div className="form-group">
             <label htmlFor="cuit">CUIT</label>
@@ -94,6 +111,7 @@ const RegisterForm = ({ onClose }) => {
               />
               <span className="icon"><CuitIcon /></span>
             </div>
+            {errors.cuit && <p className="error-message">{errors.cuit}</p>}
           </div>
           <div className="form-group">
             <label htmlFor="address">Dirección de Entrega</label>
@@ -108,8 +126,9 @@ const RegisterForm = ({ onClose }) => {
               />
               <span className="icon"><AddressIcon /></span>
             </div>
+            {errors.address && <p className="error-message">{errors.address}</p>}
           </div>
-          <button type="submit" className="submit-button">Registrarse</button>
+          <button type="submit" className="submit-button">Crear Cuenta</button>
         </form>
       </div>
     </div>
