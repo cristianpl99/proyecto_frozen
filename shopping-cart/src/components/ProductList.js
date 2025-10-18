@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { CartContext } from '../context/CartContext';
 import Product from './Product';
 import Modal from './Modal';
+import SkeletonProductCard from './SkeletonProductCard';
 import './ProductList.css';
 
 const ProductList = () => {
@@ -81,7 +82,7 @@ const ProductList = () => {
       </div>
       <div className="product-list-container">
         {isLoading ? (
-          <p>Cargando productos...</p>
+          Array.from({ length: 8 }).map((_, index) => <SkeletonProductCard key={index} />)
         ) : (
           filteredProducts.map(product => (
             <Product key={product.id_producto} product={product} onProductClick={handleProductClick} />

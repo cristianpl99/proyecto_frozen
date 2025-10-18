@@ -1,0 +1,58 @@
+.skeleton-card {
+  background: var(--card-background);
+  border-radius: 10px;
+  box-shadow: 0 4px 15px var(--card-shadow);
+  margin: 1rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.skeleton-image,
+.skeleton-text,
+.skeleton-button {
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-image {
+  height: 150px;
+  margin-bottom: 1rem;
+}
+
+.skeleton-text {
+  height: 20px;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-text.short {
+  width: 60%;
+}
+
+.skeleton-button {
+  height: 40px;
+  margin-top: 1rem;
+}
+
+.skeleton-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 150%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -150%;
+  }
+  100% {
+    left: 150%;
+  }
+}

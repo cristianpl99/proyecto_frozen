@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { CartContext } from '../context/CartContext';
 import CartItem from './CartItem';
+import ProgressBar from './ProgressBar';
 import './Cart.css';
 
 const CartIcon = () => (
@@ -40,7 +41,14 @@ const Cart = () => {
               )}
             </div>
             <div className="shipping-info">
-              Envio Gratis superando los $5000
+              {subtotal < 5000 ? (
+                <>
+                  <span>🚚 Te faltan ${5000 - subtotal} para envío gratis</span>
+                  <ProgressBar value={subtotal} max={5000} />
+                </>
+              ) : (
+                <span>🎉 ¡Felicitaciones! Tenés envío gratis.</span>
+              )}
             </div>
             <div className="summary-row total-row">
               <span>Total:</span>

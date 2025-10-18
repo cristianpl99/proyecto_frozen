@@ -42,7 +42,7 @@ const Product = ({ product, onProductClick }) => {
           disabled={isAdded || isOutOfStock}
           className={`${isAdded ? 'added' : ''} ${isOutOfStock ? 'out-of-stock' : ''}`}
         >
-          {isOutOfStock ? 'Producto Agotado' : (isAdded ? '✔ Agregado' : 'Agregar al Carrito')}
+          {isOutOfStock ? 'Agotado' : (isAdded ? '✔ Agregado' : '🛒 Agregar')}
         </button>
       </div>
     </div>
