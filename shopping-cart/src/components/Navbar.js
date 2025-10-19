@@ -32,7 +32,7 @@ const Navbar = ({ onRegisterClick }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('https://frozenback-production.up.railway.app/api/ventas/clientes/');
+      const response = await fetch('https://frozenback-test.up.railway.app/api/ventas/clientes/');
       const data = await response.json();
       const client = data.results.find(c => c.email === email);
 
