@@ -92,7 +92,7 @@ const RegisterForm = ({ onClose }) => {
       setErrors(newErrors);
     } else {
       try {
-        const response = await fetch('https://frozenback-production.up.railway.app/api/ventas/clientes/');
+        const response = await fetch('https://frozenback-test.up.railway.app/api/ventas/clientes/');
         const data = await response.json();
         const existingClient = data.results.find(c => c.email === formData.email);
 
@@ -108,7 +108,7 @@ const RegisterForm = ({ onClose }) => {
           direccion: formData.address,
         };
 
-        const createResponse = await fetch('https://frozenback-production.up.railway.app/api/ventas/clientes/', {
+        const createResponse = await fetch('https://frozenback-test.up.railway.app/api/ventas/clientes/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
