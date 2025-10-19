@@ -9,11 +9,25 @@ export const ProductProvider = ({ children }) => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const response = await fetch('https://frozenback-production.up.railway.app/api/productos/productos/');
-      const data = await response.json();
-      setProducts(data.results);
+      const productResponse = await fetch('https://frozenback-production.up.railway.app/api/productos/productos/');
+      const productData = await productResponse.json();
+      const products = productData.results;
+
+      const stockPromises = products.map(product =>
+        fetch(`https://frozenback-production.up.railway.app/api/stock/cantidad-disponible/${product.id_producto}/`)
+          .then(res => res.json())
+      );
+
+      const stockData = await Promise.all(stockPromises);
+
+      const productsWithStock = products.map((product, index) => ({
+        ...product,
+        stock: stockData[index]
+      }));
+
+      setProducts(productsWithStock);
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error("Error fetching product or stock data:", error);
     } finally {
       setLoading(false);
     }
