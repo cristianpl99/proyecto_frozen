@@ -33,8 +33,8 @@ const Navbar = ({ onRegisterClick }) => {
     e.preventDefault();
     try {
       const response = await fetch('https://frozenback-production.up.railway.app/api/ventas/clientes/');
-      const clients = await response.json();
-      const client = clients.find(c => c.email === email);
+      const data = await response.json();
+      const client = data.results.find(c => c.email === email);
 
       if (client) {
         login(client);
