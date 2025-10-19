@@ -81,7 +81,7 @@
 }
 
 .product-card button.out-of-stock {
-  background-color: #dc3545; /* Red color */
+  background: #dc3545; /* Red color */
   cursor: not-allowed;
 }
 
