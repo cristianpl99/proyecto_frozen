@@ -15,12 +15,12 @@ const ProductList = ({ setFetchProducts }) => {
   const fetchProductsAndStock = async () => {
     setIsLoading(true);
     try {
-      const productResponse = await fetch('https://frozenback-production.up.railway.app/api/productos/productos/');
+      const productResponse = await fetch('https://frozenback-test.up.railway.app/api/productos/productos/');
       const productData = await productResponse.json();
       const products = productData.results;
 
       const stockPromises = products.map(product =>
-        fetch(`https://frozenback-production.up.railway.app/api/stock/cantidad-disponible/${product.id_producto}/`)
+        fetch(`https://frozenback-test.up.railway.app/api/stock/cantidad-disponible/${product.id_producto}/`)
           .then(res => res.json())
       );
 
