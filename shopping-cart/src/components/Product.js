@@ -16,7 +16,7 @@ const Product = ({ product, onProductClick }) => {
   };
 
   const stockInfo = product.stock;
-  const isOutOfStock = stockInfo && stockInfo.cantidad_disponible === 0;
+  const isOutOfStock = stockInfo && stockInfo.cantidad_disponible <= 0;
 
   const cardStyle = product.imagenes && product.imagenes[0] ? {
     backgroundImage: `url(data:image/jpeg;base64,${product.imagenes[0].imagen_base64})`,

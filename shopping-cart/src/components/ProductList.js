@@ -56,7 +56,7 @@ const ProductList = ({ setFetchProducts }) => {
     .map(product => {
       const itemInCart = cart.find(item => item.id_producto === product.id_producto);
       const quantityInCart = itemInCart ? itemInCart.quantity : 0;
-      const availableStock = product.stock.cantidad_disponible - quantityInCart;
+      const availableStock = Math.max(0, product.stock.cantidad_disponible - quantityInCart);
 
       return {
         ...product,
