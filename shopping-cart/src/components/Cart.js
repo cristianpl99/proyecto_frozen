@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { CartContext } from '../context/CartContext';
 import { ToastContext } from '../context/ToastContext';
+import { AuthContext } from '../context/AuthContext';
 import CartItem from './CartItem';
 import ProgressBar from './ProgressBar';
 import './Cart.css';
@@ -16,19 +17,25 @@ const CartIcon = () => (
 const Cart = () => {
   const { cart, getTotalPrice, clearCart } = useContext(CartContext);
   const { addToast } = useContext(ToastContext);
+  const { user } = useContext(AuthContext);
 
   const subtotal = parseFloat(getTotalPrice());
   const shippingCost = subtotal > 5000 ? 0 : 1000;
   const total = subtotal + shippingCost;
 
   const handlePagar = async () => {
+    if (!user) {
+      addToast('Debes iniciar sesión para realizar la compra', 'error');
+      return;
+    }
+
     if (cart.length === 0) {
       addToast('Tu carrito está vacío', 'error');
       return;
     }
 
     const orderData = {
-      id_cliente: 4,
+      id_cliente: user.id_cliente,
       fecha_entrega: new Date().toISOString(),
       id_prioridad: 1,
       productos: cart.map(item => ({
