@@ -7,6 +7,7 @@ import Cart from './components/Cart';
 import { CartProvider } from './context/CartContext';
 import { ToastProvider } from './context/ToastContext';
 import { AuthProvider } from './context/AuthContext';
+import { ProductProvider } from './context/ProductContext';
 import ToastContainer from './components/ToastContainer';
 import Footer from './components/Footer';
 
@@ -24,9 +25,10 @@ function App() {
   return (
     <AuthProvider>
       <ToastProvider>
-        <CartProvider>
-          <div className="App">
-            <Navbar onRegisterClick={handleRegisterClick} />
+        <ProductProvider>
+          <CartProvider>
+            <div className="App">
+              <Navbar onRegisterClick={handleRegisterClick} />
           {showRegisterForm && <RegisterForm onClose={handleCloseRegisterForm} />}
           <main className="main-content">
             <div className="product-list">
@@ -40,6 +42,7 @@ function App() {
           <Footer />
         </div>
       </CartProvider>
+    </ProductProvider>
     </ToastProvider>
   </AuthProvider>
   );

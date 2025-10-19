@@ -91,13 +91,24 @@ const RegisterForm = ({ onClose }) => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      const clientData = {
-        nombre: `${formData.name} ${formData.lastName}`,
-        email: formData.email,
-      };
-
       try {
-        const response = await fetch('https://frozenback-production.up.railway.app/api/ventas/clientes/', {
+        const response = await fetch('https://frozenback-production.up.railway.app/api/ventas/clientes/');
+        const data = await response.json();
+        const existingClient = data.results.find(c => c.email === formData.email);
+
+        if (existingClient) {
+          addToast('El email ya está registrado', 'error');
+          return;
+        }
+
+        const clientData = {
+          nombre: `${formData.name} ${formData.lastName}`,
+          email: formData.email,
+          cuit: formData.cuit,
+          direccion: formData.address,
+        };
+
+        const createResponse = await fetch('https://frozenback-production.up.railway.app/api/ventas/clientes/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -105,7 +116,7 @@ const RegisterForm = ({ onClose }) => {
           body: JSON.stringify(clientData),
         });
 
-        if (response.ok) {
+        if (createResponse.ok) {
           addToast('Cliente creado exitosamente', 'success');
           onClose();
         } else {
