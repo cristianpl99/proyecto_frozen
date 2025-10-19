@@ -8,6 +8,15 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
   const addToCart = (product) => {
+    const { stock } = product;
+    const existingProduct = cart.find(item => item.id_producto === product.id_producto);
+    const quantityInCart = existingProduct ? existingProduct.quantity : 0;
+
+    if (quantityInCart >= stock.cantidad_disponible) {
+      addToast(`No hay más stock de ${product.nombre}`, 'error');
+      return;
+    }
+
     setCart((prevCart) => {
       const existingProduct = prevCart.find(item => item.id_producto === product.id_producto);
       if (existingProduct) {

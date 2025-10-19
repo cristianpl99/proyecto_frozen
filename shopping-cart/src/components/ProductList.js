@@ -52,23 +52,9 @@ const ProductList = ({ setFetchProducts }) => {
     setSelectedProduct(null);
   };
 
-  const filteredProducts = products
-    .map(product => {
-      const itemInCart = cart.find(item => item.id_producto === product.id_producto);
-      const quantityInCart = itemInCart ? itemInCart.quantity : 0;
-      const availableStock = Math.max(0, product.stock.cantidad_disponible - quantityInCart);
-
-      return {
-        ...product,
-        stock: {
-          ...product.stock,
-          cantidad_disponible: availableStock
-        }
-      };
-    })
-    .filter(product =>
-      product.nombre.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  const filteredProducts = products.filter(product =>
+    product.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div>
@@ -85,9 +71,20 @@ const ProductList = ({ setFetchProducts }) => {
         {isLoading ? (
           Array.from({ length: 8 }).map((_, index) => <SkeletonProductCard key={index} />)
         ) : (
-          filteredProducts.map(product => (
-            <Product key={product.id_producto} product={product} onProductClick={handleProductClick} />
-          ))
+          filteredProducts.map(product => {
+            const itemInCart = cart.find(item => item.id_producto === product.id_producto);
+            const quantityInCart = itemInCart ? itemInCart.quantity : 0;
+            const availableStock = Math.max(0, product.stock.cantidad_disponible - quantityInCart);
+
+            return (
+              <Product
+                key={product.id_producto}
+                product={product}
+                availableStock={availableStock}
+                onProductClick={handleProductClick}
+              />
+            );
+          })
         )}
       </div>
       <Modal
