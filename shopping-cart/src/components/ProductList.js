@@ -1,16 +1,48 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { CartContext } from '../context/CartContext';
-import { ProductContext } from '../context/ProductContext';
 import Product from './Product';
 import Modal from './Modal';
 import SkeletonProductCard from './SkeletonProductCard';
 import './ProductList.css';
 
-const ProductList = () => {
+const ProductList = ({ setFetchProducts }) => {
+  const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const { cart } = useContext(CartContext);
-  const { products, loading } = useContext(ProductContext);
+
+  const fetchProductsAndStock = async () => {
+    setIsLoading(true);
+    try {
+      const productResponse = await fetch('https://frozenback-production.up.railway.app/api/productos/productos/');
+      const productData = await productResponse.json();
+      const products = productData.results;
+
+      const stockPromises = products.map(product =>
+        fetch(`https://frozenback-production.up.railway.app/api/stock/cantidad-disponible/${product.id_producto}/`)
+          .then(res => res.json())
+      );
+
+      const stockData = await Promise.all(stockPromises);
+
+      const productsWithStock = products.map((product, index) => ({
+        ...product,
+        stock: stockData[index]
+      }));
+
+      setProducts(productsWithStock);
+    } catch (error) {
+      console.error("Error fetching product or stock data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProductsAndStock();
+    setFetchProducts(() => fetchProductsAndStock);
+  }, [setFetchProducts]);
 
   const handleProductClick = (product) => {
     setSelectedProduct(product);
@@ -50,7 +82,7 @@ const ProductList = () => {
         />
       </div>
       <div className="product-list-container">
-        {loading ? (
+        {isLoading ? (
           Array.from({ length: 8 }).map((_, index) => <SkeletonProductCard key={index} />)
         ) : (
           filteredProducts.map(product => (

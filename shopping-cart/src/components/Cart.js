@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { CartContext } from '../context/CartContext';
 import { ToastContext } from '../context/ToastContext';
 import { AuthContext } from '../context/AuthContext';
-import { ProductContext } from '../context/ProductContext';
 import CartItem from './CartItem';
 import ProgressBar from './ProgressBar';
 import './Cart.css';
@@ -15,11 +14,10 @@ const CartIcon = () => (
   </svg>
 );
 
-const Cart = () => {
+const Cart = ({ fetchProducts }) => {
   const { cart, getTotalPrice, clearCart } = useContext(CartContext);
   const { addToast } = useContext(ToastContext);
   const { user } = useContext(AuthContext);
-  const { fetchProducts } = useContext(ProductContext);
 
   const subtotal = parseFloat(getTotalPrice());
   const shippingCost = subtotal > 5000 ? 0 : 1000;
@@ -48,7 +46,7 @@ const Cart = () => {
     };
 
     try {
-      const response = await fetch('https://frozenback-production.up.railway.app/api/ventas/ordenes-venta/crear/', {
+      const response = await fetch('https://frozenback-test.up.railway.app/api/ventas/ordenes-venta/crear/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

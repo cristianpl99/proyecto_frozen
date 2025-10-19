@@ -7,12 +7,12 @@ import Cart from './components/Cart';
 import { CartProvider } from './context/CartContext';
 import { ToastProvider } from './context/ToastContext';
 import { AuthProvider } from './context/AuthContext';
-import { ProductProvider } from './context/ProductContext';
 import ToastContainer from './components/ToastContainer';
 import Footer from './components/Footer';
 
 function App() {
   const [showRegisterForm, setShowRegisterForm] = useState(false);
+  const [fetchProducts, setFetchProducts] = useState(null);
 
   const handleRegisterClick = () => {
     setShowRegisterForm(true);
@@ -25,24 +25,22 @@ function App() {
   return (
     <AuthProvider>
       <ToastProvider>
-        <ProductProvider>
-          <CartProvider>
-            <div className="App">
-              <Navbar onRegisterClick={handleRegisterClick} />
+        <CartProvider>
+          <div className="App">
+            <Navbar onRegisterClick={handleRegisterClick} />
           {showRegisterForm && <RegisterForm onClose={handleCloseRegisterForm} />}
           <main className="main-content">
             <div className="product-list">
-              <ProductList />
+              <ProductList setFetchProducts={setFetchProducts} />
             </div>
             <aside className="cart">
-              <Cart />
+              <Cart fetchProducts={fetchProducts} />
             </aside>
           </main>
           <ToastContainer />
           <Footer />
         </div>
       </CartProvider>
-    </ProductProvider>
     </ToastProvider>
   </AuthProvider>
   );
