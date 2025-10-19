@@ -16,13 +16,6 @@ const CuitIcon = () => (
     </svg>
 );
 
-const AddressIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="darkgray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-        <circle cx="12" cy="10" r="3"></circle>
-    </svg>
-);
-
 const EmailIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="darkgray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
@@ -49,7 +42,6 @@ const RegisterForm = ({ onClose }) => {
     name: '',
     lastName: '',
     cuit: '',
-    address: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -75,7 +67,6 @@ const RegisterForm = ({ onClose }) => {
     if (!formData.name) newErrors.name = 'El nombre es obligatorio';
     if (!formData.lastName) newErrors.lastName = 'El apellido es obligatorio';
     if (!formData.cuit) newErrors.cuit = 'El CUIT es obligatorio';
-    if (!formData.address) newErrors.address = 'La dirección es obligatoria';
     if (!formData.email) {
       newErrors.email = 'El email es obligatorio';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -83,6 +74,8 @@ const RegisterForm = ({ onClose }) => {
     }
     if (!formData.password) {
       newErrors.password = 'La contraseña es obligatoria';
+    } else if (formData.password.length < 8) {
+      newErrors.password = 'La contraseña debe tener al menos 8 caracteres';
     }
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Las contraseñas no coinciden';
@@ -102,10 +95,11 @@ const RegisterForm = ({ onClose }) => {
         }
 
         const clientData = {
-          nombre: `${formData.name} ${formData.lastName}`,
+          nombre: formData.name,
+          apellido: formData.lastName,
           email: formData.email,
-          cuit: formData.cuit,
-          direccion: formData.address,
+          cuil: formData.cuit,
+          contraseña: formData.password,
         };
 
         const createResponse = await fetch('https://frozenback-test.up.railway.app/api/ventas/clientes/', {
@@ -233,21 +227,6 @@ const RegisterForm = ({ onClose }) => {
               </span>
             </div>
             {errors.confirmPassword && <p className="error-message">{errors.confirmPassword}</p>}
-          </div>
-          <div className="form-group">
-            <label htmlFor="address">Dirección de Entrega</label>
-            <div className="input-with-icon">
-              <input
-                type="text"
-                id="address"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                required
-              />
-              <span className="icon"><AddressIcon /></span>
-            </div>
-            {errors.address && <p className="error-message">{errors.address}</p>}
           </div>
           <button type="submit" className="submit-button">Crear Cuenta</button>
         </form>
