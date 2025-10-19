@@ -36,7 +36,7 @@ const Navbar = ({ onRegisterClick }) => {
       const clients = await response.json();
       const client = clients.find(c => c.email === email);
 
-      if (client && password === '123') {
+      if (client) {
         login(client);
         addToast(`Bienvenido, ${client.nombre}`, 'success');
         setEmail('');
