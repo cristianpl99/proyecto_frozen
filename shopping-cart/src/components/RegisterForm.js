@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import './RegisterForm.css';
+import { ToastContext } from '../context/ToastContext';
 
 const UserIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="darkgray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -58,6 +59,7 @@ const RegisterForm = ({ onClose }) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [errors, setErrors] = useState({});
+  const { addToast } = useContext(ToastContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -67,7 +69,7 @@ const RegisterForm = ({ onClose }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
     if (!formData.name) newErrors.name = 'El nombre es obligatorio';
@@ -89,8 +91,29 @@ const RegisterForm = ({ onClose }) => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      console.log('Form data submitted:', formData);
-      onClose();
+      const clientData = {
+        nombre: `${formData.name} ${formData.lastName}`,
+        email: formData.email,
+      };
+
+      try {
+        const response = await fetch('https://frozenback-production.up.railway.app/api/ventas/clientes/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(clientData),
+        });
+
+        if (response.ok) {
+          addToast('Cliente creado exitosamente', 'success');
+          onClose();
+        } else {
+          addToast('Error al crear el cliente', 'error');
+        }
+      } catch (error) {
+        addToast('Error de red al crear el cliente', 'error');
+      }
     }
   };
 
