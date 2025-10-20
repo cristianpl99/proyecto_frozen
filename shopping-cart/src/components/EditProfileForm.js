@@ -98,7 +98,7 @@ const EditProfileForm = ({ onClose }) => {
         }
 
         const response = await fetch(`https://frozenback-test.up.railway.app/api/ventas/clientes/${user.id_cliente}/`, {
-          method: 'PUT',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
           },
