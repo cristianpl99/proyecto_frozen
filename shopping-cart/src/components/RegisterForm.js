@@ -87,10 +87,15 @@ const RegisterForm = ({ onClose }) => {
       try {
         const response = await fetch('https://frozenback-test.up.railway.app/api/ventas/clientes/');
         const data = await response.json();
-        const existingClient = data.results.find(c => c.email === formData.email);
-
-        if (existingClient) {
+        const existingEmail = data.results.find(c => c.email === formData.email);
+        if (existingEmail) {
           addToast('El email ya está registrado', 'error');
+          return;
+        }
+
+        const existingCuit = data.results.find(c => c.cuil === formData.cuit);
+        if (existingCuit) {
+          addToast('El CUIT ya se encuentra registrado', 'error');
           return;
         }
 
