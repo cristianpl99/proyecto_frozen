@@ -56,7 +56,7 @@ const ProductList = ({ setFetchProducts }) => {
     .map(product => {
       const itemInCart = cart.find(item => item.id_producto === product.id_producto);
       const quantityInCart = itemInCart ? itemInCart.quantity : 0;
-      const availableStock = product.stock.cantidad_disponible - quantityInCart;
+      const availableStock = Math.max(0, product.stock.cantidad_disponible - quantityInCart);
 
       return {
         ...product,
@@ -86,7 +86,12 @@ const ProductList = ({ setFetchProducts }) => {
           Array.from({ length: 8 }).map((_, index) => <SkeletonProductCard key={index} />)
         ) : (
           filteredProducts.map(product => (
-            <Product key={product.id_producto} product={product} onProductClick={handleProductClick} />
+            <Product
+              key={product.id_producto}
+              product={product}
+              availableStock={product.stock.cantidad_disponible}
+              onProductClick={handleProductClick}
+            />
           ))
         )}
       </div>
