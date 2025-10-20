@@ -102,11 +102,14 @@ const Cart = ({ fetchProducts }) => {
             <span>${completedOrderDetails.total.toFixed(2)}</span>
           </div>
           <div className="summary-info">
-            <p>📧 Email: {user.email}</p>
+            <p>📧 El resumen fue enviado a: <strong>{user.email}</strong></p>
             <p>🏦 Alias de pago: <strong>frozen.pyme.congelados</strong></p>
-            <p>🔐 Tus datos están protegidos</p>
+            <p>📧 Enviá tu comprobante de transferencia a: <strong>frozenpyme@gmail.com</strong></p>
+            <p>⏰ Tu pedido será reservado por 24hs.</p>
           </div>
-          <button className="pay-btn" onClick={handleSeguirComprando}>Seguir Comprando</button>
+          <div className="pay-btn-container">
+            <button className="pay-btn" onClick={handleSeguirComprando}>Seguir Comprando</button>
+          </div>
         </div>
       ) : cart.length === 0 ? (
         <p className="cart-empty">Tu carrito está vacío</p>
