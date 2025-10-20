@@ -86,6 +86,7 @@ const EditProfileForm = ({ onClose }) => {
     } else {
       try {
         const clientData = {
+          id_cliente: user.id_cliente,
           nombre: formData.name,
           apellido: formData.lastName,
           cuil: formData.cuit,
