@@ -9,17 +9,10 @@ const UserIcon = () => (
     </svg>
 );
 
-const CuitIcon = () => (
+const CuilIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="darkgray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="4" width="20" height="16" rx="2"></rect>
         <path d="M6 10h4m-4 4h4m6-4h4m-4 4h4"></path>
-    </svg>
-);
-
-const AddressIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="darkgray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-        <circle cx="12" cy="10" r="3"></circle>
     </svg>
 );
 
@@ -48,8 +41,7 @@ const RegisterForm = ({ onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
     lastName: '',
-    cuit: '',
-    address: '',
+    cuil: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -74,8 +66,7 @@ const RegisterForm = ({ onClose }) => {
     const newErrors = {};
     if (!formData.name) newErrors.name = 'El nombre es obligatorio';
     if (!formData.lastName) newErrors.lastName = 'El apellido es obligatorio';
-    if (!formData.cuit) newErrors.cuit = 'El CUIT es obligatorio';
-    if (!formData.address) newErrors.address = 'La dirección es obligatoria';
+    if (!formData.cuil) newErrors.cuil = 'El CUIL es obligatorio';
     if (!formData.email) {
       newErrors.email = 'El email es obligatorio';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -83,6 +74,8 @@ const RegisterForm = ({ onClose }) => {
     }
     if (!formData.password) {
       newErrors.password = 'La contraseña es obligatoria';
+    } else if (formData.password.length < 8) {
+      newErrors.password = 'La contraseña debe tener al menos 8 caracteres';
     }
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Las contraseñas no coinciden';
@@ -94,18 +87,24 @@ const RegisterForm = ({ onClose }) => {
       try {
         const response = await fetch('https://frozenback-test.up.railway.app/api/ventas/clientes/');
         const data = await response.json();
-        const existingClient = data.results.find(c => c.email === formData.email);
-
-        if (existingClient) {
+        const existingEmail = data.results.find(c => c.email === formData.email);
+        if (existingEmail) {
           addToast('El email ya está registrado', 'error');
           return;
         }
 
+        const existingCuil = data.results.find(c => c.cuil === formData.cuil);
+        if (existingCuil) {
+          addToast('El CUIL ya se encuentra registrado', 'error');
+          return;
+        }
+
         const clientData = {
-          nombre: `${formData.name} ${formData.lastName}`,
+          nombre: formData.name,
+          apellido: formData.lastName,
           email: formData.email,
-          cuit: formData.cuit,
-          direccion: formData.address,
+          cuil: formData.cuil,
+          contraseña: formData.password,
         };
 
         const createResponse = await fetch('https://frozenback-test.up.railway.app/api/ventas/clientes/', {
@@ -171,19 +170,19 @@ const RegisterForm = ({ onClose }) => {
             {errors.lastName && <p className="error-message">{errors.lastName}</p>}
           </div>
           <div className="form-group">
-            <label htmlFor="cuit">CUIT</label>
+            <label htmlFor="cuil">CUIL</label>
             <div className="input-with-icon">
               <input
                 type="text"
-                id="cuit"
-                name="cuit"
-                value={formData.cuit}
+                id="cuil"
+                name="cuil"
+                value={formData.cuil}
                 onChange={handleChange}
                 required
               />
-              <span className="icon"><CuitIcon /></span>
+              <span className="icon"><CuilIcon /></span>
             </div>
-            {errors.cuit && <p className="error-message">{errors.cuit}</p>}
+            {errors.cuil && <p className="error-message">{errors.cuil}</p>}
           </div>
           <div className="form-group">
             <label htmlFor="email">Email</label>
@@ -233,21 +232,6 @@ const RegisterForm = ({ onClose }) => {
               </span>
             </div>
             {errors.confirmPassword && <p className="error-message">{errors.confirmPassword}</p>}
-          </div>
-          <div className="form-group">
-            <label htmlFor="address">Dirección de Entrega</label>
-            <div className="input-with-icon">
-              <input
-                type="text"
-                id="address"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                required
-              />
-              <span className="icon"><AddressIcon /></span>
-            </div>
-            {errors.address && <p className="error-message">{errors.address}</p>}
           </div>
           <button type="submit" className="submit-button">Crear Cuenta</button>
         </form>

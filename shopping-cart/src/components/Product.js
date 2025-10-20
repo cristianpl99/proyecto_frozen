@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { CartContext } from '../context/CartContext';
 import './Product.css';
 
-const Product = ({ product, availableStock, onProductClick }) => {
+const Product = ({ product, onProductClick }) => {
   const { addToCart } = useContext(CartContext);
   const [isAdded, setIsAdded] = useState(false);
 
@@ -15,7 +15,8 @@ const Product = ({ product, availableStock, onProductClick }) => {
     }, 2000);
   };
 
-  const isOutOfStock = availableStock <= 0;
+  const stockInfo = product.stock;
+  const isOutOfStock = stockInfo && stockInfo.cantidad_disponible === 0;
 
   const cardStyle = product.imagenes && product.imagenes[0] ? {
     backgroundImage: `url(data:image/jpeg;base64,${product.imagenes[0].imagen_base64})`,
@@ -31,9 +32,9 @@ const Product = ({ product, availableStock, onProductClick }) => {
       <div className="product-card-content">
         <h3>{product.nombre}</h3>
         <p className="price">${product.precio}</p>
-        {product.stock && (
+        {stockInfo && (
           <div className="stock-info">
-            Disponible: {availableStock} {product.stock.unidad_medida}
+            Disponible: {stockInfo.cantidad_disponible} {stockInfo.unidad_medida}
           </div>
         )}
         <button
