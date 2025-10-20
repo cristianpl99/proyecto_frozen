@@ -19,7 +19,7 @@ const Cart = ({ fetchProducts }) => {
   const { addToast } = useContext(ToastContext);
   const { user } = useContext(AuthContext);
   const [orderComplete, setOrderComplete] = useState(false);
-  const [orderTotal, setOrderTotal] = useState(0);
+  const [completedOrderDetails, setCompletedOrderDetails] = useState({ items: [], total: 0 });
 
   const subtotal = parseFloat(getTotalPrice());
   const shippingCost = subtotal > 5000 ? 0 : 1000;
@@ -58,7 +58,7 @@ const Cart = ({ fetchProducts }) => {
 
       if (response.ok) {
         addToast('Orden de venta creada con éxito', 'success');
-        setOrderTotal(total);
+        setCompletedOrderDetails({ items: [...cart], total });
         setOrderComplete(true);
         clearCart();
       } else {
@@ -76,13 +76,36 @@ const Cart = ({ fetchProducts }) => {
 
   return (
     <div className="cart-container">
-      <h2><CartIcon /> Carrito de Compras</h2>
+      <h2><CartIcon /> {orderComplete ? 'Resumen de la compra' : 'Carrito de Compras'}</h2>
       {orderComplete ? (
         <div className="order-summary-content">
-          <h3>¡Gracias por tu compra, {user.nombre} {user.apellido}!</h3>
-          <p>El detalle del pedido fue enviado a {user.email}.</p>
-          <p>El monto total es ${orderTotal.toFixed(2)}.</p>
-          <p>Nuestro alias es <strong>frozen.pyme.congelados</strong>, por favor envianos a frozen@gmail.com el comprobante para iniciar el proceso de envio.</p>
+          <table className="order-summary-table">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Cant</th>
+                <th>Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {completedOrderDetails.items.map(item => (
+                <tr key={item.id_producto}>
+                  <td>{item.nombre}</td>
+                  <td>{item.quantity}</td>
+                  <td>${(item.precio * item.quantity).toFixed(2)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="summary-row total-row">
+            <span>Total a pagar:</span>
+            <span>${completedOrderDetails.total.toFixed(2)}</span>
+          </div>
+          <div className="summary-info">
+            <p>📧 Email: {user.email}</p>
+            <p>🏦 Alias de pago: <strong>frozen.pyme.congelados</strong></p>
+            <p>🔐 Tus datos están protegidos</p>
+          </div>
           <button className="pay-btn" onClick={handleSeguirComprando}>Seguir Comprando</button>
         </div>
       ) : cart.length === 0 ? (
