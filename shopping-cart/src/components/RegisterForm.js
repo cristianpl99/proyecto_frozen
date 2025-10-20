@@ -9,7 +9,7 @@ const UserIcon = () => (
     </svg>
 );
 
-const CuitIcon = () => (
+const CuilIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="darkgray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="4" width="20" height="16" rx="2"></rect>
         <path d="M6 10h4m-4 4h4m6-4h4m-4 4h4"></path>
@@ -41,7 +41,7 @@ const RegisterForm = ({ onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
     lastName: '',
-    cuit: '',
+    cuil: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -66,7 +66,7 @@ const RegisterForm = ({ onClose }) => {
     const newErrors = {};
     if (!formData.name) newErrors.name = 'El nombre es obligatorio';
     if (!formData.lastName) newErrors.lastName = 'El apellido es obligatorio';
-    if (!formData.cuit) newErrors.cuit = 'El CUIT es obligatorio';
+    if (!formData.cuil) newErrors.cuil = 'El CUIL es obligatorio';
     if (!formData.email) {
       newErrors.email = 'El email es obligatorio';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -93,9 +93,9 @@ const RegisterForm = ({ onClose }) => {
           return;
         }
 
-        const existingCuit = data.results.find(c => c.cuil === formData.cuit);
-        if (existingCuit) {
-          addToast('El CUIT ya se encuentra registrado', 'error');
+        const existingCuil = data.results.find(c => c.cuil === formData.cuil);
+        if (existingCuil) {
+          addToast('El CUIL ya se encuentra registrado', 'error');
           return;
         }
 
@@ -103,7 +103,7 @@ const RegisterForm = ({ onClose }) => {
           nombre: formData.name,
           apellido: formData.lastName,
           email: formData.email,
-          cuil: formData.cuit,
+          cuil: formData.cuil,
           contraseña: formData.password,
         };
 
@@ -170,19 +170,19 @@ const RegisterForm = ({ onClose }) => {
             {errors.lastName && <p className="error-message">{errors.lastName}</p>}
           </div>
           <div className="form-group">
-            <label htmlFor="cuit">CUIT</label>
+            <label htmlFor="cuil">CUIL</label>
             <div className="input-with-icon">
               <input
                 type="text"
-                id="cuit"
-                name="cuit"
-                value={formData.cuit}
+                id="cuil"
+                name="cuil"
+                value={formData.cuil}
                 onChange={handleChange}
                 required
               />
-              <span className="icon"><CuitIcon /></span>
+              <span className="icon"><CuilIcon /></span>
             </div>
-            {errors.cuit && <p className="error-message">{errors.cuit}</p>}
+            {errors.cuil && <p className="error-message">{errors.cuil}</p>}
           </div>
           <div className="form-group">
             <label htmlFor="email">Email</label>
