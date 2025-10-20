@@ -31,6 +31,14 @@ export const CartProvider = ({ children }) => {
   };
 
   const updateQuantity = (productId, quantity) => {
+    const itemToUpdate = cart.find(p => p.id_producto === productId);
+    if (!itemToUpdate) return;
+
+    if (quantity > itemToUpdate.stock.cantidad_disponible) {
+      addToast(`No hay más stock de ${itemToUpdate.nombre}`, 'error');
+      return;
+    }
+
     if (quantity <= 0) {
       removeFromCart(productId);
       return;
