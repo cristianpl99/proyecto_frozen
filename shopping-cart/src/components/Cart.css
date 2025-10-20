@@ -100,3 +100,35 @@
   margin-top: 1rem;
   text-align: left;
 }
+.address-form {
+  margin-top: 16px;
+  border-top: 1px solid #eee;
+  padding-top: 16px;
+}
+
+.address-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.address-input-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 48%;
+}
+
+.address-input-container svg {
+  position: absolute;
+  left: 8px;
+  color: #333;
+}
+
+.address-input-container input,
+.address-input-container select {
+  width: 100%;
+  padding: 8px 8px 8px 32px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
