@@ -75,8 +75,7 @@ const RegisterForm = ({ onClose }) => {
     const newErrors = {};
     if (!formData.name) newErrors.name = 'El nombre es obligatorio';
     if (!formData.lastName) newErrors.lastName = 'El apellido es obligatorio';
-    if (!formData.cuit) newErrors.cuit = 'El CUIT es obligatorio';
-    if (!formData.address) newErrors.address = 'La dirección es obligatoria';
+    if (!formData.cuit) newErrors.cuit = 'El CUIL es obligatorio';
     if (!formData.email) {
       newErrors.email = 'El email es obligatorio';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -102,10 +101,11 @@ const RegisterForm = ({ onClose }) => {
         }
 
         const clientData = {
-          nombre: `${formData.name} ${formData.lastName}`,
+          nombre: formData.name,
+          apellido: formData.lastName,
           email: formData.email,
-          cuit: formData.cuit,
-          direccion: formData.address,
+          cuil: formData.cuit,
+          contraseña: formData.password,
         };
 
         const createResponse = await fetch('https://frozenback-test.up.railway.app/api/ventas/clientes/', {
@@ -171,7 +171,7 @@ const RegisterForm = ({ onClose }) => {
             {errors.lastName && <p className="error-message">{errors.lastName}</p>}
           </div>
           <div className="form-group">
-            <label htmlFor="cuit">CUIT</label>
+            <label htmlFor="cuit">CUIL</label>
             <div className="input-with-icon">
               <input
                 type="text"
@@ -233,21 +233,6 @@ const RegisterForm = ({ onClose }) => {
               </span>
             </div>
             {errors.confirmPassword && <p className="error-message">{errors.confirmPassword}</p>}
-          </div>
-          <div className="form-group">
-            <label htmlFor="address">Dirección de Entrega</label>
-            <div className="input-with-icon">
-              <input
-                type="text"
-                id="address"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                required
-              />
-              <span className="icon"><AddressIcon /></span>
-            </div>
-            {errors.address && <p className="error-message">{errors.address}</p>}
           </div>
           <button type="submit" className="submit-button">Crear Cuenta</button>
         </form>
