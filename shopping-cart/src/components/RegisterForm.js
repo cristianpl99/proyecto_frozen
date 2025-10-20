@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import './RegisterForm.css';
 import { ToastContext } from '../context/ToastContext';
+import { fetchAllClients } from '../utils/api';
 
 const UserIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="darkgray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -92,9 +93,8 @@ const RegisterForm = ({ onClose }) => {
       setErrors(newErrors);
     } else {
       try {
-        const response = await fetch('https://frozenback-test.up.railway.app/api/ventas/clientes/');
-        const data = await response.json();
-        const existingClient = data.results.find(c => c.email === formData.email);
+        const clients = await fetchAllClients();
+        const existingClient = clients.find(c => c.email === formData.email);
 
         if (existingClient) {
           addToast('El email ya está registrado', 'error');

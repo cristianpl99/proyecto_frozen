@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import './Navbar.css';
 import { AuthContext } from '../context/AuthContext';
 import { ToastContext } from '../context/ToastContext';
+import { fetchAllClients } from '../utils/api';
 
 const EmailIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -32,9 +33,8 @@ const Navbar = ({ onRegisterClick, onEditProfileClick }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('https://frozenback-test.up.railway.app/api/ventas/clientes/');
-      const data = await response.json();
-      const client = data.results.find(c => c.email === email);
+      const clients = await fetchAllClients();
+      const client = clients.find(c => c.email === email);
 
       if (client) {
         login(client);
