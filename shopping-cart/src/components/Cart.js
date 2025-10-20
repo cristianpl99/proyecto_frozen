@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { CartContext } from '../context/CartContext';
 import { ToastContext } from '../context/ToastContext';
 import { AuthContext } from '../context/AuthContext';
@@ -18,14 +18,12 @@ const Cart = ({ fetchProducts }) => {
   const { cart, getTotalPrice, clearCart } = useContext(CartContext);
   const { addToast } = useContext(ToastContext);
   const { user } = useContext(AuthContext);
-  const [orderComplete, setOrderComplete] = useState(false);
-  const [completedOrderDetails, setCompletedOrderDetails] = useState({ items: [], total: 0 });
 
   const subtotal = parseFloat(getTotalPrice());
   const shippingCost = subtotal > 5000 ? 0 : 1000;
   const total = subtotal + shippingCost;
 
-  const handleHacerPedido = async () => {
+  const handlePagar = async () => {
     if (!user) {
       addToast('Debes iniciar sesión para realizar la compra', 'error');
       return;
@@ -58,9 +56,8 @@ const Cart = ({ fetchProducts }) => {
 
       if (response.ok) {
         addToast('Orden de venta creada con éxito', 'success');
-        setCompletedOrderDetails({ items: [...cart], total });
-        setOrderComplete(true);
         clearCart();
+        fetchProducts();
       } else {
         addToast('Error al crear la orden de venta', 'error');
       }
@@ -69,49 +66,10 @@ const Cart = ({ fetchProducts }) => {
     }
   };
 
-  const handleSeguirComprando = () => {
-    setOrderComplete(false);
-    fetchProducts();
-  };
-
   return (
     <div className="cart-container">
-      <h2><CartIcon /> {orderComplete ? 'Resumen de la compra' : 'Carrito de Compras'}</h2>
-      {orderComplete ? (
-        <div className="order-summary-content">
-          <table className="order-summary-table">
-            <thead>
-              <tr>
-                <th>Producto</th>
-                <th>Cant</th>
-                <th>Subtotal</th>
-              </tr>
-            </thead>
-            <tbody>
-              {completedOrderDetails.items.map(item => (
-                <tr key={item.id_producto}>
-                  <td>{item.nombre}</td>
-                  <td>{item.quantity}</td>
-                  <td>${(item.precio * item.quantity).toFixed(2)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="summary-row total-row">
-            <span>Total a pagar:</span>
-            <span>${completedOrderDetails.total.toFixed(2)}</span>
-          </div>
-          <div className="summary-info">
-            <p>📧 El resumen fue enviado a: <strong>{user.email}</strong></p>
-            <p>🏦 Alias de pago: <strong>frozen.pyme.congelados</strong></p>
-            <p>📧 Enviá tu comprobante de transferencia a: <strong>frozenpyme@gmail.com</strong></p>
-            <p>⏰ Tu pedido será reservado por 24hs.</p>
-          </div>
-          <div className="pay-btn-container">
-            <button className="pay-btn" onClick={handleSeguirComprando}>Seguir Comprando</button>
-          </div>
-        </div>
-      ) : cart.length === 0 ? (
+      <h2><CartIcon /> Carrito de Compras</h2>
+      {cart.length === 0 ? (
         <p className="cart-empty">Tu carrito está vacío</p>
       ) : (
         <>
@@ -144,7 +102,7 @@ const Cart = ({ fetchProducts }) => {
               <span>${total.toFixed(2)}</span>
             </div>
             <div className="pay-btn-container">
-              <button className="pay-btn" onClick={handleHacerPedido}>Hacer Pedido</button>
+              <button className="pay-btn" onClick={handlePagar}>Pagar</button>
             </div>
           </div>
         </>

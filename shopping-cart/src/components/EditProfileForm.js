@@ -17,10 +17,17 @@ const CuitIcon = () => (
     </svg>
 );
 
-const AddressIcon = () => (
+const EyeOpenIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="darkgray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-        <circle cx="12" cy="10" r="3"></circle>
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+    </svg>
+);
+
+const EyeClosedIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="darkgray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+        <line x1="1" y1="1" x2="23" y2="23"></line>
     </svg>
 );
 
@@ -32,17 +39,21 @@ const EditProfileForm = ({ onClose }) => {
     name: '',
     lastName: '',
     cuit: '',
-    address: '',
+    password: '',
+    confirmPassword: '',
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   useEffect(() => {
     if (user) {
-      const [name, ...lastName] = user.nombre.split(' ');
       setFormData({
-        name: name,
-        lastName: lastName.join(' '),
-        cuit: user.cuit,
-        address: user.direccion,
+        name: user.nombre,
+        lastName: user.apellido,
+        cuit: user.cuil,
+        password: '',
+        confirmPassword: '',
       });
     }
   }, [user]);
@@ -62,19 +73,28 @@ const EditProfileForm = ({ onClose }) => {
     const newErrors = {};
     if (!formData.name) newErrors.name = 'El nombre es obligatorio';
     if (!formData.lastName) newErrors.lastName = 'El apellido es obligatorio';
-    if (!formData.cuit) newErrors.cuit = 'El CUIT es obligatorio';
-    if (!formData.address) newErrors.address = 'La dirección es obligatoria';
+    if (!formData.cuit) newErrors.cuit = 'El CUIL es obligatorio';
+    if (formData.password && formData.password.length < 8) {
+      newErrors.password = 'La contraseña debe tener al menos 8 caracteres';
+    }
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'Las contraseñas no coinciden';
+    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
       try {
         const clientData = {
-          nombre: `${formData.name} ${formData.lastName}`,
-          cuit: formData.cuit,
-          direccion: formData.address,
+          nombre: formData.name,
+          apellido: formData.lastName,
+          cuil: formData.cuit,
           email: user.email,
         };
+
+        if (formData.password) {
+          clientData.contraseña = formData.password;
+        }
 
         const response = await fetch(`https://frozenback-test.up.railway.app/api/ventas/clientes/${user.id_cliente}/`, {
           method: 'PUT',
@@ -140,7 +160,7 @@ const EditProfileForm = ({ onClose }) => {
             {errors.lastName && <p className="error-message">{errors.lastName}</p>}
           </div>
           <div className="form-group">
-            <label htmlFor="cuit">CUIT</label>
+            <label htmlFor="cuit">CUIL</label>
             <div className="input-with-icon">
               <input
                 type="text"
@@ -155,19 +175,36 @@ const EditProfileForm = ({ onClose }) => {
             {errors.cuit && <p className="error-message">{errors.cuit}</p>}
           </div>
           <div className="form-group">
-            <label htmlFor="address">Dirección de Entrega</label>
+            <label htmlFor="password">Nueva Contraseña (opcional)</label>
             <div className="input-with-icon">
               <input
-                type="text"
-                id="address"
-                name="address"
-                value={formData.address}
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                name="password"
+                value={formData.password}
                 onChange={handleChange}
-                required
               />
-              <span className="icon"><AddressIcon /></span>
+              <span className="icon" onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
+              </span>
             </div>
-            {errors.address && <p className="error-message">{errors.address}</p>}
+            {errors.password && <p className="error-message">{errors.password}</p>}
+          </div>
+          <div className="form-group">
+            <label htmlFor="confirmPassword">Repetir Nueva Contraseña</label>
+            <div className="input-with-icon">
+              <input
+                type={showConfirmPassword ? 'text' : 'password'}
+                id="confirmPassword"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+              />
+              <span className="icon" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                {showConfirmPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
+              </span>
+            </div>
+            {errors.confirmPassword && <p className="error-message">{errors.confirmPassword}</p>}
           </div>
           <button type="submit" className="submit-button">Guardar Cambios</button>
         </form>
