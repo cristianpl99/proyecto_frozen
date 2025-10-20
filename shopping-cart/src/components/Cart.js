@@ -4,7 +4,6 @@ import { ToastContext } from '../context/ToastContext';
 import { AuthContext } from '../context/AuthContext';
 import CartItem from './CartItem';
 import ProgressBar from './ProgressBar';
-import OrderSummaryModal from './OrderSummaryModal';
 import './Cart.css';
 
 const CartIcon = () => (
@@ -19,7 +18,7 @@ const Cart = ({ fetchProducts }) => {
   const { cart, getTotalPrice, clearCart } = useContext(CartContext);
   const { addToast } = useContext(ToastContext);
   const { user } = useContext(AuthContext);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [orderComplete, setOrderComplete] = useState(false);
   const [orderTotal, setOrderTotal] = useState(0);
 
   const subtotal = parseFloat(getTotalPrice());
@@ -60,7 +59,8 @@ const Cart = ({ fetchProducts }) => {
       if (response.ok) {
         addToast('Orden de venta creada con éxito', 'success');
         setOrderTotal(total);
-        setIsModalOpen(true);
+        setOrderComplete(true);
+        clearCart();
       } else {
         addToast('Error al crear la orden de venta', 'error');
       }
@@ -69,23 +69,23 @@ const Cart = ({ fetchProducts }) => {
     }
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    clearCart();
+  const handleSeguirComprando = () => {
+    setOrderComplete(false);
     fetchProducts();
   };
 
   return (
     <div className="cart-container">
-      {isModalOpen && (
-        <OrderSummaryModal
-          user={user}
-          total={orderTotal}
-          onClose={handleCloseModal}
-        />
-      )}
       <h2><CartIcon /> Carrito de Compras</h2>
-      {cart.length === 0 ? (
+      {orderComplete ? (
+        <div className="order-summary-content">
+          <h3>¡Gracias por tu compra, {user.nombre} {user.apellido}!</h3>
+          <p>El detalle del pedido fue enviado a {user.email}.</p>
+          <p>El monto total es ${orderTotal.toFixed(2)}.</p>
+          <p>Nuestro alias es <strong>frozen.pyme.congelados</strong>, por favor envianos a frozen@gmail.com el comprobante para iniciar el proceso de envio.</p>
+          <button className="pay-btn" onClick={handleSeguirComprando}>Seguir Comprando</button>
+        </div>
+      ) : cart.length === 0 ? (
         <p className="cart-empty">Tu carrito está vacío</p>
       ) : (
         <>
