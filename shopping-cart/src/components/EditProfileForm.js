@@ -109,7 +109,9 @@ const EditProfileForm = ({ onClose }) => {
           refreshUser();
           onClose();
         } else {
-          addToast('Error al actualizar los datos', 'error');
+          const errorData = await response.json();
+          const errorMessage = Object.values(errorData).flat().join(' ');
+          addToast(`Error: ${errorMessage}`, 'error');
         }
       } catch (error) {
         addToast('Error de red al actualizar los datos', 'error');
