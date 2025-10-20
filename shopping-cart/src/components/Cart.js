@@ -61,7 +61,6 @@ const Cart = ({ fetchProducts }) => {
         addToast('Orden de venta creada con éxito', 'success');
         setOrderTotal(total);
         setIsModalOpen(true);
-        fetchProducts();
       } else {
         addToast('Error al crear la orden de venta', 'error');
       }
@@ -73,6 +72,7 @@ const Cart = ({ fetchProducts }) => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     clearCart();
+    fetchProducts();
   };
 
   return (
