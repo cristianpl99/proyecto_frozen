@@ -1,0 +1,26 @@
+.order-summary-content {
+  padding: 1rem;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.summary-total-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+
+.final-total {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 1rem 0;
+}

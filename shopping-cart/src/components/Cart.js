@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { CartContext } from '../context/CartContext';
 import { ToastContext } from '../context/ToastContext';
 import { AuthContext } from '../context/AuthContext';
 import CartItem from './CartItem';
 import ProgressBar from './ProgressBar';
+import OrderSummaryModal from './OrderSummaryModal';
 import './Cart.css';
 
 const CartIcon = () => (
@@ -18,12 +19,14 @@ const Cart = ({ fetchProducts }) => {
   const { cart, getTotalPrice, clearCart } = useContext(CartContext);
   const { addToast } = useContext(ToastContext);
   const { user } = useContext(AuthContext);
+  const [showSummary, setShowSummary] = useState(false);
+  const [lastOrder, setLastOrder] = useState(null);
 
   const subtotal = parseFloat(getTotalPrice());
   const shippingCost = subtotal > 5000 ? 0 : 1000;
   const total = subtotal + shippingCost;
 
-  const handlePagar = async () => {
+  const handleHacerPedido = async () => {
     if (!user) {
       addToast('Debes iniciar sesión para realizar la compra', 'error');
       return;
@@ -56,8 +59,8 @@ const Cart = ({ fetchProducts }) => {
 
       if (response.ok) {
         addToast('Orden de venta creada con éxito', 'success');
-        clearCart();
-        fetchProducts();
+        setLastOrder({ cart, subtotal, shippingCost, total });
+        setShowSummary(true);
       } else {
         addToast('Error al crear la orden de venta', 'error');
       }
@@ -102,11 +105,20 @@ const Cart = ({ fetchProducts }) => {
               <span>${total.toFixed(2)}</span>
             </div>
             <div className="pay-btn-container">
-              <button className="pay-btn" onClick={handlePagar}>Pagar</button>
+              <button className="pay-btn" onClick={handleHacerPedido}>Hacer Pedido</button>
             </div>
           </div>
         </>
       )}
+      <OrderSummaryModal
+        show={showSummary}
+        onClose={() => {
+          setShowSummary(false);
+          clearCart();
+          fetchProducts();
+        }}
+        orderDetails={lastOrder}
+      />
     </div>
   );
 };
