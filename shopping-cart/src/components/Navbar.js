@@ -18,7 +18,7 @@ const PasswordIcon = () => (
 );
 
 
-const Navbar = ({ onRegisterClick }) => {
+const Navbar = ({ onRegisterClick, onEditProfileClick }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -75,6 +75,7 @@ const Navbar = ({ onRegisterClick }) => {
           {user ? (
             <div className="welcome-container">
               <span className="welcome-message">Bienvenido, {user.nombre}</span>
+              <button className="edit-btn" onClick={onEditProfileClick}>Editar datos</button>
               <button className="logout-btn" onClick={handleLogout}>Desloguear</button>
             </div>
           ) : (

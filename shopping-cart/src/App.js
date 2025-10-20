@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import Navbar from './components/Navbar';
 import RegisterForm from './components/RegisterForm';
+import EditProfileForm from './components/EditProfileForm';
 import ProductList from './components/ProductList';
 import Cart from './components/Cart';
 import { CartProvider } from './context/CartContext';
@@ -12,7 +13,40 @@ import Footer from './components/Footer';
 
 function App() {
   const [showRegisterForm, setShowRegisterForm] = useState(false);
-  const [fetchProducts, setFetchProducts] = useState(null);
+  const [showEditProfileForm, setShowEditProfileForm] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchProductsAndStock = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const productResponse = await fetch('https://frozenback-test.up.railway.app/api/productos/productos/');
+      const productData = await productResponse.json();
+      const products = productData.results;
+
+      const stockPromises = products.map(product =>
+        fetch(`https://frozenback-test.up.railway.app/api/stock/cantidad-disponible/${product.id_producto}/`)
+          .then(res => res.json())
+      );
+
+      const stockData = await Promise.all(stockPromises);
+
+      const productsWithStock = products.map((product, index) => ({
+        ...product,
+        stock: stockData[index]
+      }));
+
+      setProducts(productsWithStock);
+    } catch (error) {
+      console.error("Error fetching product or stock data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchProductsAndStock();
+  }, [fetchProductsAndStock]);
 
   const handleRegisterClick = () => {
     setShowRegisterForm(true);
@@ -22,19 +56,28 @@ function App() {
     setShowRegisterForm(false);
   };
 
+  const handleEditProfileClick = () => {
+    setShowEditProfileForm(true);
+  };
+
+  const handleCloseEditProfileForm = () => {
+    setShowEditProfileForm(false);
+  };
+
   return (
     <AuthProvider>
       <ToastProvider>
         <CartProvider>
           <div className="App">
-            <Navbar onRegisterClick={handleRegisterClick} />
+            <Navbar onRegisterClick={handleRegisterClick} onEditProfileClick={handleEditProfileClick} />
           {showRegisterForm && <RegisterForm onClose={handleCloseRegisterForm} />}
+          {showEditProfileForm && <EditProfileForm onClose={handleCloseEditProfileForm} />}
           <main className="main-content">
             <div className="product-list">
-              <ProductList setFetchProducts={setFetchProducts} />
+              <ProductList products={products} isLoading={isLoading} />
             </div>
             <aside className="cart">
-              <Cart fetchProducts={fetchProducts} />
+              <Cart fetchProducts={fetchProductsAndStock} />
             </aside>
           </main>
           <ToastContainer />
