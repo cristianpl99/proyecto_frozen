@@ -78,3 +78,25 @@
 .pay-btn:hover {
   background-color: #1a8f3e;
 }
+
+.order-summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.order-summary-table th,
+.order-summary-table td {
+  padding: 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.order-summary-table th {
+  font-weight: bold;
+}
+
+.summary-info {
+  margin-top: 1rem;
+  text-align: left;
+}
