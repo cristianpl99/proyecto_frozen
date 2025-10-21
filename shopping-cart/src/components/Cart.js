@@ -51,16 +51,11 @@ const ZoneIcon = () => (
 );
 
 const Cart = ({ fetchProducts }) => {
-  const { cart, getTotalPrice, clearCart } = useContext(CartContext);
+  const { cart, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, zone, setZone } = useContext(CartContext);
   const { addToast } = useContext(ToastContext);
   const { user } = useContext(AuthContext);
   const [orderComplete, setOrderComplete] = useState(false);
   const [completedOrderDetails, setCompletedOrderDetails] = useState({ items: [], total: 0 });
-
-  const [street, setStreet] = useState('');
-  const [streetNumber, setStreetNumber] = useState('');
-  const [city, setCity] = useState('');
-  const [zone, setZone] = useState('');
 
   const subtotal = parseFloat(getTotalPrice());
   const shippingCost = subtotal > 5000 ? 0 : 1000;
@@ -74,6 +69,11 @@ const Cart = ({ fetchProducts }) => {
 
     if (cart.length === 0) {
       addToast('Tu carrito está vacío', 'error');
+      return;
+    }
+
+    if (!street || !streetNumber || !city || !zone) {
+      addToast('Por favor, completa todos los campos de dirección', 'error');
       return;
     }
 
