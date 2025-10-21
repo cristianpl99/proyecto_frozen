@@ -170,7 +170,7 @@ const EditProfileForm = ({ onClose }) => {
             </div>
           </div>
           <div className="form-group">
-            <label htmlFor="newPassword">Nueva Contraseña</label>
+            <label htmlFor="newPassword">Nueva Contraseña <i>(Opcional)</i></label>
             <div className="input-with-icon">
               <input
                 type={showNewPassword ? 'text' : 'password'}
