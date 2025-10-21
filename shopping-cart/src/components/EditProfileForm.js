@@ -77,6 +77,10 @@ const EditProfileForm = ({ onClose }) => {
     };
 
     if (formData.newPassword) {
+      if (formData.newPassword.length < 8) {
+        addToast('La nueva contraseña debe tener al menos 8 caracteres', 'error');
+        return;
+      }
       updatedData.nueva_contraseña = formData.newPassword;
     }
 
