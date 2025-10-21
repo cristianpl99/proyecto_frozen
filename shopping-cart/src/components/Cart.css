@@ -105,12 +105,14 @@
   margin-top: 24px;
   padding-top: 24px;
   border-top: 1px solid #eee;
+  margin-bottom: 40px; /* NUEVO: agrega espacio debajo */
 }
 
 .address-row {
   display: flex;
-  gap: 16px;
-  margin-bottom: 16px;
+  gap: 80px;
+  margin-bottom: 24px;
+  margin-right: 40px;
 }
 
 .address-input-group {
