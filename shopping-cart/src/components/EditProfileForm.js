@@ -105,7 +105,7 @@ const EditProfileForm = ({ onClose }) => {
       <div className="register-form-container">
         <button className="close-button" onClick={onClose}>X</button>
         <div className="form-title">
-          <img src="/favicon_frozen2.png" alt="logo" className="form-logo"/>
+          <img src="/favicon_ice.png" alt="logo" className="form-logo"/>
           <div>
             <h2>Editar Datos</h2>
           </div>
