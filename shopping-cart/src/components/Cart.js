@@ -77,21 +77,34 @@ const Cart = ({ fetchProducts }) => {
       return;
     }
 
+    const getZoneAbbreviation = (zone) => {
+      switch (zone) {
+        case 'Norte':
+          return 'N';
+        case 'Sur':
+          return 'S';
+        case 'Este':
+          return 'E';
+        case 'Oeste':
+          return 'O';
+        default:
+          return '';
+      }
+    };
+
     const orderData = {
       id_cliente: user.id_cliente,
-      fecha_entrega: new Date().toISOString(),
+      id_estado_venta: 3,
       id_prioridad: 1,
+      fecha_entrega: new Date().toISOString(),
+      calle: street,
+      altura: streetNumber,
+      localidad: city,
+      zona: getZoneAbbreviation(zone),
       productos: cart.map(item => ({
-        id_producto: item.id_producto.toString(),
+        id_producto: item.id_producto,
         cantidad: item.quantity,
-        unidad_medida: item.unidad_medida || '',
       })),
-      direccion_entrega: {
-        calle: street,
-        numero: streetNumber,
-        localidad: city,
-        zona: zone,
-      },
     };
 
     try {
