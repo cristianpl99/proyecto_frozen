@@ -116,7 +116,7 @@
 .address-input-group {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  flex: 1;
 }
 
 .address-input-group label {
