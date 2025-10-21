@@ -94,9 +94,9 @@ const Cart = ({ fetchProducts }) => {
 
     const orderData = {
       id_cliente: user.id_cliente,
-      id_estado_venta: 3,
+      fecha_entrega: null,
       id_prioridad: 1,
-      fecha_entrega: new Date().toISOString(),
+      tipo_venta: "ONL",
       calle: street,
       altura: streetNumber,
       localidad: city,
