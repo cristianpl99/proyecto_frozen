@@ -105,18 +105,14 @@
   margin-top: 24px;
   padding-top: 24px;
   border-top: 1px solid #eee;
-}
-
-.address-row {
   display: flex;
+  flex-direction: column;
   gap: 16px;
-  margin-bottom: 16px;
 }
 
 .address-input-group {
   display: flex;
   flex-direction: column;
-  flex: 1;
 }
 
 .address-input-group label {
