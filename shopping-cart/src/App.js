@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import Navbar from './components/Navbar';
 import RegisterForm from './components/RegisterForm';
+import EditProfileForm from './components/EditProfileForm';
 import ProductList from './components/ProductList';
 import Cart from './components/Cart';
 import { CartProvider } from './context/CartContext';
@@ -12,6 +13,7 @@ import Footer from './components/Footer';
 
 function App() {
   const [showRegisterForm, setShowRegisterForm] = useState(false);
+  const [showEditProfile, setShowEditProfile] = useState(false);
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -54,27 +56,36 @@ function App() {
     setShowRegisterForm(false);
   };
 
+  const handleEditProfileClick = () => {
+    setShowEditProfile(true);
+  };
+
+  const handleCloseEditProfileForm = () => {
+    setShowEditProfile(false);
+  };
+
   return (
     <AuthProvider>
       <ToastProvider>
         <CartProvider>
           <div className="App">
-            <Navbar onRegisterClick={handleRegisterClick} />
-          {showRegisterForm && <RegisterForm onClose={handleCloseRegisterForm} />}
-          <main className="main-content">
-            <div className="product-list">
-              <ProductList products={products} isLoading={isLoading} />
-            </div>
-            <aside className="cart">
-              <Cart fetchProducts={fetchProductsAndStock} />
-            </aside>
-          </main>
-          <ToastContainer />
-          <Footer />
-        </div>
-      </CartProvider>
-    </ToastProvider>
-  </AuthProvider>
+            <Navbar onRegisterClick={handleRegisterClick} onEditProfileClick={handleEditProfileClick} />
+            {showRegisterForm && <RegisterForm onClose={handleCloseRegisterForm} />}
+            {showEditProfile && <EditProfileForm onClose={handleCloseEditProfileForm} />}
+            <main className="main-content">
+              <div className="product-list">
+                <ProductList products={products} isLoading={isLoading} />
+              </div>
+              <aside className="cart">
+                <Cart fetchProducts={fetchProductsAndStock} />
+              </aside>
+            </main>
+            <ToastContainer />
+            <Footer />
+          </div>
+        </CartProvider>
+      </ToastProvider>
+    </AuthProvider>
   );
 }
 
