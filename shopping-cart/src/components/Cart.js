@@ -14,8 +14,44 @@ const CartIcon = () => (
   </svg>
 );
 
+const StreetIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 22h16"></path>
+    <path d="M8 18V6a4 4 0 0 1 4-4h0a4 4 0 0 1 4 4v12"></path>
+    <path d="M12 10h.01"></path>
+    <path d="M12 14h.01"></path>
+    <path d="M12 6h.01"></path>
+    <path d="M12 18h.01"></path>
+  </svg>
+);
+
+const NumberIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 9h16"></path>
+    <path d="M4 15h16"></path>
+    <path d="M10 3L8 21"></path>
+    <path d="M16 3l-2 18"></path>
+  </svg>
+);
+
+const CityIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M2 11h20v10H2z"></path>
+    <path d="M5 11V5a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v6"></path>
+    <path d="M9 21V11h6v10"></path>
+    <path d="M9 5h6"></path>
+  </svg>
+);
+
+const ZoneIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 22s-8-4.5-8-11.5a8 8 0 1 1 16 0c0 7-8 11.5-8 11.5z"></path>
+    <circle cx="12" cy="10" r="3"></circle>
+  </svg>
+);
+
 const Cart = ({ fetchProducts }) => {
-  const { cart, getTotalPrice, clearCart } = useContext(CartContext);
+  const { cart, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, zone, setZone } = useContext(CartContext);
   const { addToast } = useContext(ToastContext);
   const { user } = useContext(AuthContext);
   const [orderComplete, setOrderComplete] = useState(false);
@@ -36,14 +72,38 @@ const Cart = ({ fetchProducts }) => {
       return;
     }
 
+    if (!street || !streetNumber || !city || !zone) {
+      addToast('Por favor, completa todos los campos de dirección', 'error');
+      return;
+    }
+
+    const getZoneAbbreviation = (zone) => {
+      switch (zone) {
+        case 'Norte':
+          return 'N';
+        case 'Sur':
+          return 'S';
+        case 'Este':
+          return 'E';
+        case 'Oeste':
+          return 'O';
+        default:
+          return '';
+      }
+    };
+
     const orderData = {
       id_cliente: user.id_cliente,
-      fecha_entrega: new Date().toISOString(),
+      fecha_entrega: null,
       id_prioridad: 1,
+      tipo_venta: "ONL",
+      calle: street,
+      altura: streetNumber,
+      localidad: city,
+      zona: getZoneAbbreviation(zone),
       productos: cart.map(item => ({
-        id_producto: item.id_producto.toString(),
+        id_producto: item.id_producto,
         cantidad: item.quantity,
-        unidad_medida: item.unidad_medida || '',
       })),
     };
 
@@ -142,6 +202,49 @@ const Cart = ({ fetchProducts }) => {
             <div className="summary-row total-row">
               <span>Total:</span>
               <span>${total.toFixed(2)}</span>
+            </div>
+            <div className="address-form">
+              <div className="address-row">
+                <div className="address-input-container">
+                  <StreetIcon />
+                  <input
+                    type="text"
+                    placeholder="Calle"
+                    value={street}
+                    onChange={(e) => setStreet(e.target.value)}
+                  />
+                </div>
+                <div className="address-input-container">
+                  <NumberIcon />
+                  <input
+                    type="text"
+                    placeholder="Altura"
+                    value={streetNumber}
+                    onChange={(e) => setStreetNumber(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="address-row">
+                <div className="address-input-container">
+                  <CityIcon />
+                  <input
+                    type="text"
+                    placeholder="Localidad"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                  />
+                </div>
+                <div className="address-input-container">
+                  <ZoneIcon />
+                  <select value={zone} onChange={(e) => setZone(e.target.value)}>
+                    <option value="" disabled>Zona</option>
+                    <option value="Norte">Norte</option>
+                    <option value="Sur">Sur</option>
+                    <option value="Este">Este</option>
+                    <option value="Oeste">Oeste</option>
+                  </select>
+                </div>
+              </div>
             </div>
             <div className="pay-btn-container">
               <button className="pay-btn" onClick={handleHacerPedido}>Hacer Pedido</button>

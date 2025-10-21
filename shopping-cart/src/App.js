@@ -65,9 +65,9 @@ function App() {
   };
 
   return (
-    <AuthProvider>
-      <ToastProvider>
-        <CartProvider>
+    <ToastProvider>
+      <CartProvider>
+        <AuthProvider>
           <div className="App">
             <Navbar onRegisterClick={handleRegisterClick} onEditProfileClick={handleEditProfileClick} />
             {showRegisterForm && <RegisterForm onClose={handleCloseRegisterForm} />}
@@ -83,9 +83,9 @@ function App() {
             <ToastContainer />
             <Footer />
           </div>
-        </CartProvider>
-      </ToastProvider>
-    </AuthProvider>
+        </AuthProvider>
+      </CartProvider>
+    </ToastProvider>
   );
 }
 

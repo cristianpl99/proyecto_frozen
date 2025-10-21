@@ -75,8 +75,8 @@ const Navbar = ({ onRegisterClick, onEditProfileClick }) => {
           {user ? (
             <div className="welcome-container">
               <span className="welcome-message">Bienvenido, {user.nombre}</span>
-              <button className="edit-btn" onClick={onEditProfileClick}>Editar Datos</button>
               <button className="logout-btn" onClick={handleLogout}>Desloguear</button>
+              <button className="edit-btn" onClick={onEditProfileClick}>Editar Datos</button>
             </div>
           ) : (
             <form onSubmit={handleLogin}>

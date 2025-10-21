@@ -6,6 +6,11 @@ export const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const { addToast } = useContext(ToastContext);
   const [cart, setCart] = useState([]);
+  const [street, setStreet] = useState('');
+  const [streetNumber, setStreetNumber] = useState('');
+  const [city, setCity] = useState('');
+  const [zone, setZone] = useState('');
+
 
   const addToCart = (product) => {
     setCart((prevCart) => {
@@ -58,8 +63,15 @@ export const CartProvider = ({ children }) => {
     setCart([]);
   };
 
+  const clearAddress = () => {
+    setStreet('');
+    setStreetNumber('');
+    setCity('');
+    setZone('');
+  };
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, getTotalPrice, clearCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, zone, setZone, clearAddress }}>
       {children}
     </CartContext.Provider>
   );
