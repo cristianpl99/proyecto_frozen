@@ -102,12 +102,13 @@
 }
 
 .address-form {
-  margin-top: 24px;
   padding-top: 24px;
   border-top: 1px solid #eee;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  max-width: 400px;
+  margin: 24px auto 0;
 }
 
 .address-input-group {
