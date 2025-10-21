@@ -93,27 +93,18 @@ const Cart = ({ fetchProducts }) => {
     };
 
     const orderData = {
-      fecha: new Date().toISOString(),
+      id_cliente: user.id_cliente,
+      id_estado_venta: 3,
+      id_prioridad: 1,
       fecha_entrega: new Date().toISOString(),
-      prioridad: {
-        id_prioridad: 1,
-      },
-      cliente: {
-        id_cliente: user.id_cliente,
-      },
-      estado_venta: {
-        id_estado_venta: 3,
-      },
-      productos: cart.map(item => ({
-        id_producto: item.id_producto.toString(),
-        cantidad: item.quantity,
-        unidad_medida: item.unidad_medida || '',
-      })),
-      tipo_venta: "ONL",
       calle: street,
       altura: streetNumber,
       localidad: city,
       zona: getZoneAbbreviation(zone),
+      productos: cart.map(item => ({
+        id_producto: item.id_producto,
+        cantidad: item.quantity,
+      })),
     };
 
     try {
