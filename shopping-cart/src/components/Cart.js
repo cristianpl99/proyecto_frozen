@@ -15,7 +15,7 @@ const CartIcon = () => (
 );
 
 const StreetIcon = () => (
-  <svg xmlns="http://www.w.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M4 22h16"></path>
     <path d="M8 18V6a4 4 0 0 1 4-4h0a4 4 0 0 1 4 4v12"></path>
     <path d="M12 10h.01"></path>
@@ -26,7 +26,7 @@ const StreetIcon = () => (
 );
 
 const NumberIcon = () => (
-  <svg xmlns="http://www.w.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M4 9h16"></path>
     <path d="M4 15h16"></path>
     <path d="M10 3L8 21"></path>
@@ -35,7 +35,7 @@ const NumberIcon = () => (
 );
 
 const CityIcon = () => (
-  <svg xmlns="http://www.w.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M2 11h20v10H2z"></path>
     <path d="M5 11V5a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v6"></path>
     <path d="M9 21V11h6v10"></path>
@@ -44,23 +44,18 @@ const CityIcon = () => (
 );
 
 const ZoneIcon = () => (
-  <svg xmlns="http://www.w.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M12 22s-8-4.5-8-11.5a8 8 0 1 1 16 0c0 7-8 11.5-8 11.5z"></path>
     <circle cx="12" cy="10" r="3"></circle>
   </svg>
 );
 
 const Cart = ({ fetchProducts }) => {
-  const { cart, getTotalPrice, clearCart } = useContext(CartContext);
+  const { cart, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, zone, setZone } = useContext(CartContext);
   const { addToast } = useContext(ToastContext);
   const { user } = useContext(AuthContext);
   const [orderComplete, setOrderComplete] = useState(false);
   const [completedOrderDetails, setCompletedOrderDetails] = useState({ items: [], total: 0 });
-
-  const [street, setStreet] = useState('');
-  const [streetNumber, setStreetNumber] = useState('');
-  const [city, setCity] = useState('');
-  const [zone, setZone] = useState('');
 
   const subtotal = parseFloat(getTotalPrice());
   const shippingCost = subtotal > 5000 ? 0 : 1000;
@@ -74,6 +69,11 @@ const Cart = ({ fetchProducts }) => {
 
     if (cart.length === 0) {
       addToast('Tu carrito está vacío', 'error');
+      return;
+    }
+
+    if (!street || !streetNumber || !city || !zone) {
+      addToast('Por favor, completa todos los campos de dirección', 'error');
       return;
     }
 
@@ -205,44 +205,59 @@ const Cart = ({ fetchProducts }) => {
             </div>
             <div className="address-form">
               <div className="address-row">
-                <div className="address-input-container">
-                  <StreetIcon />
-                  <input
-                    type="text"
-                    placeholder="Calle"
-                    value={street}
-                    onChange={(e) => setStreet(e.target.value)}
-                  />
+                <div className="address-input-group">
+                  <label htmlFor="street">Calle</label>
+                  <div className="address-input-container">
+                    <StreetIcon />
+                    <input
+                      id="street"
+                      type="text"
+                      placeholder="Calle"
+                      value={street}
+                      onChange={(e) => setStreet(e.target.value)}
+                    />
+                  </div>
                 </div>
-                <div className="address-input-container">
-                  <NumberIcon />
-                  <input
-                    type="text"
-                    placeholder="Altura"
-                    value={streetNumber}
-                    onChange={(e) => setStreetNumber(e.target.value)}
-                  />
+                <div className="address-input-group">
+                  <label htmlFor="streetNumber">Altura</label>
+                  <div className="address-input-container">
+                    <NumberIcon />
+                    <input
+                      id="streetNumber"
+                      type="text"
+                      placeholder="Altura"
+                      value={streetNumber}
+                      onChange={(e) => setStreetNumber(e.target.value)}
+                    />
+                  </div>
                 </div>
               </div>
               <div className="address-row">
-                <div className="address-input-container">
-                  <CityIcon />
-                  <input
-                    type="text"
-                    placeholder="Localidad"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                  />
+                <div className="address-input-group">
+                  <label htmlFor="city">Localidad</label>
+                  <div className="address-input-container">
+                    <CityIcon />
+                    <input
+                      id="city"
+                      type="text"
+                      placeholder="Localidad"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                    />
+                  </div>
                 </div>
-                <div className="address-input-container">
-                  <ZoneIcon />
-                  <select value={zone} onChange={(e) => setZone(e.target.value)}>
-                    <option value="" disabled>Zona</option>
-                    <option value="Norte">Norte</option>
-                    <option value="Sur">Sur</option>
-                    <option value="Este">Este</option>
-                    <option value="Oeste">Oeste</option>
-                  </select>
+                <div className="address-input-group">
+                  <label htmlFor="zone">Zona</label>
+                  <div className="address-input-container">
+                    <ZoneIcon />
+                    <select id="zone" value={zone} onChange={(e) => setZone(e.target.value)}>
+                      <option value="" disabled>Zona</option>
+                      <option value="Norte">Norte</option>
+                      <option value="Sur">Sur</option>
+                      <option value="Este">Este</option>
+                      <option value="Oeste">Oeste</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>
