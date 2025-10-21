@@ -205,44 +205,59 @@ const Cart = ({ fetchProducts }) => {
             </div>
             <div className="address-form">
               <div className="address-row">
-                <div className="address-input-container">
-                  <StreetIcon />
-                  <input
-                    type="text"
-                    placeholder="Calle"
-                    value={street}
-                    onChange={(e) => setStreet(e.target.value)}
-                  />
+                <div className="address-input-group">
+                  <label htmlFor="street">Calle</label>
+                  <div className="address-input-container">
+                    <StreetIcon />
+                    <input
+                      id="street"
+                      type="text"
+                      placeholder="Calle"
+                      value={street}
+                      onChange={(e) => setStreet(e.target.value)}
+                    />
+                  </div>
                 </div>
-                <div className="address-input-container">
-                  <NumberIcon />
-                  <input
-                    type="text"
-                    placeholder="Altura"
-                    value={streetNumber}
-                    onChange={(e) => setStreetNumber(e.target.value)}
-                  />
+                <div className="address-input-group">
+                  <label htmlFor="streetNumber">Altura</label>
+                  <div className="address-input-container">
+                    <NumberIcon />
+                    <input
+                      id="streetNumber"
+                      type="text"
+                      placeholder="Altura"
+                      value={streetNumber}
+                      onChange={(e) => setStreetNumber(e.target.value)}
+                    />
+                  </div>
                 </div>
               </div>
               <div className="address-row">
-                <div className="address-input-container">
-                  <CityIcon />
-                  <input
-                    type="text"
-                    placeholder="Localidad"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                  />
+                <div className="address-input-group">
+                  <label htmlFor="city">Localidad</label>
+                  <div className="address-input-container">
+                    <CityIcon />
+                    <input
+                      id="city"
+                      type="text"
+                      placeholder="Localidad"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                    />
+                  </div>
                 </div>
-                <div className="address-input-container">
-                  <ZoneIcon />
-                  <select value={zone} onChange={(e) => setZone(e.target.value)}>
-                    <option value="" disabled>Zona</option>
-                    <option value="Norte">Norte</option>
-                    <option value="Sur">Sur</option>
-                    <option value="Este">Este</option>
-                    <option value="Oeste">Oeste</option>
-                  </select>
+                <div className="address-input-group">
+                  <label htmlFor="zone">Zona</label>
+                  <div className="address-input-container">
+                    <ZoneIcon />
+                    <select id="zone" value={zone} onChange={(e) => setZone(e.target.value)}>
+                      <option value="" disabled>Zona</option>
+                      <option value="Norte">Norte</option>
+                      <option value="Sur">Sur</option>
+                      <option value="Este">Este</option>
+                      <option value="Oeste">Oeste</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>
