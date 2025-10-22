@@ -13,7 +13,7 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
   const initializeMap = useCallback((initialPosition) => {
     const mapInstance = new window.google.maps.Map(mapRef.current, {
       center: initialPosition,
-      zoom,
+      zoom: 12, // Use a fixed initial zoom
       disableDefaultUI: true,
     });
     setMap(mapInstance);
