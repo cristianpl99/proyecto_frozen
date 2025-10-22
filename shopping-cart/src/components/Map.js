@@ -13,7 +13,7 @@ const Map = ({ onPlaceSelect }) => {
       return;
     }
 
-    const initialPosition = { lat: -34.6037, lng: -58.3816 }; // Buenos Aires
+    const initialPosition = { lat: -34.510525, lng: -58.699404 }; // Juan María Gutiérrez 1150
 
     const mapInstance = new window.google.maps.Map(mapRef.current, {
       center: initialPosition,
