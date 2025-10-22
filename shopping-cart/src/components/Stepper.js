@@ -8,7 +8,7 @@ const Checkmark = () => (
 );
 
 const Stepper = ({ currentStep }) => {
-  const steps = ['Productos', 'Envío', 'Confirmación'];
+  const steps = ['Productos', 'Envío', 'Resumen', 'Confirmación'];
 
   return (
     <div className="stepper-wrapper">

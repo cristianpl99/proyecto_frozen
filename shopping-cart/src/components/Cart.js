@@ -169,6 +169,7 @@ const Cart = ({ fetchProducts }) => {
           streetNumber,
           city,
         });
+        setStep(4);
         clearCart();
       } else {
         addToast('Error al crear la orden de venta', 'error');
@@ -323,7 +324,7 @@ const Cart = ({ fetchProducts }) => {
             </div>
           )}
 
-          {step === 3 && !completedOrderDetails && (
+          {step === 3 && (
             <div className="order-summary-content">
               <table className="order-summary-table">
                 <thead>
@@ -360,7 +361,7 @@ const Cart = ({ fetchProducts }) => {
             </div>
           )}
 
-          {step === 3 && completedOrderDetails && (
+          {step === 4 && (
             <div className="order-summary-content">
               <h2>¡Gracias por tu compra, {user.nombre}!</h2>
               <div className="summary-info">
