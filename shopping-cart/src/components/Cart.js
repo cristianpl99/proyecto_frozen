@@ -5,6 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 import CartItem from './CartItem';
 import ProgressBar from './ProgressBar';
 import Map from './Map';
+import Stepper from './Stepper';
 import './Cart.css';
 
 const CartIcon = () => (
@@ -55,6 +56,7 @@ const Cart = ({ fetchProducts }) => {
   const { cart, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, zone, setZone } = useContext(CartContext);
   const { addToast } = useContext(ToastContext);
   const { user } = useContext(AuthContext);
+  const [step, setStep] = useState(1);
   const [orderComplete, setOrderComplete] = useState(false);
   const [completedOrderDetails, setCompletedOrderDetails] = useState({ items: [], total: 0 });
 
@@ -120,7 +122,7 @@ const Cart = ({ fetchProducts }) => {
       if (response.ok) {
         addToast('Orden de venta creada con éxito', 'success');
         setCompletedOrderDetails({ items: [...cart], total });
-        setOrderComplete(true);
+        setStep(3);
         clearCart();
       } else {
         addToast('Error al crear la orden de venta', 'error');
@@ -131,7 +133,7 @@ const Cart = ({ fetchProducts }) => {
   };
 
   const handleSeguirComprando = () => {
-    setOrderComplete(false);
+    setStep(1);
     fetchProducts();
   };
 
@@ -148,74 +150,57 @@ const Cart = ({ fetchProducts }) => {
 
   return (
     <div className="cart-container">
-      <h2><CartIcon /> {orderComplete ? 'Resumen de la compra' : 'Carrito de Compras'}</h2>
-      {orderComplete ? (
-        <div className="order-summary-content">
-          <table className="order-summary-table">
-            <thead>
-              <tr>
-                <th>Producto</th>
-                <th>Cant</th>
-                <th>Subtotal</th>
-              </tr>
-            </thead>
-            <tbody>
-              {completedOrderDetails.items.map(item => (
-                <tr key={item.id_producto}>
-                  <td>{item.nombre}</td>
-                  <td>{item.quantity}</td>
-                  <td>${(item.precio * item.quantity).toFixed(2)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="summary-row total-row">
-            <span>Total a pagar:</span>
-            <span>${completedOrderDetails.total.toFixed(2)}</span>
-          </div>
-          <div className="summary-info">
-            <p>📧 El resumen fue enviado a: <strong>{user.email}</strong></p>
-            <p>🏦 Alias de pago: <strong>frozen.pyme.congelados</strong></p>
-            <p>📧 Enviá tu comprobante de transferencia a: <strong>frozenpyme@gmail.com</strong></p>
-            <p>⏰ Tu pedido será reservado por 24hs.</p>
-          </div>
-          <div className="pay-btn-container">
-            <button className="pay-btn" onClick={handleSeguirComprando}>Seguir Comprando</button>
-          </div>
-        </div>
-      ) : cart.length === 0 ? (
+      <Stepper currentStep={step} />
+      <h2><CartIcon />
+        {step === 1 && 'Carrito de Compras'}
+        {step === 2 && 'Dirección de Envío'}
+        {step === 3 && 'Resumen de la compra'}
+      </h2>
+
+      {cart.length === 0 && step !== 3 ? (
         <p className="cart-empty">Tu carrito está vacío</p>
       ) : (
         <>
-          {cart.map(item => <CartItem key={item.id_producto} item={item} />)}
-          <div className="cart-summary">
-            <div className="summary-row">
-              <span>Subtotal:</span>
-              <span>${subtotal.toFixed(2)}</span>
-            </div>
-            <div className="summary-row">
-              <span>Costo de Envío:</span>
-              {shippingCost === 0 ? (
-                <span className="bonificado">Bonificado</span>
-              ) : (
-                <span>${shippingCost.toFixed(2)}</span>
-              )}
-            </div>
-            <div className="shipping-info">
-              {subtotal < 5000 ? (
-                <>
-                  <span>🚚 Te faltan ${5000 - subtotal} para envío gratis</span>
-                  <ProgressBar value={subtotal} max={5000} />
-                </>
-              ) : (
-                <span>🎉 ¡Felicitaciones! Tenés envío gratis.</span>
-              )}
-            </div>
-            <div className="summary-row total-row">
-              <span>Total:</span>
-              <span>${total.toFixed(2)}</span>
-            </div>
-            <div className="address-form">
+          {step === 1 && (
+            <>
+              {cart.map(item => <CartItem key={item.id_producto} item={item} />)}
+              <div className="cart-summary">
+                <div className="summary-row">
+                  <span>Subtotal:</span>
+                  <span>${subtotal.toFixed(2)}</span>
+                </div>
+                <div className="summary-row">
+                  <span>Costo de Envío:</span>
+                  {shippingCost === 0 ? (
+                    <span className="bonificado">Bonificado</span>
+                  ) : (
+                    <span>${shippingCost.toFixed(2)}</span>
+                  )}
+                </div>
+                <div className="shipping-info">
+                  {subtotal < 5000 ? (
+                    <>
+                      <span>🚚 Te faltan ${5000 - subtotal} para envío gratis</span>
+                      <ProgressBar value={subtotal} max={5000} />
+                    </>
+                  ) : (
+                    <span>🎉 ¡Felicitaciones! Tenés envío gratis.</span>
+                  )}
+                </div>
+                <div className="summary-row total-row">
+                  <span>Total:</span>
+                  <span>${total.toFixed(2)}</span>
+                </div>
+                <div className="pay-btn-container">
+                  <button className="pay-btn" onClick={() => setStep(2)}>Continuar a Envio</button>
+                </div>
+              </div>
+            </>
+          )}
+
+          {step === 2 && (
+            <div className="address-step">
+              <div className="address-form">
               <div className="address-row">
                 <div className="address-input-group">
                   <label htmlFor="street">Calle</label>
@@ -273,16 +258,53 @@ const Cart = ({ fetchProducts }) => {
                 </div>
               </div>
             </div>
-            <Map
-              onPlaceSelect={handlePlaceSelect}
-              street={street}
-              streetNumber={streetNumber}
-              city={city}
-            />
-            <div className="pay-btn-container">
-              <button className="pay-btn" onClick={handleHacerPedido}>Hacer Pedido</button>
+                <Map
+                  onPlaceSelect={handlePlaceSelect}
+                  street={street}
+                  streetNumber={streetNumber}
+                  city={city}
+                />
+              <div className="pay-btn-container">
+                <button className="pay-btn" onClick={handleHacerPedido}>Confirmar Pedido</button>
+              </div>
             </div>
-          </div>
+          )}
+
+          {step === 3 && (
+            <div className="order-summary-content">
+              <table className="order-summary-table">
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Cant</th>
+                    <th>Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {completedOrderDetails.items.map(item => (
+                    <tr key={item.id_producto}>
+                      <td>{item.nombre}</td>
+                      <td>{item.quantity}</td>
+                      <td>${(item.precio * item.quantity).toFixed(2)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div className="summary-row total-row">
+                <span>Total a pagar:</span>
+                <span>${completedOrderDetails.total.toFixed(2)}</span>
+              </div>
+              <div className="summary-info">
+                <p>📧 El resumen fue enviado a: <strong>{user.email}</strong></p>
+                <p>🏦 Alias de pago: <strong>frozen.pyme.congelados</strong></p>
+                <p>📧 Enviá tu comprobante de transferencia a: <strong>frozenpyme@gmail.com</strong></p>
+                <p>⏰ Tu pedido será reservado por 24hs.</p>
+              </div>
+              <div className="pay-btn-container">
+                <button className="pay-btn" onClick={handleSeguirComprando}>Seguir Comprando</button>
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>
