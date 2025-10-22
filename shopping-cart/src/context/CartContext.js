@@ -10,9 +10,11 @@ export const CartProvider = ({ children }) => {
   const [streetNumber, setStreetNumber] = useState('');
   const [city, setCity] = useState('');
   const [zone, setZone] = useState('');
+  const [step, setStep] = useState(1);
 
 
   const addToCart = (product) => {
+    setStep(1);
     setCart((prevCart) => {
       const existingProduct = prevCart.find(item => item.id_producto === product.id_producto);
       if (existingProduct) {
@@ -71,7 +73,7 @@ export const CartProvider = ({ children }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, zone, setZone, clearAddress }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, zone, setZone, clearAddress, step, setStep }}>
       {children}
     </CartContext.Provider>
   );

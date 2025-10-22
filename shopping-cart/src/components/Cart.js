@@ -53,12 +53,10 @@ const ZoneIcon = () => (
 );
 
 const Cart = ({ fetchProducts }) => {
-  const { cart, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, zone, setZone } = useContext(CartContext);
+  const { cart, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, zone, setZone, step, setStep } = useContext(CartContext);
   const { addToast } = useContext(ToastContext);
   const { user } = useContext(AuthContext);
-  const [step, setStep] = useState(1);
-  const [orderComplete, setOrderComplete] = useState(false);
-  const [completedOrderDetails, setCompletedOrderDetails] = useState({ items: [], total: 0 });
+  const [completedOrderDetails, setCompletedOrderDetails] = useState(null);
 
   const subtotal = parseFloat(getTotalPrice());
   const shippingCost = subtotal > 5000 ? 0 : 1000;
@@ -122,7 +120,6 @@ const Cart = ({ fetchProducts }) => {
       if (response.ok) {
         addToast('Orden de venta creada con éxito', 'success');
         setCompletedOrderDetails({ items: [...cart], total });
-        setStep(3);
         clearCart();
       } else {
         addToast('Error al crear la orden de venta', 'error');
@@ -265,12 +262,13 @@ const Cart = ({ fetchProducts }) => {
                   city={city}
                 />
               <div className="pay-btn-container">
-                <button className="pay-btn" onClick={handleHacerPedido}>Confirmar Pedido</button>
+                <button className="back-btn" onClick={() => setStep(1)}>Volver</button>
+                <button className="pay-btn" onClick={() => setStep(3)}>Ver Resumen de Compra</button>
               </div>
             </div>
           )}
 
-          {step === 3 && (
+          {step === 3 && !completedOrderDetails && (
             <div className="order-summary-content">
               <table className="order-summary-table">
                 <thead>
@@ -281,7 +279,7 @@ const Cart = ({ fetchProducts }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {completedOrderDetails.items.map(item => (
+                  {cart.map(item => (
                     <tr key={item.id_producto}>
                       <td>{item.nombre}</td>
                       <td>{item.quantity}</td>
@@ -292,8 +290,17 @@ const Cart = ({ fetchProducts }) => {
               </table>
               <div className="summary-row total-row">
                 <span>Total a pagar:</span>
-                <span>${completedOrderDetails.total.toFixed(2)}</span>
+                <span>${total.toFixed(2)}</span>
               </div>
+              <div className="pay-btn-container">
+                <button className="back-btn" onClick={() => setStep(2)}>Volver</button>
+                <button className="pay-btn" onClick={handleHacerPedido}>Confirmar Pedido</button>
+              </div>
+            </div>
+          )}
+
+          {step === 3 && completedOrderDetails && (
+            <div className="order-summary-content">
               <div className="summary-info">
                 <p>📧 El resumen fue enviado a: <strong>{user.email}</strong></p>
                 <p>🏦 Alias de pago: <strong>frozen.pyme.congelados</strong></p>
