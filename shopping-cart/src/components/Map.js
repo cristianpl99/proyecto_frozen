@@ -10,10 +10,27 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
   const [zoom, setZoom] = useState(12);
   const isMarkerDrag = useRef(false);
 
+  const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+
+  // Función para cargar el script de Google Maps
+  const loadGoogleMapsScript = useCallback(() => {
+    if (window.google) return Promise.resolve();
+
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+      script.async = true;
+      script.defer = true;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }, [apiKey]);
+
   const initializeMap = useCallback((initialPosition) => {
     const mapInstance = new window.google.maps.Map(mapRef.current, {
       center: initialPosition,
-      zoom: 12, // Use a fixed initial zoom
+      zoom,
       disableDefaultUI: true,
     });
     setMap(mapInstance);
@@ -26,7 +43,7 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
     setMarker(markerInstance);
 
     const autocomplete = new window.google.maps.places.Autocomplete(searchInputRef.current);
-    autocomplete.setFields(['address_components', 'geometry']);
+    autocomplete.setFields(['address_components', 'geometry', 'formatted_address']);
 
     autocomplete.addListener('place_changed', () => {
       const place = autocomplete.getPlace();
@@ -44,22 +61,19 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
     });
 
     markerInstance.addListener('dragend', () => {
-        const geocoder = new window.google.maps.Geocoder();
-        const newPosition = markerInstance.getPosition();
-        mapInstance.setCenter(newPosition);
-        geocoder.geocode({ location: newPosition }, (results, status) => {
-            if (status === 'OK') {
-                if (results[0]) {
-                    onPlaceSelect(results[0]);
-                    searchInputRef.current.value = results[0].formatted_address;
-                    setSelectedAddress(results[0].formatted_address);
-                }
-            }
-            isMarkerDrag.current = false;
-        });
+      const geocoder = new window.google.maps.Geocoder();
+      const newPosition = markerInstance.getPosition();
+      mapInstance.setCenter(newPosition);
+      geocoder.geocode({ location: newPosition }, (results, status) => {
+        if (status === 'OK' && results[0]) {
+          onPlaceSelect(results[0]);
+          searchInputRef.current.value = results[0].formatted_address;
+          setSelectedAddress(results[0].formatted_address);
+        }
+        isMarkerDrag.current = false;
+      });
     });
-
-  }, [onPlaceSelect]);
+  }, [onPlaceSelect, zoom]);
 
   const geocodeAddress = useCallback(() => {
     if (isMarkerDrag.current || (!street && !streetNumber && !city) || !map || !marker) return;
@@ -79,56 +93,54 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
 
   useEffect(() => {
     const handler = setTimeout(() => {
-        geocodeAddress();
-    }, 1000); // 1 second debounce
-
-    return () => {
-        clearTimeout(handler);
-    };
+      geocodeAddress();
+    }, 1000);
+    return () => clearTimeout(handler);
   }, [street, streetNumber, city, geocodeAddress]);
 
   useEffect(() => {
-    if (!window.google) {
-      console.error("Google Maps script not loaded");
-      return;
-    }
+    loadGoogleMapsScript()
+      .then(() => {
+        const setDefaultPosition = () => {
+          const defaultPosition = { lat: -34.6037, lng: -58.3816 };
+          initializeMap(defaultPosition);
+        };
 
-    const setDefaultPosition = () => {
-      const defaultPosition = { lat: -34.6037, lng: -58.3816 };
-      initializeMap(defaultPosition);
-    };
+        const initializeWithGeolocation = () => {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                const userPosition = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude,
+                };
+                initializeMap(userPosition);
+              },
+              setDefaultPosition
+            );
+          } else {
+            setDefaultPosition();
+          }
+        };
 
-    const initializeWithGeolocation = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const userPosition = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-            };
-            initializeMap(userPosition);
-          },
-          setDefaultPosition
-        );
-      } else {
-        setDefaultPosition();
-      }
-    };
-
-    if (street && streetNumber && city) {
-      const geocoder = new window.google.maps.Geocoder();
-      const address = `${street} ${streetNumber}, ${city}`;
-      geocoder.geocode({ address }, (results, status) => {
-        if (status === 'OK' && results[0]) {
-          initializeMap(results[0].geometry.location);
-          setSelectedAddress(results[0].formatted_address);
+        if (street && streetNumber && city) {
+          const geocoder = new window.google.maps.Geocoder();
+          const address = `${street} ${streetNumber}, ${city}`;
+          geocoder.geocode({ address }, (results, status) => {
+            if (status === 'OK' && results[0]) {
+              initializeMap(results[0].geometry.location);
+              setSelectedAddress(results[0].formatted_address);
+            } else {
+              initializeWithGeolocation();
+            }
+          });
         } else {
           initializeWithGeolocation();
         }
+      })
+      .catch(() => {
+        console.error('Failed to load Google Maps script');
       });
-    } else {
-      initializeWithGeolocation();
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
