@@ -59,14 +59,19 @@ const BackIcon = () => (
   </svg>
 );
 
-const ShippingIcon = () => (
+const TruckIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M1 3h15v13H1z"/>
+        <path d="M16 8h4l3 3v5h-7V8z"/>
+        <path d="M6 18h2"/>
+        <path d="M18 18h2"/>
+    </svg>
+);
+
+const MapMarkerIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 12a4 4 0 0 0 4-4H8a4 4 0 0 0 4 4z"/>
-        <path d="M16 12a4 4 0 0 1-4 4"/>
-        <path d="M12 2a1 1 0 0 0-1 1v1h2V3a1 1 0 0 0-1-1z"/>
-        <path d="M19 15l-1.5 3h-11L5 15h14z"/>
-        <path d="M6.5 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
-        <path d="M17.5 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+        <circle cx="12" cy="10" r="3"/>
     </svg>
 );
 
@@ -183,7 +188,7 @@ const Cart = ({ fetchProducts }) => {
       <Stepper currentStep={step} />
       <h2>
         {step === 1 && <><CartIcon /> Carrito de Compras</>}
-        {step === 2 && <><ShippingIcon /> Dirección de Envío</>}
+        {step === 2 && <><MapMarkerIcon /> Dirección de Envío</>}
         {step === 3 && <><ReceiptIcon /> Resumen de la compra</>}
       </h2>
 
@@ -222,7 +227,7 @@ const Cart = ({ fetchProducts }) => {
                   <span>${total.toFixed(2)}</span>
                 </div>
                 <div className="pay-btn-container">
-                  <button className="pay-btn" onClick={() => setStep(2)}>Continuar a Envio <ShippingIcon /></button>
+                  <button className="pay-btn" onClick={() => setStep(2)}>Continuar a Envio <TruckIcon /></button>
                 </div>
               </div>
             </>
