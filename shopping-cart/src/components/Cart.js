@@ -197,11 +197,6 @@ const Cart = ({ fetchProducts }) => {
   return (
     <div className="cart-container">
       <Stepper currentStep={step} />
-      <h2>
-        {step === 1 && <><CartIcon /> Carrito de Compras</>}
-        {step === 2 && <><MapMarkerIcon /> Dirección de Envío</>}
-        {step === 3 && <><ReceiptIcon /> Resumen de la compra</>}
-      </h2>
 
       {cart.length === 0 && step !== 3 ? (
         <p className="cart-empty">Tu carrito está vacío</p>
@@ -312,7 +307,18 @@ const Cart = ({ fetchProducts }) => {
                 />
               <div className="pay-btn-container">
                 <button className="back-btn icon-btn" onClick={() => setStep(1)}><BackIcon /></button>
-                <button className="pay-btn" onClick={() => setStep(3)}>Ver Resumen <ReceiptIcon /></button>
+                <button
+                  className="pay-btn"
+                  onClick={() => {
+                    if (!street || !streetNumber || !city || !zone) {
+                      addToast('Por favor, completa todos los campos de dirección', 'error');
+                      return;
+                    }
+                    setStep(3);
+                  }}
+                >
+                  Ver Resumen <ReceiptIcon />
+                </button>
               </div>
             </div>
           )}
@@ -356,12 +362,8 @@ const Cart = ({ fetchProducts }) => {
 
           {step === 3 && completedOrderDetails && (
             <div className="order-summary-content">
+              <h2>¡Gracias por tu compra, {user.nombre}!</h2>
               <div className="summary-info">
-                <h4>Dirección de Envío:</h4>
-                <p><strong>Calle:</strong> {capitalizeWords(completedOrderDetails.street)}</p>
-                <p><strong>Altura:</strong> {completedOrderDetails.streetNumber}</p>
-                <p><strong>Localidad:</strong> {capitalizeWords(completedOrderDetails.city)}</p>
-                <br />
                 <p>📧 El resumen fue enviado a: <strong>{user.email}</strong></p>
                 <p>🏦 Alias de pago: <strong>frozen.pyme.congelados</strong></p>
                 <p>📧 Enviá tu comprobante de transferencia a: <strong>frozenpyme@gmail.com</strong></p>
