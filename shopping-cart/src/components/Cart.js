@@ -60,22 +60,27 @@ const BackIcon = () => (
 );
 
 const ShippingIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M2.5 2.5h3l2.7 12.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6l2.7-12.4h-21.4"/>
-        <path d="M20.2 6.5l-3 6.6"/>
-        <path d="M11 20.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-        <path d="M18.5 20.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 12a4 4 0 0 0 4-4H8a4 4 0 0 0 4 4z"/>
+        <path d="M16 12a4 4 0 0 1-4 4"/>
+        <path d="M12 2a1 1 0 0 0-1 1v1h2V3a1 1 0 0 0-1-1z"/>
+        <path d="M19 15l-1.5 3h-11L5 15h14z"/>
+        <path d="M6.5 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+        <path d="M17.5 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
     </svg>
 );
 
-
-const SummaryIcon = () => (
+const ReceiptIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-        <path d="M14 2v6h6"/>
-        <path d="M16 13H8"/>
-        <path d="M16 17H8"/>
-        <path d="M10 9H8"/>
+        <path d="M22 10V4H2v16h8"/>
+        <path d="M21.5 13.5L19 11l-2.5 2.5L14 11l-2.5 2.5"/>
+        <path d="M12 16h10v4H12z"/>
+    </svg>
+);
+
+const CheckIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20 6L9 17l-5-5"/>
     </svg>
 );
 
@@ -179,7 +184,7 @@ const Cart = ({ fetchProducts }) => {
       <h2>
         {step === 1 && <><CartIcon /> Carrito de Compras</>}
         {step === 2 && <><ShippingIcon /> Dirección de Envío</>}
-        {step === 3 && <><SummaryIcon /> Resumen de la compra</>}
+        {step === 3 && <><ReceiptIcon /> Resumen de la compra</>}
       </h2>
 
       {cart.length === 0 && step !== 3 ? (
@@ -217,7 +222,7 @@ const Cart = ({ fetchProducts }) => {
                   <span>${total.toFixed(2)}</span>
                 </div>
                 <div className="pay-btn-container">
-                  <button className="pay-btn" onClick={() => setStep(2)}>Continuar a Envio</button>
+                  <button className="pay-btn" onClick={() => setStep(2)}>Continuar a Envio <ShippingIcon /></button>
                 </div>
               </div>
             </>
@@ -291,7 +296,7 @@ const Cart = ({ fetchProducts }) => {
                 />
               <div className="pay-btn-container">
                 <button className="back-btn icon-btn" onClick={() => setStep(1)}><BackIcon /></button>
-                <button className="pay-btn" onClick={() => setStep(3)}>Ver Resumen de Compra <ShippingIcon /></button>
+                <button className="pay-btn" onClick={() => setStep(3)}>Ver Resumen <ReceiptIcon /></button>
               </div>
             </div>
           )}
@@ -322,7 +327,7 @@ const Cart = ({ fetchProducts }) => {
               </div>
               <div className="pay-btn-container">
                 <button className="back-btn icon-btn" onClick={() => setStep(2)}><BackIcon /></button>
-                <button className="pay-btn" onClick={handleHacerPedido}>Confirmar Pedido <SummaryIcon /></button>
+                <button className="pay-btn" onClick={handleHacerPedido}>Confirmar Pedido <CheckIcon /></button>
               </div>
             </div>
           )}

@@ -92,27 +92,43 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
     }
 
     const setDefaultPosition = () => {
-      const defaultPosition = { lat: -34.6037, lng: -58.3816 }; // Buenos Aires Fallback
+      const defaultPosition = { lat: -34.6037, lng: -58.3816 };
       initializeMap(defaultPosition);
     };
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const userPosition = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
-          initializeMap(userPosition);
-        },
-        () => {
-          setDefaultPosition(); // User denied or error occurred
+    const initializeWithGeolocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const userPosition = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            };
+            initializeMap(userPosition);
+          },
+          setDefaultPosition
+        );
+      } else {
+        setDefaultPosition();
+      }
+    };
+
+    if (street && streetNumber && city) {
+      const geocoder = new window.google.maps.Geocoder();
+      const address = `${street} ${streetNumber}, ${city}`;
+      geocoder.geocode({ address }, (results, status) => {
+        if (status === 'OK' && results[0]) {
+          initializeMap(results[0].geometry.location);
+          setSelectedAddress(results[0].formatted_address);
+        } else {
+          initializeWithGeolocation();
         }
-      );
+      });
     } else {
-      setDefaultPosition(); // Browser doesn't support Geolocation
+      initializeWithGeolocation();
     }
-  }, [initializeMap]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const LocationIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
