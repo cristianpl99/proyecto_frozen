@@ -7,12 +7,14 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
   const [map, setMap] = useState(null);
   const [marker, setMarker] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState('');
+  const [zoom, setZoom] = useState(12);
   const isMarkerDrag = useRef(false);
 
   const initializeMap = useCallback((initialPosition) => {
     const mapInstance = new window.google.maps.Map(mapRef.current, {
       center: initialPosition,
-      zoom: 12,
+      zoom,
+      disableDefaultUI: true,
     });
     setMap(mapInstance);
 
@@ -130,6 +132,19 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (!map) return;
+    map.setZoom(zoom);
+  }, [zoom, map]);
+
+  useEffect(() => {
+    if (!map) return;
+    const listener = map.addListener('zoom_changed', () => {
+      setZoom(map.getZoom());
+    });
+    return () => window.google.maps.event.removeListener(listener);
+  }, [map]);
+
   const LocationIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
@@ -141,6 +156,14 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
     <div className="map-container">
       <input ref={searchInputRef} type="text" placeholder="Buscar dirección..." className="map-search-input" />
       <div ref={mapRef} className="map-canvas" />
+      <input
+        type="range"
+        min="1"
+        max="20"
+        value={zoom}
+        onChange={(e) => setZoom(Number(e.target.value))}
+        className="zoom-slider"
+      />
       {selectedAddress && (
         <div className="floating-address-label">
           <LocationIcon />

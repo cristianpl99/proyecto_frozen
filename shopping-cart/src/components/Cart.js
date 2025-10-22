@@ -76,7 +76,7 @@ const MapMarkerIcon = () => (
 );
 
 const ReceiptIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-button-blue)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M22 10V4H2v16h8"/>
         <path d="M21.5 13.5L19 11l-2.5 2.5L14 11l-2.5 2.5"/>
         <path d="M12 16h10v4H12z"/>
@@ -91,6 +91,11 @@ const CheckIcon = () => (
 
 
 const Cart = ({ fetchProducts }) => {
+  const capitalizeWords = (str) => {
+    if (!str) return '';
+    return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+  };
+
   const { cart, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, zone, setZone, step, setStep } = useContext(CartContext);
   const { addToast } = useContext(ToastContext);
   const { user } = useContext(AuthContext);
@@ -157,7 +162,14 @@ const Cart = ({ fetchProducts }) => {
 
       if (response.ok) {
         addToast('Orden de venta creada con éxito', 'success');
-        setCompletedOrderDetails({ items: [...cart], total, address: `${street} ${streetNumber}, ${city}, ${zone}` });
+        setCompletedOrderDetails({
+          items: [...cart],
+          total,
+          street,
+          streetNumber,
+          city,
+        });
+        setStep(4);
         clearCart();
       } else {
         addToast('Error al crear la orden de venta', 'error');
@@ -186,13 +198,8 @@ const Cart = ({ fetchProducts }) => {
   return (
     <div className="cart-container">
       <Stepper currentStep={step} />
-      <h2>
-        {step === 1 && <><CartIcon /> Carrito de Compras</>}
-        {step === 2 && <><MapMarkerIcon /> Dirección de Envío</>}
-        {step === 3 && <><ReceiptIcon /> Resumen de la compra</>}
-      </h2>
 
-      {cart.length === 0 && step !== 3 ? (
+      {cart.length === 0 && step < 4 ? (
         <p className="cart-empty">Tu carrito está vacío</p>
       ) : (
         <>
@@ -301,12 +308,23 @@ const Cart = ({ fetchProducts }) => {
                 />
               <div className="pay-btn-container">
                 <button className="back-btn icon-btn" onClick={() => setStep(1)}><BackIcon /></button>
-                <button className="pay-btn" onClick={() => setStep(3)}>Ver Resumen <ReceiptIcon /></button>
+                <button
+                  className="pay-btn"
+                  onClick={() => {
+                    if (!street || !streetNumber || !city || !zone) {
+                      addToast('Por favor, completa todos los campos de dirección', 'error');
+                      return;
+                    }
+                    setStep(3);
+                  }}
+                >
+                  Ver Resumen <ReceiptIcon />
+                </button>
               </div>
             </div>
           )}
 
-          {step === 3 && !completedOrderDetails && (
+          {step === 3 && (
             <div className="order-summary-content">
               <table className="order-summary-table">
                 <thead>
@@ -332,7 +350,9 @@ const Cart = ({ fetchProducts }) => {
               </div>
               <div className="summary-address">
                 <h4>Dirección de Envío:</h4>
-                <p>{street} {streetNumber}, {city}, {zone}</p>
+                <p><strong>Calle:</strong> {capitalizeWords(street)}</p>
+                <p><strong>Altura:</strong> {streetNumber}</p>
+                <p><strong>Localidad:</strong> {capitalizeWords(city)}</p>
               </div>
               <div className="pay-btn-container">
                 <button className="back-btn icon-btn" onClick={() => setStep(2)}><BackIcon /></button>
@@ -341,11 +361,11 @@ const Cart = ({ fetchProducts }) => {
             </div>
           )}
 
-          {step === 3 && completedOrderDetails && (
+          {step === 4 && (
             <div className="order-summary-content">
+              <h2>¡Gracias por tu compra, {user?.nombre}!</h2>
               <div className="summary-info">
-                <p><strong>Dirección de Envío:</strong> {completedOrderDetails.address}</p>
-                <p>📧 El resumen fue enviado a: <strong>{user.email}</strong></p>
+                <p>📧 El resumen fue enviado a: <strong>{user?.email}</strong></p>
                 <p>🏦 Alias de pago: <strong>frozen.pyme.congelados</strong></p>
                 <p>📧 Enviá tu comprobante de transferencia a: <strong>frozenpyme@gmail.com</strong></p>
                 <p>⏰ Tu pedido será reservado por 24hs.</p>
