@@ -69,14 +69,14 @@ const TruckIcon = () => (
 );
 
 const MapMarkerIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-button-blue)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
         <circle cx="12" cy="10" r="3"/>
     </svg>
 );
 
 const ReceiptIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-button-blue)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M22 10V4H2v16h8"/>
         <path d="M21.5 13.5L19 11l-2.5 2.5L14 11l-2.5 2.5"/>
         <path d="M12 16h10v4H12z"/>
@@ -157,7 +157,7 @@ const Cart = ({ fetchProducts }) => {
 
       if (response.ok) {
         addToast('Orden de venta creada con éxito', 'success');
-        setCompletedOrderDetails({ items: [...cart], total });
+        setCompletedOrderDetails({ items: [...cart], total, address: `${street} ${streetNumber}, ${city}, ${zone}` });
         clearCart();
       } else {
         addToast('Error al crear la orden de venta', 'error');
@@ -330,6 +330,10 @@ const Cart = ({ fetchProducts }) => {
                 <span>Total a pagar:</span>
                 <span>${total.toFixed(2)}</span>
               </div>
+              <div className="summary-address">
+                <h4>Dirección de Envío:</h4>
+                <p>{street} {streetNumber}, {city}, {zone}</p>
+              </div>
               <div className="pay-btn-container">
                 <button className="back-btn icon-btn" onClick={() => setStep(2)}><BackIcon /></button>
                 <button className="pay-btn" onClick={handleHacerPedido}>Confirmar Pedido <CheckIcon /></button>
@@ -340,6 +344,7 @@ const Cart = ({ fetchProducts }) => {
           {step === 3 && completedOrderDetails && (
             <div className="order-summary-content">
               <div className="summary-info">
+                <p><strong>Dirección de Envío:</strong> {completedOrderDetails.address}</p>
                 <p>📧 El resumen fue enviado a: <strong>{user.email}</strong></p>
                 <p>🏦 Alias de pago: <strong>frozen.pyme.congelados</strong></p>
                 <p>📧 Enviá tu comprobante de transferencia a: <strong>frozenpyme@gmail.com</strong></p>
