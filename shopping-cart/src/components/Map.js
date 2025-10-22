@@ -6,6 +6,7 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
   const searchInputRef = useRef(null);
   const [map, setMap] = useState(null);
   const [marker, setMarker] = useState(null);
+  const [selectedAddress, setSelectedAddress] = useState('');
   const isMarkerDrag = useRef(false);
 
   const initializeMap = useCallback((initialPosition) => {
@@ -32,6 +33,7 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
         mapInstance.setCenter(location);
         markerInstance.setPosition(location);
         onPlaceSelect(place);
+        setSelectedAddress(place.formatted_address);
       }
     });
 
@@ -48,6 +50,7 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
                 if (results[0]) {
                     onPlaceSelect(results[0]);
                     searchInputRef.current.value = results[0].formatted_address;
+                    setSelectedAddress(results[0].formatted_address);
                 }
             }
             isMarkerDrag.current = false;
@@ -57,7 +60,7 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
   }, [onPlaceSelect]);
 
   const geocodeAddress = useCallback(() => {
-    if (isMarkerDrag.current || (!street && !streetNumber && !city)) return;
+    if (isMarkerDrag.current || (!street && !streetNumber && !city) || !map || !marker) return;
 
     const address = `${street} ${streetNumber}, ${city}`;
     const geocoder = new window.google.maps.Geocoder();
@@ -67,6 +70,7 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
         map.setCenter(location);
         marker.setPosition(location);
         searchInputRef.current.value = results[0].formatted_address;
+        setSelectedAddress(results[0].formatted_address);
       }
     });
   }, [street, streetNumber, city, map, marker]);
@@ -88,32 +92,61 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
     }
 
     const setDefaultPosition = () => {
-      const defaultPosition = { lat: -34.6037, lng: -58.3816 }; // Buenos Aires Fallback
+      const defaultPosition = { lat: -34.6037, lng: -58.3816 };
       initializeMap(defaultPosition);
     };
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const userPosition = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
-          initializeMap(userPosition);
-        },
-        () => {
-          setDefaultPosition(); // User denied or error occurred
+    const initializeWithGeolocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const userPosition = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            };
+            initializeMap(userPosition);
+          },
+          setDefaultPosition
+        );
+      } else {
+        setDefaultPosition();
+      }
+    };
+
+    if (street && streetNumber && city) {
+      const geocoder = new window.google.maps.Geocoder();
+      const address = `${street} ${streetNumber}, ${city}`;
+      geocoder.geocode({ address }, (results, status) => {
+        if (status === 'OK' && results[0]) {
+          initializeMap(results[0].geometry.location);
+          setSelectedAddress(results[0].formatted_address);
+        } else {
+          initializeWithGeolocation();
         }
-      );
+      });
     } else {
-      setDefaultPosition(); // Browser doesn't support Geolocation
+      initializeWithGeolocation();
     }
-  }, [initializeMap]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const LocationIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+      <circle cx="12" cy="10" r="3"></circle>
+    </svg>
+  );
 
   return (
     <div className="map-container">
       <input ref={searchInputRef} type="text" placeholder="Buscar dirección..." className="map-search-input" />
       <div ref={mapRef} className="map-canvas" />
+      {selectedAddress && (
+        <div className="floating-address-label">
+          <LocationIcon />
+          <span>{selectedAddress}</span>
+        </div>
+      )}
     </div>
   );
 };

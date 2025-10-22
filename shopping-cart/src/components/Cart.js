@@ -5,6 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 import CartItem from './CartItem';
 import ProgressBar from './ProgressBar';
 import Map from './Map';
+import Stepper from './Stepper';
 import './Cart.css';
 
 const CartIcon = () => (
@@ -51,12 +52,49 @@ const ZoneIcon = () => (
   </svg>
 );
 
+const BackIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M19 12H5"></path>
+    <polyline points="12 19 5 12 12 5"></polyline>
+  </svg>
+);
+
+const TruckIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M1 3h15v13H1z"/>
+        <path d="M16 8h4l3 3v5h-7V8z"/>
+        <path d="M6 18h2"/>
+        <path d="M18 18h2"/>
+    </svg>
+);
+
+const MapMarkerIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-button-blue)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+        <circle cx="12" cy="10" r="3"/>
+    </svg>
+);
+
+const ReceiptIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-button-blue)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M22 10V4H2v16h8"/>
+        <path d="M21.5 13.5L19 11l-2.5 2.5L14 11l-2.5 2.5"/>
+        <path d="M12 16h10v4H12z"/>
+    </svg>
+);
+
+const CheckIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20 6L9 17l-5-5"/>
+    </svg>
+);
+
+
 const Cart = ({ fetchProducts }) => {
-  const { cart, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, zone, setZone } = useContext(CartContext);
+  const { cart, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, zone, setZone, step, setStep } = useContext(CartContext);
   const { addToast } = useContext(ToastContext);
   const { user } = useContext(AuthContext);
-  const [orderComplete, setOrderComplete] = useState(false);
-  const [completedOrderDetails, setCompletedOrderDetails] = useState({ items: [], total: 0 });
+  const [completedOrderDetails, setCompletedOrderDetails] = useState(null);
 
   const subtotal = parseFloat(getTotalPrice());
   const shippingCost = subtotal > 5000 ? 0 : 1000;
@@ -119,8 +157,7 @@ const Cart = ({ fetchProducts }) => {
 
       if (response.ok) {
         addToast('Orden de venta creada con éxito', 'success');
-        setCompletedOrderDetails({ items: [...cart], total });
-        setOrderComplete(true);
+        setCompletedOrderDetails({ items: [...cart], total, address: `${street} ${streetNumber}, ${city}, ${zone}` });
         clearCart();
       } else {
         addToast('Error al crear la orden de venta', 'error');
@@ -131,7 +168,7 @@ const Cart = ({ fetchProducts }) => {
   };
 
   const handleSeguirComprando = () => {
-    setOrderComplete(false);
+    setStep(1);
     fetchProducts();
   };
 
@@ -148,74 +185,57 @@ const Cart = ({ fetchProducts }) => {
 
   return (
     <div className="cart-container">
-      <h2><CartIcon /> {orderComplete ? 'Resumen de la compra' : 'Carrito de Compras'}</h2>
-      {orderComplete ? (
-        <div className="order-summary-content">
-          <table className="order-summary-table">
-            <thead>
-              <tr>
-                <th>Producto</th>
-                <th>Cant</th>
-                <th>Subtotal</th>
-              </tr>
-            </thead>
-            <tbody>
-              {completedOrderDetails.items.map(item => (
-                <tr key={item.id_producto}>
-                  <td>{item.nombre}</td>
-                  <td>{item.quantity}</td>
-                  <td>${(item.precio * item.quantity).toFixed(2)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="summary-row total-row">
-            <span>Total a pagar:</span>
-            <span>${completedOrderDetails.total.toFixed(2)}</span>
-          </div>
-          <div className="summary-info">
-            <p>📧 El resumen fue enviado a: <strong>{user.email}</strong></p>
-            <p>🏦 Alias de pago: <strong>frozen.pyme.congelados</strong></p>
-            <p>📧 Enviá tu comprobante de transferencia a: <strong>frozenpyme@gmail.com</strong></p>
-            <p>⏰ Tu pedido será reservado por 24hs.</p>
-          </div>
-          <div className="pay-btn-container">
-            <button className="pay-btn" onClick={handleSeguirComprando}>Seguir Comprando</button>
-          </div>
-        </div>
-      ) : cart.length === 0 ? (
+      <Stepper currentStep={step} />
+      <h2>
+        {step === 1 && <><CartIcon /> Carrito de Compras</>}
+        {step === 2 && <><MapMarkerIcon /> Dirección de Envío</>}
+        {step === 3 && <><ReceiptIcon /> Resumen de la compra</>}
+      </h2>
+
+      {cart.length === 0 && step !== 3 ? (
         <p className="cart-empty">Tu carrito está vacío</p>
       ) : (
         <>
-          {cart.map(item => <CartItem key={item.id_producto} item={item} />)}
-          <div className="cart-summary">
-            <div className="summary-row">
-              <span>Subtotal:</span>
-              <span>${subtotal.toFixed(2)}</span>
-            </div>
-            <div className="summary-row">
-              <span>Costo de Envío:</span>
-              {shippingCost === 0 ? (
-                <span className="bonificado">Bonificado</span>
-              ) : (
-                <span>${shippingCost.toFixed(2)}</span>
-              )}
-            </div>
-            <div className="shipping-info">
-              {subtotal < 5000 ? (
-                <>
-                  <span>🚚 Te faltan ${5000 - subtotal} para envío gratis</span>
-                  <ProgressBar value={subtotal} max={5000} />
-                </>
-              ) : (
-                <span>🎉 ¡Felicitaciones! Tenés envío gratis.</span>
-              )}
-            </div>
-            <div className="summary-row total-row">
-              <span>Total:</span>
-              <span>${total.toFixed(2)}</span>
-            </div>
-            <div className="address-form">
+          {step === 1 && (
+            <>
+              {cart.map(item => <CartItem key={item.id_producto} item={item} />)}
+              <div className="cart-summary">
+                <div className="summary-row">
+                  <span>Subtotal:</span>
+                  <span>${subtotal.toFixed(2)}</span>
+                </div>
+                <div className="summary-row">
+                  <span>Costo de Envío:</span>
+                  {shippingCost === 0 ? (
+                    <span className="bonificado">Bonificado</span>
+                  ) : (
+                    <span>${shippingCost.toFixed(2)}</span>
+                  )}
+                </div>
+                <div className="shipping-info">
+                  {subtotal < 5000 ? (
+                    <>
+                      <span>🚚 Te faltan ${5000 - subtotal} para envío gratis</span>
+                      <ProgressBar value={subtotal} max={5000} />
+                    </>
+                  ) : (
+                    <span>🎉 ¡Felicitaciones! Tenés envío gratis.</span>
+                  )}
+                </div>
+                <div className="summary-row total-row">
+                  <span>Total:</span>
+                  <span>${total.toFixed(2)}</span>
+                </div>
+                <div className="pay-btn-container">
+                  <button className="pay-btn" onClick={() => setStep(2)}>Continuar a Envio <TruckIcon /></button>
+                </div>
+              </div>
+            </>
+          )}
+
+          {step === 2 && (
+            <div className="address-step">
+              <div className="address-form">
               <div className="address-row">
                 <div className="address-input-group">
                   <label htmlFor="street">Calle</label>
@@ -273,16 +293,68 @@ const Cart = ({ fetchProducts }) => {
                 </div>
               </div>
             </div>
-            <Map
-              onPlaceSelect={handlePlaceSelect}
-              street={street}
-              streetNumber={streetNumber}
-              city={city}
-            />
-            <div className="pay-btn-container">
-              <button className="pay-btn" onClick={handleHacerPedido}>Hacer Pedido</button>
+                <Map
+                  onPlaceSelect={handlePlaceSelect}
+                  street={street}
+                  streetNumber={streetNumber}
+                  city={city}
+                />
+              <div className="pay-btn-container">
+                <button className="back-btn icon-btn" onClick={() => setStep(1)}><BackIcon /></button>
+                <button className="pay-btn" onClick={() => setStep(3)}>Ver Resumen <ReceiptIcon /></button>
+              </div>
             </div>
-          </div>
+          )}
+
+          {step === 3 && !completedOrderDetails && (
+            <div className="order-summary-content">
+              <table className="order-summary-table">
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Cant</th>
+                    <th>Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cart.map(item => (
+                    <tr key={item.id_producto}>
+                      <td>{item.nombre}</td>
+                      <td>{item.quantity}</td>
+                      <td>${(item.precio * item.quantity).toFixed(2)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div className="summary-row total-row">
+                <span>Total a pagar:</span>
+                <span>${total.toFixed(2)}</span>
+              </div>
+              <div className="summary-address">
+                <h4>Dirección de Envío:</h4>
+                <p>{street} {streetNumber}, {city}, {zone}</p>
+              </div>
+              <div className="pay-btn-container">
+                <button className="back-btn icon-btn" onClick={() => setStep(2)}><BackIcon /></button>
+                <button className="pay-btn" onClick={handleHacerPedido}>Confirmar Pedido <CheckIcon /></button>
+              </div>
+            </div>
+          )}
+
+          {step === 3 && completedOrderDetails && (
+            <div className="order-summary-content">
+              <div className="summary-info">
+                <p><strong>Dirección de Envío:</strong> {completedOrderDetails.address}</p>
+                <p>📧 El resumen fue enviado a: <strong>{user.email}</strong></p>
+                <p>🏦 Alias de pago: <strong>frozen.pyme.congelados</strong></p>
+                <p>📧 Enviá tu comprobante de transferencia a: <strong>frozenpyme@gmail.com</strong></p>
+                <p>⏰ Tu pedido será reservado por 24hs.</p>
+              </div>
+              <div className="pay-btn-container">
+                <button className="pay-btn" onClick={handleSeguirComprando}>Seguir Comprando</button>
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>
