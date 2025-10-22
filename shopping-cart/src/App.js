@@ -10,8 +10,10 @@ import { ToastProvider } from './context/ToastContext';
 import { AuthProvider } from './context/AuthContext';
 import ToastContainer from './components/ToastContainer';
 import Footer from './components/Footer';
+import useGoogleMapsScript from './hooks/useGoogleMapsScript';
 
 function App() {
+  const { isLoaded, error } = useGoogleMapsScript();
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [products, setProducts] = useState([]);
@@ -77,7 +79,9 @@ function App() {
                 <ProductList products={products} isLoading={isLoading} />
               </div>
               <aside className="cart">
-                <Cart fetchProducts={fetchProductsAndStock} />
+                {error && <div>Error al cargar el mapa.</div>}
+                {!isLoaded && !error && <div>Cargando mapa...</div>}
+                {isLoaded && !error && <Cart fetchProducts={fetchProductsAndStock} />}
               </aside>
             </main>
             <ToastContainer />
