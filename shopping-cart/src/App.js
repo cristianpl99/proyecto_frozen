@@ -10,8 +10,10 @@ import { ToastProvider } from './context/ToastContext';
 import { AuthProvider } from './context/AuthContext';
 import ToastContainer from './components/ToastContainer';
 import Footer from './components/Footer';
+import useGoogleMapsScript from './hooks/useGoogleMapsScript';
 
 function App() {
+  useGoogleMapsScript();
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [products, setProducts] = useState([]);
