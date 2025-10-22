@@ -199,7 +199,7 @@ const Cart = ({ fetchProducts }) => {
     <div className="cart-container">
       <Stepper currentStep={step} />
 
-      {cart.length === 0 && step !== 3 ? (
+      {cart.length === 0 && step < 4 ? (
         <p className="cart-empty">Tu carrito está vacío</p>
       ) : (
         <>
@@ -363,9 +363,9 @@ const Cart = ({ fetchProducts }) => {
 
           {step === 4 && (
             <div className="order-summary-content">
-              <h2>¡Gracias por tu compra, {user.nombre}!</h2>
+              <h2>¡Gracias por tu compra, {user?.nombre}!</h2>
               <div className="summary-info">
-                <p>📧 El resumen fue enviado a: <strong>{user.email}</strong></p>
+                <p>📧 El resumen fue enviado a: <strong>{user?.email}</strong></p>
                 <p>🏦 Alias de pago: <strong>frozen.pyme.congelados</strong></p>
                 <p>📧 Enviá tu comprobante de transferencia a: <strong>frozenpyme@gmail.com</strong></p>
                 <p>⏰ Tu pedido será reservado por 24hs.</p>
