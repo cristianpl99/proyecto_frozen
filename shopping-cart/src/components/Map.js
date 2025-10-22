@@ -6,15 +6,9 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
   const searchInputRef = useRef(null);
   const [map, setMap] = useState(null);
   const [marker, setMarker] = useState(null);
+  const isMarkerDrag = useRef(false);
 
-  useEffect(() => {
-    if (!window.google) {
-      console.error("Google Maps script not loaded");
-      return;
-    }
-
-    const initialPosition = { lat: -34.510525, lng: -58.699404 }; // Juan María Gutiérrez 1150
-
+  const initializeMap = useCallback((initialPosition) => {
     const mapInstance = new window.google.maps.Map(mapRef.current, {
       center: initialPosition,
       zoom: 12,
@@ -41,6 +35,10 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
       }
     });
 
+    markerInstance.addListener('dragstart', () => {
+      isMarkerDrag.current = true;
+    });
+
     markerInstance.addListener('dragend', () => {
         const geocoder = new window.google.maps.Geocoder();
         const newPosition = markerInstance.getPosition();
@@ -52,13 +50,14 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
                     searchInputRef.current.value = results[0].formatted_address;
                 }
             }
+            isMarkerDrag.current = false;
         });
     });
 
   }, [onPlaceSelect]);
 
   const geocodeAddress = useCallback(() => {
-    if (!street && !streetNumber && !city) return;
+    if (isMarkerDrag.current || (!street && !streetNumber && !city)) return;
 
     const address = `${street} ${streetNumber}, ${city}`;
     const geocoder = new window.google.maps.Geocoder();
@@ -81,6 +80,35 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
         clearTimeout(handler);
     };
   }, [street, streetNumber, city, geocodeAddress]);
+
+  useEffect(() => {
+    if (!window.google) {
+      console.error("Google Maps script not loaded");
+      return;
+    }
+
+    const setDefaultPosition = () => {
+      const defaultPosition = { lat: -34.6037, lng: -58.3816 }; // Buenos Aires Fallback
+      initializeMap(defaultPosition);
+    };
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userPosition = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          initializeMap(userPosition);
+        },
+        () => {
+          setDefaultPosition(); // User denied or error occurred
+        }
+      );
+    } else {
+      setDefaultPosition(); // Browser doesn't support Geolocation
+    }
+  }, [initializeMap]);
 
   return (
     <div className="map-container">
