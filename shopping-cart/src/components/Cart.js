@@ -4,6 +4,7 @@ import { ToastContext } from '../context/ToastContext';
 import { AuthContext } from '../context/AuthContext';
 import CartItem from './CartItem';
 import ProgressBar from './ProgressBar';
+import Map from './Map';
 import './Cart.css';
 
 const CartIcon = () => (
@@ -134,6 +135,17 @@ const Cart = ({ fetchProducts }) => {
     fetchProducts();
   };
 
+  const handlePlaceSelect = (place) => {
+    const addressComponents = place.address_components;
+    const streetNumberComponent = addressComponents.find(c => c.types.includes('street_number'));
+    const streetComponent = addressComponents.find(c => c.types.includes('route'));
+    const cityComponent = addressComponents.find(c => c.types.includes('locality'));
+
+    setStreet(streetComponent ? streetComponent.long_name : '');
+    setStreetNumber(streetNumberComponent ? streetNumberComponent.long_name : '');
+    setCity(cityComponent ? cityComponent.long_name : '');
+  };
+
   return (
     <div className="cart-container">
       <h2><CartIcon /> {orderComplete ? 'Resumen de la compra' : 'Carrito de Compras'}</h2>
@@ -261,6 +273,12 @@ const Cart = ({ fetchProducts }) => {
                 </div>
               </div>
             </div>
+            <Map
+              onPlaceSelect={handlePlaceSelect}
+              street={street}
+              streetNumber={streetNumber}
+              city={city}
+            />
             <div className="pay-btn-container">
               <button className="pay-btn" onClick={handleHacerPedido}>Hacer Pedido</button>
             </div>
