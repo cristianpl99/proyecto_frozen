@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import './Map.css';
 
-const Map = ({ onPlaceSelect }) => {
+const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
   const mapRef = useRef(null);
   const searchInputRef = useRef(null);
   const [map, setMap] = useState(null);
@@ -43,7 +43,9 @@ const Map = ({ onPlaceSelect }) => {
 
     markerInstance.addListener('dragend', () => {
         const geocoder = new window.google.maps.Geocoder();
-        geocoder.geocode({ location: markerInstance.getPosition() }, (results, status) => {
+        const newPosition = markerInstance.getPosition();
+        mapInstance.setCenter(newPosition);
+        geocoder.geocode({ location: newPosition }, (results, status) => {
             if (status === 'OK') {
                 if (results[0]) {
                     onPlaceSelect(results[0]);
@@ -54,6 +56,31 @@ const Map = ({ onPlaceSelect }) => {
     });
 
   }, [onPlaceSelect]);
+
+  const geocodeAddress = useCallback(() => {
+    if (!street && !streetNumber && !city) return;
+
+    const address = `${street} ${streetNumber}, ${city}`;
+    const geocoder = new window.google.maps.Geocoder();
+    geocoder.geocode({ address }, (results, status) => {
+      if (status === 'OK' && results[0]) {
+        const location = results[0].geometry.location;
+        map.setCenter(location);
+        marker.setPosition(location);
+        searchInputRef.current.value = results[0].formatted_address;
+      }
+    });
+  }, [street, streetNumber, city, map, marker]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+        geocodeAddress();
+    }, 1000); // 1 second debounce
+
+    return () => {
+        clearTimeout(handler);
+    };
+  }, [street, streetNumber, city, geocodeAddress]);
 
   return (
     <div className="map-container">

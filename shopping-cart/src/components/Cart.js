@@ -273,7 +273,12 @@ const Cart = ({ fetchProducts }) => {
                 </div>
               </div>
             </div>
-            <Map onPlaceSelect={handlePlaceSelect} />
+            <Map
+              onPlaceSelect={handlePlaceSelect}
+              street={street}
+              streetNumber={streetNumber}
+              city={city}
+            />
             <div className="pay-btn-container">
               <button className="pay-btn" onClick={handleHacerPedido}>Hacer Pedido</button>
             </div>
