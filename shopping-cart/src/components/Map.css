@@ -44,3 +44,36 @@
     text-align: center;
     backdrop-filter: blur(5px);
   }
+
+  .zoom-slider {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    writing-mode: bt-lr; /* IE */
+    -webkit-appearance: slider-vertical; /* WebKit */
+    width: 8px;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 4px;
+    outline: none;
+    transition: opacity 0.2s;
+  }
+
+  .zoom-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--primary-button-blue);
+    cursor: pointer;
+    border-radius: 50%;
+  }
+
+  .zoom-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--primary-button-blue);
+    cursor: pointer;
+    border-radius: 50%;
+  }
