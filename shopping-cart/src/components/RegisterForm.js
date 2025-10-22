@@ -128,7 +128,7 @@ const RegisterForm = ({ onClose }) => {
       <div className="register-form-container">
         <button className="close-button" onClick={onClose}>X</button>
         <div className="form-title">
-          <img src="/favicon_ice.png" alt="logo" className="form-logo"/>
+          <img src="/favicon_frozen.png" alt="logo" className="form-logo"/>
           <div>
             <h2>Crear Cuenta</h2>
             <p className="form-subtitle">Registrate para acceder a promociones y finalizar tu compra</p>
