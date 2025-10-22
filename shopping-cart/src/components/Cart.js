@@ -146,13 +146,6 @@ const Cart = ({ fetchProducts }) => {
 
       if (response.ok) {
         addToast('Orden de venta creada con éxito', 'success');
-        setCompletedOrderDetails({
-          items: [...cart],
-          total,
-          street,
-          streetNumber,
-          city,
-        });
         setStep(4);
         clearCart();
       } else {
