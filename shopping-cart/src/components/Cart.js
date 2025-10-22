@@ -91,6 +91,11 @@ const CheckIcon = () => (
 
 
 const Cart = ({ fetchProducts }) => {
+  const capitalizeWords = (str) => {
+    if (!str) return '';
+    return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+  };
+
   const { cart, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, zone, setZone, step, setStep } = useContext(CartContext);
   const { addToast } = useContext(ToastContext);
   const { user } = useContext(AuthContext);
@@ -157,7 +162,13 @@ const Cart = ({ fetchProducts }) => {
 
       if (response.ok) {
         addToast('Orden de venta creada con éxito', 'success');
-        setCompletedOrderDetails({ items: [...cart], total, address: `${street} ${streetNumber}, ${city}, ${zone}` });
+        setCompletedOrderDetails({
+          items: [...cart],
+          total,
+          street,
+          streetNumber,
+          city,
+        });
         clearCart();
       } else {
         addToast('Error al crear la orden de venta', 'error');
@@ -332,7 +343,9 @@ const Cart = ({ fetchProducts }) => {
               </div>
               <div className="summary-address">
                 <h4>Dirección de Envío:</h4>
-                <p>{street} {streetNumber}, {city}, {zone}</p>
+                <p><strong>Calle:</strong> {capitalizeWords(street)}</p>
+                <p><strong>Altura:</strong> {streetNumber}</p>
+                <p><strong>Localidad:</strong> {capitalizeWords(city)}</p>
               </div>
               <div className="pay-btn-container">
                 <button className="back-btn icon-btn" onClick={() => setStep(2)}><BackIcon /></button>
@@ -344,7 +357,11 @@ const Cart = ({ fetchProducts }) => {
           {step === 3 && completedOrderDetails && (
             <div className="order-summary-content">
               <div className="summary-info">
-                <p><strong>Dirección de Envío:</strong> {completedOrderDetails.address}</p>
+                <h4>Dirección de Envío:</h4>
+                <p><strong>Calle:</strong> {capitalizeWords(completedOrderDetails.street)}</p>
+                <p><strong>Altura:</strong> {completedOrderDetails.streetNumber}</p>
+                <p><strong>Localidad:</strong> {capitalizeWords(completedOrderDetails.city)}</p>
+                <br />
                 <p>📧 El resumen fue enviado a: <strong>{user.email}</strong></p>
                 <p>🏦 Alias de pago: <strong>frozen.pyme.congelados</strong></p>
                 <p>📧 Enviá tu comprobante de transferencia a: <strong>frozenpyme@gmail.com</strong></p>
