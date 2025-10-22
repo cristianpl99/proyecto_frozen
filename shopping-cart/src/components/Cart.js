@@ -52,6 +52,34 @@ const ZoneIcon = () => (
   </svg>
 );
 
+const BackIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M19 12H5"></path>
+    <polyline points="12 19 5 12 12 5"></polyline>
+  </svg>
+);
+
+const ShippingIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M2.5 2.5h3l2.7 12.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6l2.7-12.4h-21.4"/>
+        <path d="M20.2 6.5l-3 6.6"/>
+        <path d="M11 20.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+        <path d="M18.5 20.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+    </svg>
+);
+
+
+const SummaryIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <path d="M14 2v6h6"/>
+        <path d="M16 13H8"/>
+        <path d="M16 17H8"/>
+        <path d="M10 9H8"/>
+    </svg>
+);
+
+
 const Cart = ({ fetchProducts }) => {
   const { cart, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, zone, setZone, step, setStep } = useContext(CartContext);
   const { addToast } = useContext(ToastContext);
@@ -148,10 +176,10 @@ const Cart = ({ fetchProducts }) => {
   return (
     <div className="cart-container">
       <Stepper currentStep={step} />
-      <h2><CartIcon />
-        {step === 1 && 'Carrito de Compras'}
-        {step === 2 && 'Dirección de Envío'}
-        {step === 3 && 'Resumen de la compra'}
+      <h2>
+        {step === 1 && <><CartIcon /> Carrito de Compras</>}
+        {step === 2 && <><ShippingIcon /> Dirección de Envío</>}
+        {step === 3 && <><SummaryIcon /> Resumen de la compra</>}
       </h2>
 
       {cart.length === 0 && step !== 3 ? (
@@ -262,8 +290,8 @@ const Cart = ({ fetchProducts }) => {
                   city={city}
                 />
               <div className="pay-btn-container">
-                <button className="back-btn" onClick={() => setStep(1)}>Volver</button>
-                <button className="pay-btn" onClick={() => setStep(3)}>Ver Resumen de Compra</button>
+                <button className="back-btn icon-btn" onClick={() => setStep(1)}><BackIcon /></button>
+                <button className="pay-btn" onClick={() => setStep(3)}>Ver Resumen de Compra <ShippingIcon /></button>
               </div>
             </div>
           )}
@@ -293,8 +321,8 @@ const Cart = ({ fetchProducts }) => {
                 <span>${total.toFixed(2)}</span>
               </div>
               <div className="pay-btn-container">
-                <button className="back-btn" onClick={() => setStep(2)}>Volver</button>
-                <button className="pay-btn" onClick={handleHacerPedido}>Confirmar Pedido</button>
+                <button className="back-btn icon-btn" onClick={() => setStep(2)}><BackIcon /></button>
+                <button className="pay-btn" onClick={handleHacerPedido}>Confirmar Pedido <SummaryIcon /></button>
               </div>
             </div>
           )}

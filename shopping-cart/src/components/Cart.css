@@ -79,6 +79,35 @@
   background-color: #1a8f3e;
 }
 
+.pay-btn svg {
+    margin-left: 8px;
+}
+
+.back-btn {
+  background-color: var(--primary-button-blue);
+  border: none;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+.back-btn:hover {
+  background-color: #0056b3;
+}
+
+.icon-btn {
+    padding: 0;
+    width: 44px;
+    height: 44px;
+}
+
 .order-summary-table {
   width: 100%;
   border-collapse: collapse;

@@ -60,7 +60,7 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
   }, [onPlaceSelect]);
 
   const geocodeAddress = useCallback(() => {
-    if (isMarkerDrag.current || (!street && !streetNumber && !city)) return;
+    if (isMarkerDrag.current || (!street && !streetNumber && !city) || !map || !marker) return;
 
     const address = `${street} ${streetNumber}, ${city}`;
     const geocoder = new window.google.maps.Geocoder();
