@@ -192,3 +192,21 @@
   border-color: var(--primary-button-blue);
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
+
+.delivery-options {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.delivery-option {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.delivery-option-text {
+  margin-left: 0.5rem;
+  font-size: 1rem;
+}

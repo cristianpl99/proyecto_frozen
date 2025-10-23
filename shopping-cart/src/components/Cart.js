@@ -261,7 +261,7 @@ const Cart = ({ fetchProducts }) => {
           {step === 2 && (
             <div className="address-step">
               <div className="delivery-options">
-                <label>
+                <label className="delivery-option">
                   <input
                     type="radio"
                     name="deliveryOption"
@@ -269,9 +269,9 @@ const Cart = ({ fetchProducts }) => {
                     checked={deliveryOption === 'delivery'}
                     onChange={() => handleDeliveryOptionChange('delivery')}
                   />
-                  Envío a Domicilio
+                  <span className="delivery-option-text">🛍️ Envio a Domicilio</span>
                 </label>
-                <label>
+                <label className="delivery-option">
                   <input
                     type="radio"
                     name="deliveryOption"
@@ -279,7 +279,7 @@ const Cart = ({ fetchProducts }) => {
                     checked={deliveryOption === 'pickup'}
                     onChange={() => handleDeliveryOptionChange('pickup')}
                   />
-                  Retiro en Local
+                  <span className="delivery-option-text">🚚 Retiro en Local</span>
                 </label>
               </div>
 
@@ -339,12 +339,13 @@ const Cart = ({ fetchProducts }) => {
                 </div>
               </div>
 
-              <div className={deliveryOption === 'pickup' ? 'hidden' : ''}>
+              <div>
                 <Map
                   onPlaceSelect={handlePlaceSelect}
                   street={street}
                   streetNumber={streetNumber}
                   city={city}
+                  isPickup={deliveryOption === 'pickup'}
                 />
               </div>
 

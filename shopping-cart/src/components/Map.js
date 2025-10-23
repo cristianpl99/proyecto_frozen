@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import './Map.css';
 
-const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
+const Map = ({ onPlaceSelect, street, streetNumber, city, isPickup }) => {
   const mapRef = useRef(null);
   const searchInputRef = useRef(null);
   const [map, setMap] = useState(null);
@@ -167,6 +167,23 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
     });
     return () => window.google.maps.event.removeListener(listener);
   }, [map]);
+
+  useEffect(() => {
+    if (marker) {
+      marker.setDraggable(!isPickup);
+      marker.setIcon(
+        isPickup
+          ? {
+              path: window.google.maps.SymbolPath.CIRCLE,
+              scale: 8,
+              fillColor: '#808080',
+              fillOpacity: 1,
+              strokeWeight: 0,
+            }
+          : null
+      );
+    }
+  }, [isPickup, marker]);
 
   const LocationIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
