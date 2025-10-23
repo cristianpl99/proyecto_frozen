@@ -90,3 +90,7 @@
   color: #f1f1f1;
   margin-bottom: 1rem;
 }
+
+.out-of-stock-icon {
+  color: #d3d3d3; /* Light gray */
+}
