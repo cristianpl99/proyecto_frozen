@@ -87,6 +87,7 @@ function App() {
             <ToastContainer />
             <Footer />
             <df-messenger
+              class="custom-dialogflow-icon"
               intent="WELCOME"
               chat-title="FrozenBot🧊"
               agent-id="8131c29a-e3f7-4657-995a-917f9658b14c"
