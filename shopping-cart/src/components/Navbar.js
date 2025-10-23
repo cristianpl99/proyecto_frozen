@@ -18,12 +18,6 @@ const PasswordIcon = () => (
 );
 
 
-const ChatIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-  </svg>
-);
-
 const Navbar = ({ onRegisterClick, onEditProfileClick }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState('');
@@ -33,13 +27,6 @@ const Navbar = ({ onRegisterClick, onEditProfileClick }) => {
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
-  };
-
-  const handleChatButtonClick = () => {
-    const dfMessenger = document.querySelector('df-messenger');
-    if (dfMessenger) {
-      dfMessenger.openChat();
-    }
   };
 
   const handleLogin = async (e) => {
@@ -76,12 +63,6 @@ const Navbar = ({ onRegisterClick, onEditProfileClick }) => {
         </div>
         <div className="navbar-title">
           Frozen PyME
-        </div>
-        <div className="navbar-chat">
-          <button className="chat-btn" onClick={handleChatButtonClick}>
-            <ChatIcon />
-            Chateemos
-          </button>
         </div>
         <div className="menu-icon" onClick={toggleMenu}>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
