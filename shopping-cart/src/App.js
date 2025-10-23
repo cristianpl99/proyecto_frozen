@@ -86,6 +86,13 @@ function App() {
             </main>
             <ToastContainer />
             <Footer />
+            <iframe
+              allow="microphone;"
+              width="350"
+              height="430"
+              src="https://console.dialogflow.com/api-client/demo/embedded/8131c29a-e3f7-4657-995a-917f9658b14c"
+              className="dialogflow-chatbot"
+            ></iframe>
           </div>
         </AuthProvider>
       </CartProvider>
