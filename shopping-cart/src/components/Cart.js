@@ -285,7 +285,7 @@ const Cart = ({ fetchProducts }) => {
 
               {deliveryOption === 'pickup' && (
                 <div className="pickup-address-info">
-                  <h4>Dirección de Retiro:</h4>
+                  <h4>Podes retirar tu pedido de lunes a viernes en el horario de 8:00 a 18:00 en la siguiente dirección:</h4>
                   <p>Juan María Gutiérrez 1150, B1613 Los Polvorines</p>
                 </div>
               )}
