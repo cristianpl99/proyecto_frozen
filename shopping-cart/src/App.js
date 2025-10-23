@@ -88,7 +88,7 @@ function App() {
             <Footer />
             <df-messenger
               intent="WELCOME"
-              chat-title="frozen_bot"
+              chat-title="FrozenBot🧊"
               agent-id="8131c29a-e3f7-4657-995a-917f9658b14c"
               language-code="es"
             ></df-messenger>
