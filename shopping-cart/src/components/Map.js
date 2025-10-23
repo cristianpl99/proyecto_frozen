@@ -28,10 +28,21 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
   }, [apiKey]);
 
   const initializeMap = useCallback((initialPosition) => {
+    const bounds = {
+      north: -34.450,
+      south: -34.600,
+      west: -58.850,
+      east: -58.600,
+    };
+
     const mapInstance = new window.google.maps.Map(mapRef.current, {
       center: initialPosition,
       zoom,
       disableDefaultUI: true,
+      restriction: {
+        latLngBounds: bounds,
+        strictBounds: true,
+      },
     });
     setMap(mapInstance);
 
@@ -102,7 +113,7 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
     loadGoogleMapsScript()
       .then(() => {
         const setDefaultPosition = () => {
-          const defaultPosition = { lat: -34.6037, lng: -58.3816 };
+          const defaultPosition = { lat: -34.530, lng: -58.750 };
           initializeMap(defaultPosition);
         };
 

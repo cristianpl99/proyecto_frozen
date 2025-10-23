@@ -1,4 +1,4 @@
-import React, { useContext, } from 'react';
+import React, { useContext, useState } from 'react';
 import { CartContext } from '../context/CartContext';
 import { ToastContext } from '../context/ToastContext';
 import { AuthContext } from '../context/AuthContext';
@@ -76,6 +76,8 @@ const CheckIcon = () => (
 
 
 const Cart = ({ fetchProducts }) => {
+  const [deliveryOption, setDeliveryOption] = useState('delivery');
+
   const capitalizeWords = (str) => {
     if (!str) return '';
     return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
@@ -100,25 +102,10 @@ const Cart = ({ fetchProducts }) => {
       return;
     }
 
-    if (!street || !streetNumber || !city || !zone) {
+    if (deliveryOption === 'delivery' && (!street || !streetNumber || !city)) {
       addToast('Por favor, completa todos los campos de dirección', 'error');
       return;
     }
-
-    const getZoneAbbreviation = (zone) => {
-      switch (zone) {
-        case 'Norte':
-          return 'N';
-        case 'Sur':
-          return 'S';
-        case 'Este':
-          return 'E';
-        case 'Oeste':
-          return 'O';
-        default:
-          return '';
-      }
-    };
 
     const orderData = {
       id_cliente: user.id_cliente,
@@ -128,7 +115,7 @@ const Cart = ({ fetchProducts }) => {
       calle: street,
       altura: streetNumber,
       localidad: city,
-      zona: getZoneAbbreviation(zone),
+      zona: 'N',
       productos: cart.map(item => ({
         id_producto: item.id_producto,
         cantidad: item.quantity,
@@ -170,6 +157,60 @@ const Cart = ({ fetchProducts }) => {
     setStreet(streetComponent ? streetComponent.long_name : '');
     setStreetNumber(streetNumberComponent ? streetNumberComponent.long_name : '');
     setCity(cityComponent ? cityComponent.long_name : '');
+  };
+
+  const handleDeliveryOptionChange = (option) => {
+    setDeliveryOption(option);
+    if (option === 'pickup') {
+      setStreet('Juan María Gutiérrez');
+      setStreetNumber('1150');
+      setCity('Los Polvorines');
+    } else {
+      setStreet('');
+      setStreetNumber('');
+      setCity('');
+    }
+  };
+
+  const handleContinueToSummary = () => {
+    if (deliveryOption === 'delivery') {
+      if (!street || !streetNumber || !city) {
+        addToast('Por favor, completa todos los campos de dirección', 'error');
+        return;
+      }
+
+      const geocoder = new window.google.maps.Geocoder();
+      const address = `${street} ${streetNumber}, ${city}`;
+      const bounds = {
+        north: -34.450,
+        south: -34.600,
+        west: -58.850,
+        east: -58.600,
+      };
+
+      geocoder.geocode({ address }, (results, status) => {
+        if (status === 'OK' && results[0]) {
+          const location = results[0].geometry.location;
+          const lat = location.lat();
+          const lng = location.lng();
+
+          if (
+            lat >= bounds.south &&
+            lat <= bounds.north &&
+            lng >= bounds.west &&
+            lng <= bounds.east
+          ) {
+            setStep(3);
+          } else {
+            addToast('La zona ingresada está por fuera del área de reparto', 'error');
+          }
+        } else {
+          addToast('No se pudo verificar la dirección. Inténtalo de nuevo.', 'error');
+        }
+      });
+    } else {
+      setStep(3);
+    }
   };
 
   return (
@@ -219,82 +260,97 @@ const Cart = ({ fetchProducts }) => {
 
           {step === 2 && (
             <div className="address-step">
-              <div className="address-form">
-              <div className="address-row">
-                <div className="address-input-group">
-                  <label htmlFor="street">Calle</label>
-                  <div className="address-input-container">
-                    <StreetIcon />
-                    <input
-                      id="street"
-                      type="text"
-                      placeholder="Calle"
-                      value={street}
-                      onChange={(e) => setStreet(e.target.value)}
-                    />
+              <div className="delivery-options">
+                <label>
+                  <input
+                    type="radio"
+                    name="deliveryOption"
+                    value="delivery"
+                    checked={deliveryOption === 'delivery'}
+                    onChange={() => handleDeliveryOptionChange('delivery')}
+                  />
+                  Envío a Domicilio
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="deliveryOption"
+                    value="pickup"
+                    checked={deliveryOption === 'pickup'}
+                    onChange={() => handleDeliveryOptionChange('pickup')}
+                  />
+                  Retiro en Local
+                </label>
+              </div>
+
+              {deliveryOption === 'pickup' && (
+                <div className="pickup-address-info">
+                  <h4>Dirección de Retiro:</h4>
+                  <p>Juan María Gutiérrez 1150, B1613 Los Polvorines</p>
+                </div>
+              )}
+
+              <div className={`address-form ${deliveryOption === 'pickup' ? 'hidden' : ''}`}>
+                <div className="address-row">
+                  <div className="address-input-group">
+                    <label htmlFor="street">Calle</label>
+                    <div className="address-input-container">
+                      <StreetIcon />
+                      <input
+                        id="street"
+                        type="text"
+                        placeholder="Calle"
+                        value={street}
+                        onChange={(e) => setStreet(e.target.value)}
+                        disabled={deliveryOption === 'pickup'}
+                      />
+                    </div>
+                  </div>
+                  <div className="address-input-group">
+                    <label htmlFor="streetNumber">Altura</label>
+                    <div className="address-input-container">
+                      <NumberIcon />
+                      <input
+                        id="streetNumber"
+                        type="text"
+                        placeholder="Altura"
+                        value={streetNumber}
+                        onChange={(e) => setStreetNumber(e.target.value)}
+                        disabled={deliveryOption === 'pickup'}
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className="address-input-group">
-                  <label htmlFor="streetNumber">Altura</label>
-                  <div className="address-input-container">
-                    <NumberIcon />
-                    <input
-                      id="streetNumber"
-                      type="text"
-                      placeholder="Altura"
-                      value={streetNumber}
-                      onChange={(e) => setStreetNumber(e.target.value)}
-                    />
+                <div className="address-row">
+                  <div className="address-input-group">
+                    <label htmlFor="city">Localidad</label>
+                    <div className="address-input-container">
+                      <CityIcon />
+                      <input
+                        id="city"
+                        type="text"
+                        placeholder="Localidad"
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        disabled={deliveryOption === 'pickup'}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="address-row">
-                <div className="address-input-group">
-                  <label htmlFor="city">Localidad</label>
-                  <div className="address-input-container">
-                    <CityIcon />
-                    <input
-                      id="city"
-                      type="text"
-                      placeholder="Localidad"
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div className="address-input-group">
-                  <label htmlFor="zone">Zona</label>
-                  <div className="address-input-container">
-                    <ZoneIcon />
-                    <select id="zone" value={zone} onChange={(e) => setZone(e.target.value)}>
-                      <option value="" disabled>Zona</option>
-                      <option value="Norte">Norte</option>
-                      <option value="Sur">Sur</option>
-                      <option value="Este">Este</option>
-                      <option value="Oeste">Oeste</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
+
+              <div className={deliveryOption === 'pickup' ? 'hidden' : ''}>
                 <Map
                   onPlaceSelect={handlePlaceSelect}
                   street={street}
                   streetNumber={streetNumber}
                   city={city}
                 />
+              </div>
+
               <div className="pay-btn-container">
                 <button className="back-btn icon-btn" onClick={() => setStep(1)}><BackIcon /></button>
-                <button
-                  className="pay-btn"
-                  onClick={() => {
-                    if (!street || !streetNumber || !city || !zone) {
-                      addToast('Por favor, completa todos los campos de dirección', 'error');
-                      return;
-                    }
-                    setStep(3);
-                  }}
-                >
+                <button className="pay-btn" onClick={handleContinueToSummary}>
                   Ver Resumen <ReceiptIcon />
                 </button>
               </div>
