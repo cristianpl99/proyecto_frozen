@@ -210,3 +210,8 @@
   margin-left: 0.5rem;
   font-size: 1rem;
 }
+
+.pickup-message {
+  text-align: center;
+  font-style: italic;
+}
