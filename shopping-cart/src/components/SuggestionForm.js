@@ -55,7 +55,7 @@ const SuggestionForm = ({ onClose }) => {
                 <div className="form-title">
                     <img src="/favicon_ice.png" alt="logo" className="form-logo"/>
                     <div>
-                        <h2>Hacer Sugerencia</h2>
+                        <h2>Sugerencia</h2>
                     </div>
                 </div>
                 <form onSubmit={handleSubmit}>
@@ -82,7 +82,7 @@ const SuggestionForm = ({ onClose }) => {
                     </div>
                     <button type="submit" className="submit-button">
                         <EnvelopeIcon />
-                        Enviar
+                        Enviar Sugerencia
                     </button>
                 </form>
             </div>
