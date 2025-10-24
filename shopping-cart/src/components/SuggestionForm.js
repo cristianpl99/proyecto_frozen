@@ -3,6 +3,13 @@ import './MaterialForm.css';
 import { ToastContext } from '../context/ToastContext';
 import { AuthContext } from '../context/AuthContext';
 
+const SendIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="22" y1="2" x2="11" y2="13"></line>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+    </svg>
+);
+
 const SuggestionForm = ({ onClose }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -76,7 +83,8 @@ const SuggestionForm = ({ onClose }) => {
                         <label htmlFor="description">Descripción (máx. 200 caracteres)</label>
                     </div>
                     <button type="submit" className="submit-button material-submit-button">
-                        Enviar Sugerencia
+                        <span className="button-text">Enviar Sugerencia</span>
+                        <span className="button-icon"><SendIcon /></span>
                     </button>
                 </form>
             </div>
