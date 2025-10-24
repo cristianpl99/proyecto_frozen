@@ -248,6 +248,11 @@
   color: #d9534f;
 }
 
+.user-menu-item.logout-btn:hover {
+  background-color: #d9534f;
+  color: white;
+}
+
 .user-menu-item:hover {
   background-color: #f0f0f0;
 }

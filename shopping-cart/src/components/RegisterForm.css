@@ -122,8 +122,8 @@
 }
 
 .submit-button:hover {
-  background-color: #d4edda;
-  border-color: #155724;
+  background-color: #28a745;
+  border: 2px solid #155724;
 }
 
 .submit-button:hover .button-text {
@@ -133,6 +133,11 @@
 .submit-button:hover .button-icon {
   display: inline;
   color: #155724;
+}
+
+.submit-button:hover .button-icon svg {
+  width: 1.5em;
+  height: 1.5em;
 }
 
 .error-message {
