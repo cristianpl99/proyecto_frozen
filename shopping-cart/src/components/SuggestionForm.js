@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import './SuggestionForm.css';
+import './RegisterForm.css';
 import { ToastContext } from '../context/ToastContext';
 import { AuthContext } from '../context/AuthContext';
 
@@ -25,7 +25,7 @@ const SuggestionForm = ({ onClose }) => {
         }
 
         try {
-            const response = await fetch('https://frozenback-test.up.railway.app/api/ventas/sugerencia/', {
+            const response = await fetch('https://frozenback-test.up.railway.app/api/ventas/sugerencias/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -49,11 +49,14 @@ const SuggestionForm = ({ onClose }) => {
     };
 
     return (
-        <div className="suggestion-form-overlay">
-            <div className="suggestion-form-container">
+        <div className="register-form-overlay">
+            <div className="register-form-container">
                 <button className="close-button" onClick={onClose}>X</button>
                 <div className="form-title">
-                    <h2>Hacer Sugerencia</h2>
+                    <img src="/favicon_ice.png" alt="logo" className="form-logo"/>
+                    <div>
+                        <h2>Hacer Sugerencia</h2>
+                    </div>
                 </div>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">

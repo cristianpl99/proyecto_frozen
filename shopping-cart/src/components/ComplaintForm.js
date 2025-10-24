@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import './ComplaintForm.css';
+import './RegisterForm.css';
 import { ToastContext } from '../context/ToastContext';
 import { AuthContext } from '../context/AuthContext';
 
@@ -49,11 +49,14 @@ const ComplaintForm = ({ onClose }) => {
     };
 
     return (
-        <div className="complaint-form-overlay">
-            <div className="complaint-form-container">
+        <div className="register-form-overlay">
+            <div className="register-form-container">
                 <button className="close-button" onClick={onClose}>X</button>
                 <div className="form-title">
-                    <h2>Hacer Reclamo</h2>
+                    <img src="/favicon_ice.png" alt="logo" className="form-logo"/>
+                    <div>
+                        <h2>Hacer Reclamo</h2>
+                    </div>
                 </div>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
