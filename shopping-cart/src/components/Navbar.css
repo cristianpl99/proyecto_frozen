@@ -205,18 +205,17 @@
   gap: 5px;
   padding: 1rem;
   z-index: 1000;
-  animation: fadeIn 0.5s ease-in-out forwards;
+  transform-origin: top right;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transform: scale(0.95);
+  opacity: 0;
+  visibility: hidden;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+.user-menu-dropdown.open {
+  transform: scale(1);
+  opacity: 1;
+  visibility: visible;
 }
 
 .user-menu-item {

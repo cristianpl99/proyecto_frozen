@@ -45,29 +45,20 @@ const BackIcon = () => (
   </svg>
 );
 
-const TruckIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M1 3h15v13H1z"/>
-        <path d="M16 8h4l3 3v5h-7V8z"/>
-        <path d="M6 18h2"/>
-        <path d="M18 18h2"/>
-    </svg>
-);
-
-const ReceiptIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M22 10V4H2v16h8"/>
-        <path d="M21.5 13.5L19 11l-2.5 2.5L14 11l-2.5 2.5"/>
-        <path d="M12 16h10v4H12z"/>
-    </svg>
-);
-
-const CheckIcon = () => (
+const ContinueIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M20 6L9 17l-5-5"/>
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 16 16 12 12 8"></polyline>
+        <line x1="8" y1="12" x2="16" y2="12"></line>
     </svg>
 );
 
+const ConfirmIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+);
 
 const Cart = ({ fetchProducts }) => {
   const [deliveryOption, setDeliveryOption] = useState('delivery');
@@ -248,7 +239,10 @@ const Cart = ({ fetchProducts }) => {
                   <span>${total.toFixed(2)}</span>
                 </div>
                 <div className="pay-btn-container">
-                  <button className="pay-btn" onClick={() => setStep(2)}>Continuar a Envio <TruckIcon /></button>
+                  <button className="submit-button material-submit-button" onClick={() => setStep(2)}>
+                    <span className="button-text">Continuar a Envio</span>
+                    <span className="button-icon"><ContinueIcon /></span>
+                  </button>
                 </div>
               </div>
             </>
@@ -346,8 +340,9 @@ const Cart = ({ fetchProducts }) => {
 
               <div className="pay-btn-container">
                 <button className="back-btn icon-btn" onClick={() => setStep(1)}><BackIcon /></button>
-                <button className="pay-btn" onClick={handleContinueToSummary}>
-                  Ver Resumen <ReceiptIcon />
+                <button className="submit-button material-submit-button" onClick={handleContinueToSummary}>
+                  <span className="button-text">Ver Resumen</span>
+                  <span className="button-icon"><ContinueIcon /></span>
                 </button>
               </div>
             </div>
@@ -385,7 +380,10 @@ const Cart = ({ fetchProducts }) => {
               </div>
               <div className="pay-btn-container">
                 <button className="back-btn icon-btn" onClick={() => setStep(2)}><BackIcon /></button>
-                <button className="pay-btn" onClick={handleHacerPedido}>Confirmar Pedido <CheckIcon /></button>
+                <button className="submit-button material-submit-button" onClick={handleHacerPedido}>
+                  <span className="button-text">Confirmar Pedido</span>
+                  <span className="button-icon"><ConfirmIcon /></span>
+                </button>
               </div>
             </div>
           )}

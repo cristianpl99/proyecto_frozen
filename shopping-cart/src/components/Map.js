@@ -78,7 +78,9 @@ const Map = ({ onPlaceSelect, street, streetNumber, city, isPickup }) => {
       geocoder.geocode({ location: newPosition }, (results, status) => {
         if (status === 'OK' && results[0]) {
           onPlaceSelect(results[0]);
-          searchInputRef.current.value = results[0].formatted_address;
+          if (searchInputRef.current) {
+            searchInputRef.current.value = results[0].formatted_address;
+          }
           setSelectedAddress(results[0].formatted_address);
         }
         isMarkerDrag.current = false;
@@ -96,7 +98,9 @@ const Map = ({ onPlaceSelect, street, streetNumber, city, isPickup }) => {
         const location = results[0].geometry.location;
         map.setCenter(location);
         marker.setPosition(location);
-        searchInputRef.current.value = results[0].formatted_address;
+        if (searchInputRef.current) {
+          searchInputRef.current.value = results[0].formatted_address;
+        }
         setSelectedAddress(results[0].formatted_address);
       }
     });
