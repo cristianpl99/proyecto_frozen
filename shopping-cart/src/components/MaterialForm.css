@@ -3,6 +3,11 @@
   margin-bottom: 2rem;
 }
 
+.material-form-group {
+  display: flex;
+  justify-content: center;
+}
+
 .material-form-group input,
 .material-form-group textarea {
   width: 100%;
@@ -10,6 +15,12 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1rem;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.material-form-group textarea {
+  resize: none;
+  height: 150px;
 }
 
 .material-form-group label {
@@ -36,6 +47,9 @@
 
 .material-submit-button {
   width: 50%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .material-submit-button svg {
