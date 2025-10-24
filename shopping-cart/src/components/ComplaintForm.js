@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import './ComplaintForm.css';
-import './ComplaintSuggestionForm.css';
+import './MaterialForm.css';
 import { ToastContext } from '../context/ToastContext';
 import { AuthContext } from '../context/AuthContext';
 import { useEffect } from 'react';
@@ -85,8 +85,7 @@ const ComplaintForm = ({ onClose }) => {
                 </div>
                 {activeTab === 'new' ? (
                     <form onSubmit={handleSubmit}>
-                        <div className="form-group complaint-form-group">
-                            <label htmlFor="title">Título (máx. 30 caracteres)</label>
+                        <div className="material-form-group">
                             <input
                                 type="text"
                                 id="title"
@@ -94,19 +93,22 @@ const ComplaintForm = ({ onClose }) => {
                                 onChange={(e) => setTitle(e.target.value)}
                                 maxLength="30"
                                 required
+                                placeholder=" "
                             />
+                            <label htmlFor="title">Título (máx. 30 caracteres)</label>
                         </div>
-                        <div className="form-group complaint-form-group">
-                            <label htmlFor="description">Descripción (máx. 200 caracteres)</label>
+                        <div className="material-form-group">
                             <textarea
                                 id="description"
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 maxLength="200"
                                 required
+                                placeholder=" "
                             />
+                            <label htmlFor="description">Descripción (máx. 200 caracteres)</label>
                         </div>
-                        <button type="submit" className="submit-button">
+                        <button type="submit" className="submit-button material-submit-button">
                             <EnvelopeIcon />
                             Enviar Reclamo
                         </button>

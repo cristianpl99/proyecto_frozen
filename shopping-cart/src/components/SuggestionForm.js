@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import './ComplaintSuggestionForm.css';
+import './MaterialForm.css';
 import { ToastContext } from '../context/ToastContext';
 import { AuthContext } from '../context/AuthContext';
 
@@ -59,8 +59,7 @@ const SuggestionForm = ({ onClose }) => {
                     </div>
                 </div>
                 <form onSubmit={handleSubmit}>
-                    <div className="form-group complaint-form-group">
-                        <label htmlFor="title">Título (máx. 30 caracteres)</label>
+                    <div className="material-form-group">
                         <input
                             type="text"
                             id="title"
@@ -68,19 +67,22 @@ const SuggestionForm = ({ onClose }) => {
                             onChange={(e) => setTitle(e.target.value)}
                             maxLength="30"
                             required
+                            placeholder=" "
                         />
+                        <label htmlFor="title">Título (máx. 30 caracteres)</label>
                     </div>
-                    <div className="form-group complaint-form-group">
-                        <label htmlFor="description">Descripción (máx. 200 caracteres)</label>
+                    <div className="material-form-group">
                         <textarea
                             id="description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             maxLength="200"
                             required
+                            placeholder=" "
                         />
+                        <label htmlFor="description">Descripción (máx. 200 caracteres)</label>
                     </div>
-                    <button type="submit" className="submit-button">
+                    <button type="submit" className="submit-button material-submit-button">
                         <EnvelopeIcon />
                         Enviar Sugerencia
                     </button>
