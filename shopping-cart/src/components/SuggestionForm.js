@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import './RegisterForm.css';
+import './ComplaintSuggestionForm.css';
 import { ToastContext } from '../context/ToastContext';
 import { AuthContext } from '../context/AuthContext';
 
@@ -59,7 +59,7 @@ const SuggestionForm = ({ onClose }) => {
                     </div>
                 </div>
                 <form onSubmit={handleSubmit}>
-                    <div className="form-group">
+                    <div className="form-group complaint-form-group">
                         <label htmlFor="title">Título (máx. 30 caracteres)</label>
                         <input
                             type="text"
@@ -70,7 +70,7 @@ const SuggestionForm = ({ onClose }) => {
                             required
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="form-group complaint-form-group">
                         <label htmlFor="description">Descripción (máx. 200 caracteres)</label>
                         <textarea
                             id="description"
