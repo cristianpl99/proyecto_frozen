@@ -3,6 +3,8 @@ import './App.css';
 import Navbar from './components/Navbar';
 import RegisterForm from './components/RegisterForm';
 import EditProfileForm from './components/EditProfileForm';
+import ComplaintForm from './components/ComplaintForm';
+import SuggestionForm from './components/SuggestionForm';
 import ProductList from './components/ProductList';
 import Cart from './components/Cart';
 import { CartProvider } from './context/CartContext';
@@ -16,6 +18,8 @@ function App() {
   const { isLoaded, error } = useGoogleMapsScript();
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
+  const [showComplaintForm, setShowComplaintForm] = useState(false);
+  const [showSuggestionForm, setShowSuggestionForm] = useState(false);
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -66,14 +70,37 @@ function App() {
     setShowEditProfile(false);
   };
 
+  const handleComplaintClick = () => {
+    setShowComplaintForm(true);
+  };
+
+  const handleCloseComplaintForm = () => {
+    setShowComplaintForm(false);
+  };
+
+  const handleSuggestionClick = () => {
+    setShowSuggestionForm(true);
+  };
+
+  const handleCloseSuggestionForm = () => {
+    setShowSuggestionForm(false);
+  };
+
   return (
     <ToastProvider>
       <CartProvider>
         <AuthProvider>
           <div className="App">
-            <Navbar onRegisterClick={handleRegisterClick} onEditProfileClick={handleEditProfileClick} />
+            <Navbar
+              onRegisterClick={handleRegisterClick}
+              onEditProfileClick={handleEditProfileClick}
+              onComplaintClick={handleComplaintClick}
+              onSuggestionClick={handleSuggestionClick}
+            />
             {showRegisterForm && <RegisterForm onClose={handleCloseRegisterForm} />}
             {showEditProfile && <EditProfileForm onClose={handleCloseEditProfileForm} />}
+            {showComplaintForm && <ComplaintForm onClose={handleCloseComplaintForm} />}
+            {showSuggestionForm && <SuggestionForm onClose={handleCloseSuggestionForm} />}
             <main className="main-content">
               <div className="product-list">
                 <ProductList products={products} isLoading={isLoading} />

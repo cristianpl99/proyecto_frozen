@@ -18,8 +18,9 @@ const PasswordIcon = () => (
 );
 
 
-const Navbar = ({ onRegisterClick, onEditProfileClick }) => {
+const Navbar = ({ onRegisterClick, onEditProfileClick, onComplaintClick, onSuggestionClick }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { user, login, logout } = useContext(AuthContext);
@@ -75,8 +76,23 @@ const Navbar = ({ onRegisterClick, onEditProfileClick }) => {
           {user ? (
             <div className="welcome-container">
               <span className="welcome-message">Bienvenido, {user.nombre}</span>
-              <button className="logout-btn" onClick={handleLogout}>Desloguear</button>
-              <button className="edit-btn" onClick={onEditProfileClick}>Editar Datos</button>
+              <div className="user-menu">
+                <button className="user-menu-btn" onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                  </svg>
+                </button>
+                {isUserMenuOpen && (
+                  <div className="user-menu-dropdown">
+                    <button className="user-menu-item" onClick={onEditProfileClick}>Editar Datos</button>
+                    <button className="user-menu-item" onClick={onComplaintClick}>Hacer Reclamo</button>
+                    <button className="user-menu-item" onClick={onSuggestionClick}>Hacer Sugerencia</button>
+                    <button className="user-menu-item logout-btn" onClick={handleLogout}>Desloguear</button>
+                  </div>
+                )}
+              </div>
             </div>
           ) : (
             <form onSubmit={handleLogin}>
