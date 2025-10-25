@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import './Map.css';
 
-const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
+const Map = ({ onPlaceSelect, street, streetNumber, city, isPickup }) => {
   const mapRef = useRef(null);
   const searchInputRef = useRef(null);
   const [map, setMap] = useState(null);
@@ -28,10 +28,21 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
   }, [apiKey]);
 
   const initializeMap = useCallback((initialPosition) => {
+    const bounds = {
+      north: -34.450,
+      south: -34.600,
+      west: -58.850,
+      east: -58.600,
+    };
+
     const mapInstance = new window.google.maps.Map(mapRef.current, {
       center: initialPosition,
       zoom,
       disableDefaultUI: true,
+      restriction: {
+        latLngBounds: bounds,
+        strictBounds: true,
+      },
     });
     setMap(mapInstance);
 
@@ -67,7 +78,9 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
       geocoder.geocode({ location: newPosition }, (results, status) => {
         if (status === 'OK' && results[0]) {
           onPlaceSelect(results[0]);
-          searchInputRef.current.value = results[0].formatted_address;
+          if (searchInputRef.current) {
+            searchInputRef.current.value = results[0].formatted_address;
+          }
           setSelectedAddress(results[0].formatted_address);
         }
         isMarkerDrag.current = false;
@@ -85,7 +98,9 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
         const location = results[0].geometry.location;
         map.setCenter(location);
         marker.setPosition(location);
-        searchInputRef.current.value = results[0].formatted_address;
+        if (searchInputRef.current) {
+          searchInputRef.current.value = results[0].formatted_address;
+        }
         setSelectedAddress(results[0].formatted_address);
       }
     });
@@ -102,7 +117,7 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
     loadGoogleMapsScript()
       .then(() => {
         const setDefaultPosition = () => {
-          const defaultPosition = { lat: -34.6037, lng: -58.3816 };
+          const defaultPosition = { lat: -34.530, lng: -58.750 };
           initializeMap(defaultPosition);
         };
 
@@ -156,6 +171,23 @@ const Map = ({ onPlaceSelect, street, streetNumber, city }) => {
     });
     return () => window.google.maps.event.removeListener(listener);
   }, [map]);
+
+  useEffect(() => {
+    if (marker) {
+      marker.setDraggable(!isPickup);
+      marker.setIcon(
+        isPickup
+          ? {
+              path: window.google.maps.SymbolPath.CIRCLE,
+              scale: 8,
+              fillColor: '#808080',
+              fillOpacity: 1,
+              strokeWeight: 0,
+            }
+          : null
+      );
+    }
+  }, [isPickup, marker]);
 
   const LocationIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

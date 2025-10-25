@@ -1,4 +1,4 @@
-import React, { useContext, } from 'react';
+import React, { useContext, useState } from 'react';
 import { CartContext } from '../context/CartContext';
 import { ToastContext } from '../context/ToastContext';
 import { AuthContext } from '../context/AuthContext';
@@ -37,12 +37,6 @@ const CityIcon = () => (
   </svg>
 );
 
-const ZoneIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 22s-8-4.5-8-11.5a8 8 0 1 1 16 0c0 7-8 11.5-8 11.5z"></path>
-    <circle cx="12" cy="10" r="3"></circle>
-  </svg>
-);
 
 const BackIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -51,37 +45,32 @@ const BackIcon = () => (
   </svg>
 );
 
-const TruckIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M1 3h15v13H1z"/>
-        <path d="M16 8h4l3 3v5h-7V8z"/>
-        <path d="M6 18h2"/>
-        <path d="M18 18h2"/>
-    </svg>
-);
-
-const ReceiptIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M22 10V4H2v16h8"/>
-        <path d="M21.5 13.5L19 11l-2.5 2.5L14 11l-2.5 2.5"/>
-        <path d="M12 16h10v4H12z"/>
-    </svg>
-);
-
-const CheckIcon = () => (
+const ContinueIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M20 6L9 17l-5-5"/>
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 16 16 12 12 8"></polyline>
+        <line x1="8" y1="12" x2="16" y2="12"></line>
     </svg>
 );
 
+const ConfirmIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+);
 
 const Cart = ({ fetchProducts }) => {
+  const [deliveryOption, setDeliveryOption] = useState('delivery');
+
   const capitalizeWords = (str) => {
     if (!str) return '';
-    return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+    return str.replace(/\b(\w)(\w*)/g, function($0, $1, $2) {
+      return $1.toUpperCase() + $2.toLowerCase();
+    });
   };
 
-  const { cart, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, zone, setZone, step, setStep } = useContext(CartContext);
+  const { cart, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, step, setStep } = useContext(CartContext);
   const { addToast } = useContext(ToastContext);
   const { user } = useContext(AuthContext);
 
@@ -100,25 +89,10 @@ const Cart = ({ fetchProducts }) => {
       return;
     }
 
-    if (!street || !streetNumber || !city || !zone) {
+    if (deliveryOption === 'delivery' && (!street || !streetNumber || !city)) {
       addToast('Por favor, completa todos los campos de dirección', 'error');
       return;
     }
-
-    const getZoneAbbreviation = (zone) => {
-      switch (zone) {
-        case 'Norte':
-          return 'N';
-        case 'Sur':
-          return 'S';
-        case 'Este':
-          return 'E';
-        case 'Oeste':
-          return 'O';
-        default:
-          return '';
-      }
-    };
 
     const orderData = {
       id_cliente: user.id_cliente,
@@ -128,7 +102,7 @@ const Cart = ({ fetchProducts }) => {
       calle: street,
       altura: streetNumber,
       localidad: city,
-      zona: getZoneAbbreviation(zone),
+      zona: 'N',
       productos: cart.map(item => ({
         id_producto: item.id_producto,
         cantidad: item.quantity,
@@ -172,6 +146,60 @@ const Cart = ({ fetchProducts }) => {
     setCity(cityComponent ? cityComponent.long_name : '');
   };
 
+  const handleDeliveryOptionChange = (option) => {
+    setDeliveryOption(option);
+    if (option === 'pickup') {
+      setStreet('Juan María Gutiérrez');
+      setStreetNumber('1150');
+      setCity('Los Polvorines');
+    } else {
+      setStreet('');
+      setStreetNumber('');
+      setCity('');
+    }
+  };
+
+  const handleContinueToSummary = () => {
+    if (deliveryOption === 'delivery') {
+      if (!street || !streetNumber || !city) {
+        addToast('Por favor, completa todos los campos de dirección', 'error');
+        return;
+      }
+
+      const geocoder = new window.google.maps.Geocoder();
+      const address = `${street} ${streetNumber}, ${city}`;
+      const bounds = {
+        north: -34.450,
+        south: -34.600,
+        west: -58.850,
+        east: -58.600,
+      };
+
+      geocoder.geocode({ address }, (results, status) => {
+        if (status === 'OK' && results[0]) {
+          const location = results[0].geometry.location;
+          const lat = location.lat();
+          const lng = location.lng();
+
+          if (
+            lat >= bounds.south &&
+            lat <= bounds.north &&
+            lng >= bounds.west &&
+            lng <= bounds.east
+          ) {
+            setStep(3);
+          } else {
+            addToast('La zona ingresada está por fuera del área de reparto', 'error');
+          }
+        } else {
+          addToast('No se pudo verificar la dirección. Inténtalo de nuevo.', 'error');
+        }
+      });
+    } else {
+      setStep(3);
+    }
+  };
+
   return (
     <div className="cart-container">
       <Stepper currentStep={step} />
@@ -211,7 +239,10 @@ const Cart = ({ fetchProducts }) => {
                   <span>${total.toFixed(2)}</span>
                 </div>
                 <div className="pay-btn-container">
-                  <button className="pay-btn" onClick={() => setStep(2)}>Continuar a Envio <TruckIcon /></button>
+                  <button className="submit-button material-submit-button" onClick={() => setStep(2)}>
+                    <span className="button-text">Continuar a Envio</span>
+                    <span className="button-icon"><ContinueIcon /></span>
+                  </button>
                 </div>
               </div>
             </>
@@ -219,83 +250,99 @@ const Cart = ({ fetchProducts }) => {
 
           {step === 2 && (
             <div className="address-step">
-              <div className="address-form">
-              <div className="address-row">
-                <div className="address-input-group">
-                  <label htmlFor="street">Calle</label>
-                  <div className="address-input-container">
-                    <StreetIcon />
-                    <input
-                      id="street"
-                      type="text"
-                      placeholder="Calle"
-                      value={street}
-                      onChange={(e) => setStreet(e.target.value)}
-                    />
+              <div className="delivery-options">
+                <label className="delivery-option">
+                  <input
+                    type="radio"
+                    name="deliveryOption"
+                    value="delivery"
+                    checked={deliveryOption === 'delivery'}
+                    onChange={() => handleDeliveryOptionChange('delivery')}
+                  />
+                  <span className="delivery-option-text">🛍️ Envio a Domicilio</span>
+                </label>
+                <label className="delivery-option">
+                  <input
+                    type="radio"
+                    name="deliveryOption"
+                    value="pickup"
+                    checked={deliveryOption === 'pickup'}
+                    onChange={() => handleDeliveryOptionChange('pickup')}
+                  />
+                  <span className="delivery-option-text">🚚 Retiro en Local</span>
+                </label>
+              </div>
+
+              {deliveryOption === 'pickup' && (
+                <div className="pickup-address-info">
+                  <h4 className="pickup-message">Podes retirar tu pedido de lunes a viernes en el horario de 8:00 a 18:00 en la siguiente dirección:</h4>
+                </div>
+              )}
+
+              <div className={`address-form ${deliveryOption === 'pickup' ? 'hidden' : ''}`}>
+                <div className="address-row">
+                  <div className="address-input-group">
+                    <label htmlFor="street">Calle</label>
+                    <div className="address-input-container">
+                      <StreetIcon />
+                      <input
+                        id="street"
+                        type="text"
+                        placeholder="Calle"
+                        value={street}
+                        onChange={(e) => setStreet(e.target.value)}
+                        disabled={deliveryOption === 'pickup'}
+                      />
+                    </div>
+                  </div>
+                  <div className="address-input-group">
+                    <label htmlFor="streetNumber">Altura</label>
+                    <div className="address-input-container">
+                      <NumberIcon />
+                      <input
+                        id="streetNumber"
+                        type="text"
+                        placeholder="Altura"
+                        value={streetNumber}
+                        onChange={(e) => setStreetNumber(e.target.value)}
+                        disabled={deliveryOption === 'pickup'}
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className="address-input-group">
-                  <label htmlFor="streetNumber">Altura</label>
-                  <div className="address-input-container">
-                    <NumberIcon />
-                    <input
-                      id="streetNumber"
-                      type="text"
-                      placeholder="Altura"
-                      value={streetNumber}
-                      onChange={(e) => setStreetNumber(e.target.value)}
-                    />
+                <div className="address-row">
+                  <div className="address-input-group">
+                    <label htmlFor="city">Localidad</label>
+                    <div className="address-input-container">
+                      <CityIcon />
+                      <input
+                        id="city"
+                        type="text"
+                        placeholder="Localidad"
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        disabled={deliveryOption === 'pickup'}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="address-row">
-                <div className="address-input-group">
-                  <label htmlFor="city">Localidad</label>
-                  <div className="address-input-container">
-                    <CityIcon />
-                    <input
-                      id="city"
-                      type="text"
-                      placeholder="Localidad"
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div className="address-input-group">
-                  <label htmlFor="zone">Zona</label>
-                  <div className="address-input-container">
-                    <ZoneIcon />
-                    <select id="zone" value={zone} onChange={(e) => setZone(e.target.value)}>
-                      <option value="" disabled>Zona</option>
-                      <option value="Norte">Norte</option>
-                      <option value="Sur">Sur</option>
-                      <option value="Este">Este</option>
-                      <option value="Oeste">Oeste</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
+
+              <div>
                 <Map
                   onPlaceSelect={handlePlaceSelect}
                   street={street}
                   streetNumber={streetNumber}
                   city={city}
+                  isPickup={deliveryOption === 'pickup'}
                 />
+              </div>
+
               <div className="pay-btn-container">
                 <button className="back-btn icon-btn" onClick={() => setStep(1)}><BackIcon /></button>
-                <button
-                  className="pay-btn"
-                  onClick={() => {
-                    if (!street || !streetNumber || !city || !zone) {
-                      addToast('Por favor, completa todos los campos de dirección', 'error');
-                      return;
-                    }
-                    setStep(3);
-                  }}
-                >
-                  Ver Resumen <ReceiptIcon />
+                <button className="submit-button material-submit-button" onClick={handleContinueToSummary}>
+                  <span className="button-text">Ver Resumen</span>
+                  <span className="button-icon"><ContinueIcon /></span>
                 </button>
               </div>
             </div>
@@ -333,7 +380,10 @@ const Cart = ({ fetchProducts }) => {
               </div>
               <div className="pay-btn-container">
                 <button className="back-btn icon-btn" onClick={() => setStep(2)}><BackIcon /></button>
-                <button className="pay-btn" onClick={handleHacerPedido}>Confirmar Pedido <CheckIcon /></button>
+                <button className="submit-button material-submit-button" onClick={handleHacerPedido}>
+                  <span className="button-text">Confirmar Pedido</span>
+                  <span className="button-icon"><ConfirmIcon /></span>
+                </button>
               </div>
             </div>
           )}

@@ -32,3 +32,16 @@
     flex-direction: column;
   }
 }
+
+df-messenger {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+}
+
+.custom-dialogflow-icon {
+  --df-messenger-chat-bubble-background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M0 0h24v24H0z" fill="none" /><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" /></svg>');
+  --df-messenger-chat-bubble-background-size: 60%;
+  --df-messenger-chat-bubble-background-color: #0b57d0;
+}

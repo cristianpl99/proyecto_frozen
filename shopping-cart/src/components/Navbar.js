@@ -18,8 +18,9 @@ const PasswordIcon = () => (
 );
 
 
-const Navbar = ({ onRegisterClick, onEditProfileClick }) => {
+const Navbar = ({ onRegisterClick, onEditProfileClick, onComplaintClick, onSuggestionClick }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { user, login, logout } = useContext(AuthContext);
@@ -75,8 +76,37 @@ const Navbar = ({ onRegisterClick, onEditProfileClick }) => {
           {user ? (
             <div className="welcome-container">
               <span className="welcome-message">Bienvenido, {user.nombre}</span>
-              <button className="logout-btn" onClick={handleLogout}>Desloguear</button>
-              <button className="edit-btn" onClick={onEditProfileClick}>Editar Datos</button>
+              <div className="user-menu">
+                <button className={`user-menu-btn ${isUserMenuOpen ? 'open' : ''}`} onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}>
+                  <div className="hamburger-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </button>
+                {isUserMenuOpen && (
+                  <div className={`user-menu-dropdown ${isUserMenuOpen ? 'open' : ''}`}>
+                    <button className="user-menu-item" onClick={onEditProfileClick}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                      Editar Datos
+                    </button>
+                    <div className="menu-separator"></div>
+                    <button className="user-menu-item" onClick={onComplaintClick}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+                      Reclamos
+                    </button>
+                    <button className="user-menu-item" onClick={onSuggestionClick}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+                      Sugerencias
+                    </button>
+                    <div className="menu-separator"></div>
+                    <button className="user-menu-item logout-btn" onClick={handleLogout}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                      Desloguear
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           ) : (
             <form onSubmit={handleLogin}>

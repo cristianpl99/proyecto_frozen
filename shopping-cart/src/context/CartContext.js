@@ -9,7 +9,6 @@ export const CartProvider = ({ children }) => {
   const [street, setStreet] = useState('');
   const [streetNumber, setStreetNumber] = useState('');
   const [city, setCity] = useState('');
-  const [zone, setZone] = useState('');
   const [step, setStep] = useState(1);
 
 
@@ -69,11 +68,10 @@ export const CartProvider = ({ children }) => {
     setStreet('');
     setStreetNumber('');
     setCity('');
-    setZone('');
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, zone, setZone, clearAddress, step, setStep }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, clearAddress, step, setStep }}>
       {children}
     </CartContext.Provider>
   );
