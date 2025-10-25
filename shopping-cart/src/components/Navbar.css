@@ -265,7 +265,6 @@
   }
 
   .navbar-login {
-    display: none;
     position: absolute;
     top: 80px;
     left: 0;
@@ -273,11 +272,15 @@
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    padding: 2rem;
+    padding: 0 2rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
   }
 
   .navbar-login.active {
-    display: block;
+    max-height: 500px; /* Adjust as needed */
+    padding: 2rem;
   }
 
   .navbar-login form {
