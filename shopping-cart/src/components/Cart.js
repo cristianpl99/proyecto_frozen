@@ -381,7 +381,7 @@ const Cart = ({ fetchProducts }) => {
               <div className="pay-btn-container">
                 <button className="back-btn icon-btn" onClick={() => setStep(2)}><BackIcon /></button>
                 <button className="submit-button material-submit-button stepper-button" onClick={handleHacerPedido}>
-                  <span className="button-text">Ir a Confirmar Pedido</span>
+                  <span className="button-text">Confirmar Pedido</span>
                   <span className="button-icon"><ConfirmIcon /></span>
                 </button>
               </div>
