@@ -117,13 +117,10 @@
   transition: background-color 0.3s;
 }
 
-.submit-button .button-text {
-  display: none;
-}
-
 .submit-button .button-icon {
   display: inline;
-  color: #155724;
+  vertical-align: middle;
+  margin-left: 5px;
 }
 
 .submit-button:hover {
@@ -131,7 +128,22 @@
   border: 2px solid #155724;
 }
 
-.submit-button:hover .button-icon {
+/* Stepper buttons should show both text and icon on hover */
+.stepper-button:hover .button-text {
+  display: inline;
+}
+
+.stepper-button:hover .button-icon {
+  display: inline;
+}
+
+/* Form buttons should hide text and show icon on hover */
+.submit-button:not(.stepper-button):hover .button-text {
+  display: none;
+}
+
+.submit-button:not(.stepper-button):hover .button-icon {
+  display: inline;
   color: #155724;
 }
 
