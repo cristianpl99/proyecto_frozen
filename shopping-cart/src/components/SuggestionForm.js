@@ -83,7 +83,7 @@ const SuggestionForm = ({ onClose }) => {
                         <label htmlFor="description">Descripción (máx. 200 caracteres)</label>
                     </div>
                     <button type="submit" className="submit-button material-submit-button">
-                        <span className="button-text">Enviar Sugerencia</span>
+                        <span className="button-text">Enviar</span>
                         <span className="button-icon"><SendIcon /></span>
                     </button>
                 </form>

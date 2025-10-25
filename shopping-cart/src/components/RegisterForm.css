@@ -117,8 +117,11 @@
   transition: background-color 0.3s;
 }
 
-.submit-button .button-icon {
-  display: none;
+.submit-button .button-icon svg {
+  width: 1.5em;
+  height: 1.5em;
+  vertical-align: middle;
+  margin-left: 5px;
 }
 
 .submit-button:hover {
@@ -126,8 +129,18 @@
   border: 2px solid #155724;
 }
 
+/* Stepper buttons should show both text and icon on hover */
+.stepper-button:hover .button-text {
+  display: inline;
+}
+
+.stepper-button:hover .button-icon {
+  display: inline;
+}
+
+/* All submit buttons should show both text and icon on hover */
 .submit-button:hover .button-text {
-  display: none;
+  display: inline;
 }
 
 .submit-button:hover .button-icon {
@@ -135,10 +148,6 @@
   color: #155724;
 }
 
-.submit-button:hover .button-icon svg {
-  width: 1.5em;
-  height: 1.5em;
-}
 
 .error-message {
   color: #d9534f;

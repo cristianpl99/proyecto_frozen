@@ -239,8 +239,8 @@ const Cart = ({ fetchProducts }) => {
                   <span>${total.toFixed(2)}</span>
                 </div>
                 <div className="pay-btn-container">
-                  <button className="submit-button material-submit-button" onClick={() => setStep(2)}>
-                    <span className="button-text">Continuar a Envio</span>
+                  <button className="submit-button material-submit-button stepper-button" onClick={() => setStep(2)}>
+                    <span className="button-text">Ir a Envio</span>
                     <span className="button-icon"><ContinueIcon /></span>
                   </button>
                 </div>
@@ -340,7 +340,7 @@ const Cart = ({ fetchProducts }) => {
 
               <div className="pay-btn-container">
                 <button className="back-btn icon-btn" onClick={() => setStep(1)}><BackIcon /></button>
-                <button className="submit-button material-submit-button" onClick={handleContinueToSummary}>
+                <button className="submit-button material-submit-button stepper-button" onClick={handleContinueToSummary}>
                   <span className="button-text">Ver Resumen</span>
                   <span className="button-icon"><ContinueIcon /></span>
                 </button>
@@ -380,7 +380,7 @@ const Cart = ({ fetchProducts }) => {
               </div>
               <div className="pay-btn-container">
                 <button className="back-btn icon-btn" onClick={() => setStep(2)}><BackIcon /></button>
-                <button className="submit-button material-submit-button" onClick={handleHacerPedido}>
+                <button className="submit-button material-submit-button stepper-button" onClick={handleHacerPedido}>
                   <span className="button-text">Confirmar Pedido</span>
                   <span className="button-icon"><ConfirmIcon /></span>
                 </button>
