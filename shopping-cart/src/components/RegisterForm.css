@@ -109,12 +109,12 @@
   width: 100%;
   padding: 0.75rem;
   border-radius: 16px;
-  border: 1px solid var(--primary-button-blue);
+  border: 2px solid var(--primary-button-blue);
   background-color: #a1c4fd;
   color: var(--primary-button-blue);
   cursor: pointer;
   font-weight: bold;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, border-color 0.3s;
 }
 
 .submit-button .button-icon {
@@ -123,7 +123,7 @@
 
 .submit-button:hover {
   background-color: #28a745;
-  border: 2px solid #155724;
+  border-color: #155724;
 }
 
 .submit-button:hover .button-text {
