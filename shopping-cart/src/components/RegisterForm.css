@@ -138,12 +138,12 @@
   display: inline;
 }
 
-/* Form buttons should hide text and show icon on hover */
-.submit-button:not(.stepper-button):hover .button-text {
-  display: none;
+/* All submit buttons should show both text and icon on hover */
+.submit-button:hover .button-text {
+  display: inline;
 }
 
-.submit-button:not(.stepper-button):hover .button-icon {
+.submit-button:hover .button-icon {
   display: inline;
   color: #155724;
 }

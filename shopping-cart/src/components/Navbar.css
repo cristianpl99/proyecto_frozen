@@ -258,10 +258,19 @@
 }
 
 @media screen and (max-width: 992px) {
+  .navbar-container {
+    justify-content: space-between;
+  }
+
+  .navbar-logo, .navbar-title {
+    flex: none;
+  }
+
   .menu-icon {
     display: block;
     cursor: pointer;
     color: var(--main-text);
+    z-index: 1000;
   }
 
   .navbar-login {
@@ -272,10 +281,9 @@
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    padding: 0 2rem;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+    transition: max-height 0.5s ease-in-out;
   }
 
   .navbar-login.active {
