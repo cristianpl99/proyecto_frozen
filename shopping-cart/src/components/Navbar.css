@@ -25,7 +25,7 @@
 }
 
 .navbar-logo {
-  flex: 1;
+  flex: none;
   justify-content: flex-start;
   color: var(--card-background);
 }
@@ -35,23 +35,47 @@
   font-weight: 700;
   font-size: 1.5rem;
   text-align: center;
-  flex: 1;
+  flex: none;
+}
+
+.menu-icon {
+  display: block;
+  cursor: pointer;
+  color: var(--main-text);
+  z-index: 1000;
 }
 
 .navbar-login {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
+  position: absolute;
+  top: 80px;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out;
+}
+
+.navbar-login.active {
+  max-height: 500px; /* Adjust as needed */
+  padding: 2rem;
 }
 
 .navbar-login form {
   display: flex;
-  align-items: center;
-  gap: 15px;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.menu-icon {
-  display: none;
+.navbar-login .input-with-icon-right input {
+  border: 1px solid black;
+}
+
+.navbar-login .button-group {
+  justify-content: center;
+  width: 100%;
 }
 
 .input-group {
@@ -255,53 +279,4 @@
 
 .user-menu-item:hover {
   background-color: #f0f0f0;
-}
-
-@media screen and (max-width: 992px) {
-  .navbar-container {
-    justify-content: space-between;
-  }
-
-  .navbar-logo, .navbar-title {
-    flex: none;
-  }
-
-  .menu-icon {
-    display: block;
-    cursor: pointer;
-    color: var(--main-text);
-    z-index: 1000;
-  }
-
-  .navbar-login {
-    position: absolute;
-    top: 80px;
-    left: 0;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.5s ease-in-out;
-  }
-
-  .navbar-login.active {
-    max-height: 500px; /* Adjust as needed */
-    padding: 2rem;
-  }
-
-  .navbar-login form {
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .navbar-login .input-with-icon-right input {
-    border: 1px solid black;
-  }
-
-  .navbar-login .button-group {
-    justify-content: center;
-    width: 100%;
-  }
 }
