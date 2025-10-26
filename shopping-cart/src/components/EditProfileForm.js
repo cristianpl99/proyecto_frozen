@@ -66,8 +66,28 @@ const EditProfileForm = ({ onClose }) => {
     }));
   };
 
+  const handleCuitChange = (e) => {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 2) {
+      value = `${value.slice(0, 2)}-${value.slice(2)}`;
+    }
+    if (value.length > 11) {
+      value = `${value.slice(0, 11)}-${value.slice(11, 12)}`;
+    }
+    setFormData((prevData) => ({
+      ...prevData,
+      cuil: value,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const cuilRegex = /^\d{2}-\d{7,8}-\d{1}$/;
+    if (!cuilRegex.test(formData.cuil)) {
+      addToast('El formato del CUIL no es válido', 'error');
+      return;
+    }
 
     const updatedData = {
       nombre: formData.nombre,
@@ -147,7 +167,8 @@ const EditProfileForm = ({ onClose }) => {
                 id="cuil"
                 name="cuil"
                 value={formData.cuil}
-                onChange={handleChange}
+                onChange={handleCuitChange}
+                maxLength="13"
                 required
               />
               <span className="icon"><CuitIcon /></span>

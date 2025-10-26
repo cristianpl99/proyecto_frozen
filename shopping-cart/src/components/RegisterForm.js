@@ -61,12 +61,31 @@ const RegisterForm = ({ onClose }) => {
     }));
   };
 
+  const handleCuitChange = (e) => {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 2) {
+      value = `${value.slice(0, 2)}-${value.slice(2)}`;
+    }
+    if (value.length > 11) {
+      value = `${value.slice(0, 11)}-${value.slice(11, 12)}`;
+    }
+    setFormData((prevData) => ({
+      ...prevData,
+      cuit: value,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
     if (!formData.name) newErrors.name = 'El nombre es obligatorio';
     if (!formData.lastName) newErrors.lastName = 'El apellido es obligatorio';
-    if (!formData.cuit) newErrors.cuit = 'El CUIT es obligatorio';
+    const cuilRegex = /^\d{2}-\d{7,8}-\d{1}$/;
+    if (!formData.cuit) {
+      newErrors.cuit = 'El CUIL es obligatorio';
+    } else if (!cuilRegex.test(formData.cuit)) {
+      newErrors.cuit = 'El formato del CUIL no es válido';
+    }
     if (!formData.email) {
       newErrors.email = 'El email es obligatorio';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -166,19 +185,20 @@ const RegisterForm = ({ onClose }) => {
             {errors.lastName && <p className="error-message">{errors.lastName}</p>}
           </div>
           <div className="form-group">
-            <label htmlFor="cuit">CUIT</label>
+            <label htmlFor="cuil">CUIL</label>
             <div className="input-with-icon">
               <input
                 type="text"
-                id="cuit"
-                name="cuit"
-                value={formData.cuit}
-                onChange={handleChange}
+                id="cuil"
+                name="cuil"
+                value={formData.cuil}
+                onChange={handleCuitChange}
+                maxLength="13"
                 required
               />
               <span className="icon"><CuitIcon /></span>
             </div>
-            {errors.cuit && <p className="error-message">{errors.cuit}</p>}
+            {errors.cuil && <p className="error-message">{errors.cuil}</p>}
           </div>
           <div className="form-group">
             <label htmlFor="email">Email</label>
