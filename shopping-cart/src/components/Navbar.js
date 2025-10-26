@@ -74,13 +74,17 @@ const Navbar = ({ onRegisterClick, onEditProfileClick, onComplaintClick, onSugge
         </div>
         <div className={`navbar-login ${isOpen ? 'active' : ''}`}>
           {user ? (
-            <div className="user-menu-container">
-              <div className="welcome-container">
-                <span className="welcome-message">Bienvenido, {user.nombre}</span>
-                <div className="user-menu">
-                  <button className={`user-menu-btn ${isUserMenuOpen ? 'open' : ''}`} onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}>
-                    <span className="user-menu-icon">🧊</span>
-                  </button>
+            <div className="welcome-container">
+              <span className="welcome-message">Bienvenido, {user.nombre}</span>
+              <div className="user-menu">
+                <button className={`user-menu-btn ${isUserMenuOpen ? 'open' : ''}`} onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}>
+                  <div className="hamburger-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </button>
+                {isUserMenuOpen && (
                   <div className={`user-menu-dropdown ${isUserMenuOpen ? 'open' : ''}`}>
                     <button className="user-menu-item" onClick={onEditProfileClick}>
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
@@ -101,7 +105,7 @@ const Navbar = ({ onRegisterClick, onEditProfileClick, onComplaintClick, onSugge
                       Desloguear
                     </button>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           ) : (
