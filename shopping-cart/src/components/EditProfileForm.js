@@ -66,26 +66,11 @@ const EditProfileForm = ({ onClose }) => {
     }));
   };
 
-  const handleCuitChange = (e) => {
-    let value = e.target.value.replace(/\D/g, '');
-    if (value.length > 2) {
-      value = `${value.slice(0, 2)}-${value.slice(2)}`;
-    }
-    if (value.length > 11) {
-      value = `${value.slice(0, 11)}-${value.slice(11, 12)}`;
-    }
-    setFormData((prevData) => ({
-      ...prevData,
-      cuil: value,
-    }));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const cuilRegex = /^\d{2}-\d{7,8}-\d{1}$/;
-    if (!cuilRegex.test(formData.cuil)) {
-      addToast('El formato del CUIL no es válido', 'error');
+    if (!/^\d{10,11}$/.test(formData.cuil)) {
+      addToast('El CUIL debe tener 10 u 11 dígitos', 'error');
       return;
     }
 
@@ -163,12 +148,11 @@ const EditProfileForm = ({ onClose }) => {
             <label htmlFor="cuil">CUIL</label>
             <div className="input-with-icon">
               <input
-                type="text"
+                type="number"
                 id="cuil"
                 name="cuil"
                 value={formData.cuil}
-                onChange={handleCuitChange}
-                maxLength="13"
+                onChange={handleChange}
                 required
               />
               <span className="icon"><CuitIcon /></span>

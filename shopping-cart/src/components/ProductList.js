@@ -5,19 +5,6 @@ import Modal from './Modal';
 import SkeletonProductCard from './SkeletonProductCard';
 import './ProductList.css';
 
-const getProductIcon = (productName) => {
-  const name = productName.toLowerCase();
-  if (name.includes('hamburguesa')) return '🍔';
-  if (name.includes('milanesa')) return '🥩';
-  if (name.includes('patita')) return '🍗';
-  if (name.includes('medallon')) return '🍖';
-  if (name.includes('nugget')) return '🐔';
-  if (name.includes('vegetal')) return '🥬';
-  if (name.includes('papa')) return '🍟';
-  if (name.includes('helado')) return '🍦';
-  return '🧊';
-};
-
 const ProductList = ({ products, isLoading }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -79,7 +66,6 @@ const ProductList = ({ products, isLoading }) => {
         onClose={closeModal}
         title={selectedProduct ? selectedProduct.nombre : ''}
         description={selectedProduct ? selectedProduct.descripcion : ''}
-        icon={selectedProduct ? getProductIcon(selectedProduct.nombre) : ''}
       />
     </div>
   );

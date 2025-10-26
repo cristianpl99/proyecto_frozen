@@ -41,7 +41,7 @@ const RegisterForm = ({ onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
     lastName: '',
-    cuit: '',
+    cuil: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -61,30 +61,15 @@ const RegisterForm = ({ onClose }) => {
     }));
   };
 
-  const handleCuitChange = (e) => {
-    let value = e.target.value.replace(/\D/g, '');
-    if (value.length > 2) {
-      value = `${value.slice(0, 2)}-${value.slice(2)}`;
-    }
-    if (value.length > 11) {
-      value = `${value.slice(0, 11)}-${value.slice(11, 12)}`;
-    }
-    setFormData((prevData) => ({
-      ...prevData,
-      cuit: value,
-    }));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
     if (!formData.name) newErrors.name = 'El nombre es obligatorio';
     if (!formData.lastName) newErrors.lastName = 'El apellido es obligatorio';
-    const cuilRegex = /^\d{2}-\d{7,8}-\d{1}$/;
-    if (!formData.cuit) {
-      newErrors.cuit = 'El CUIL es obligatorio';
-    } else if (!cuilRegex.test(formData.cuit)) {
-      newErrors.cuit = 'El formato del CUIL no es válido';
+    if (!formData.cuil) {
+      newErrors.cuil = 'El CUIL es obligatorio';
+    } else if (!/^\d{10,11}$/.test(formData.cuil)) {
+      newErrors.cuil = 'El CUIL debe tener 10 u 11 dígitos';
     }
     if (!formData.email) {
       newErrors.email = 'El email es obligatorio';
@@ -117,7 +102,7 @@ const RegisterForm = ({ onClose }) => {
           nombre: formData.name,
           apellido: formData.lastName,
           email: formData.email,
-          cuil: formData.cuit,
+          cuil: formData.cuil,
           contraseña: formData.password,
           id_prioridad: 1,
         };
@@ -188,12 +173,11 @@ const RegisterForm = ({ onClose }) => {
             <label htmlFor="cuil">CUIL</label>
             <div className="input-with-icon">
               <input
-                type="text"
+                type="number"
                 id="cuil"
                 name="cuil"
                 value={formData.cuil}
-                onChange={handleCuitChange}
-                maxLength="13"
+                onChange={handleChange}
                 required
               />
               <span className="icon"><CuitIcon /></span>
