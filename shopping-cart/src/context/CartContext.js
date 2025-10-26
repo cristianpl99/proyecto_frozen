@@ -70,8 +70,16 @@ export const CartProvider = ({ children }) => {
     setCity('');
   };
 
+  const updateCartItemQuantity = (productId, quantity) => {
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.id_producto === productId ? { ...item, quantity } : item
+      )
+    );
+  };
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, clearAddress, step, setStep }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, clearAddress, step, setStep, updateCartItemQuantity }}>
       {children}
     </CartContext.Provider>
   );

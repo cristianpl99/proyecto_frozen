@@ -60,7 +60,7 @@ const ConfirmIcon = () => (
     </svg>
 );
 
-const Cart = ({ fetchProducts }) => {
+const Cart = ({ products, fetchProducts }) => {
   const [deliveryOption, setDeliveryOption] = useState('delivery');
 
   const capitalizeWords = (str) => {
@@ -70,7 +70,7 @@ const Cart = ({ fetchProducts }) => {
     });
   };
 
-  const { cart, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, step, setStep } = useContext(CartContext);
+  const { cart, getTotalPrice, clearCart, updateCartItemQuantity, street, setStreet, streetNumber, setStreetNumber, city, setCity, step, setStep } = useContext(CartContext);
   const { addToast } = useContext(ToastContext);
   const { user } = useContext(AuthContext);
 
@@ -94,10 +94,26 @@ const Cart = ({ fetchProducts }) => {
       return;
     }
 
+    let stockChanged = false;
+    for (const item of cart) {
+      const productInStock = products.find(p => p.id_producto === item.id_producto);
+      if (!productInStock || item.quantity > productInStock.stock.disponible) {
+        stockChanged = true;
+        updateCartItemQuantity(item.id_producto, 1);
+      }
+    }
+
+    if (stockChanged) {
+      addToast('Hubo un cambio de stock de uno o más productos.', 'warning');
+      setStep(1);
+      fetchProducts();
+      return;
+    }
+
     const orderData = {
       id_cliente: user.id_cliente,
       fecha_entrega: null,
-      id_prioridad: 1,
+      id_prioridad: user.id_prioridad,
       tipo_venta: "ONL",
       calle: street,
       altura: streetNumber,

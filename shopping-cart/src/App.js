@@ -108,7 +108,7 @@ function App() {
               <aside className="cart">
                 {error && <div>Error al cargar el mapa.</div>}
                 {!isLoaded && !error && <div>Cargando mapa...</div>}
-                {isLoaded && !error && <Cart fetchProducts={fetchProductsAndStock} />}
+                {isLoaded && !error && <Cart products={products} fetchProducts={fetchProductsAndStock} />}
               </aside>
             </main>
             <ToastContainer />
