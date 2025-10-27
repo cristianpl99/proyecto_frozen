@@ -69,6 +69,11 @@ const EditProfileForm = ({ onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!/^\d{10,11}$/.test(formData.cuil)) {
+      addToast('El CUIL debe tener 10 u 11 dígitos', 'error');
+      return;
+    }
+
     const updatedData = {
       nombre: formData.nombre,
       apellido: formData.apellido,
@@ -143,7 +148,7 @@ const EditProfileForm = ({ onClose }) => {
             <label htmlFor="cuil">CUIL</label>
             <div className="input-with-icon">
               <input
-                type="text"
+                type="number"
                 id="cuil"
                 name="cuil"
                 value={formData.cuil}
