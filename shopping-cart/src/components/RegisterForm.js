@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import './RegisterForm.css';
 import { ToastContext } from '../context/ToastContext';
+import { formatCuil } from '../utils/utils';
 
 const UserIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="darkgray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -102,7 +103,7 @@ const RegisterForm = ({ onClose }) => {
           nombre: formData.name,
           apellido: formData.lastName,
           email: formData.email,
-          cuil: formData.cuil,
+          cuil: formatCuil(formData.cuil),
           contraseña: formData.password,
           id_prioridad: 1,
         };
@@ -173,11 +174,12 @@ const RegisterForm = ({ onClose }) => {
             <label htmlFor="cuil">CUIL</label>
             <div className="input-with-icon">
               <input
-                type="number"
+                type="text"
                 id="cuil"
                 name="cuil"
                 value={formData.cuil}
                 onChange={handleChange}
+                pattern="\d*"
                 required
               />
               <span className="icon"><CuitIcon /></span>

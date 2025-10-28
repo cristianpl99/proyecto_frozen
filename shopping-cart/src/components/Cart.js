@@ -65,9 +65,7 @@ const Cart = ({ products, fetchProducts }) => {
 
   const capitalizeWords = (str) => {
     if (!str) return '';
-    return str.replace(/\b(\w)(\w*)/g, function($0, $1, $2) {
-      return $1.toUpperCase() + $2.toLowerCase();
-    });
+    return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
   const { cart, getTotalPrice, clearCart, updateCartItemQuantity, street, setStreet, streetNumber, setStreetNumber, city, setCity, step, setStep } = useContext(CartContext);
@@ -94,19 +92,32 @@ const Cart = ({ products, fetchProducts }) => {
       return;
     }
 
-    let stockChanged = false;
-    for (const item of cart) {
-      const productInStock = products.find(p => p.id_producto === item.id_producto);
-      if (!productInStock || item.quantity > productInStock.stock.disponible) {
-        stockChanged = true;
-        updateCartItemQuantity(item.id_producto, 1);
+    try {
+      const response = await fetch('https://frozenback-test.up.railway.app/api/productos/productos/');
+      if (!response.ok) {
+        throw new Error('Failed to fetch latest product stock');
       }
-    }
+      const latestProducts = await response.json();
 
-    if (stockChanged) {
-      addToast('Hubo un cambio de stock de uno o más productos.', 'warning');
-      setStep(1);
-      fetchProducts();
+      let stockChanged = false;
+      const updatedCart = [...cart];
+
+      for (const item of updatedCart) {
+        const productInStock = latestProducts.find(p => p.id_producto === item.id_producto);
+        if (!productInStock || item.quantity > productInStock.stock.disponible) {
+          stockChanged = true;
+          updateCartItemQuantity(item.id_producto, 0);
+        }
+      }
+
+      if (stockChanged) {
+        addToast('Hubo un cambio de stock de uno o más productos.', 'warning');
+        setStep(1);
+        fetchProducts();
+        return;
+      }
+    } catch (error) {
+      addToast('Error al verificar el stock. Por favor, inténtalo de nuevo.', 'error');
       return;
     }
 
@@ -143,6 +154,8 @@ const Cart = ({ products, fetchProducts }) => {
       }
     } catch (error) {
       addToast('Error de red al crear la orden de venta', 'error');
+    } finally {
+      fetchProducts();
     }
   };
 
@@ -206,7 +219,12 @@ const Cart = ({ products, fetchProducts }) => {
             setStep(3);
           } else {
             addToast('La zona ingresada está por fuera del área de reparto', 'error');
+            setStreet('Juan María Gutiérrez');
+            setStreetNumber('1150');
+            setCity('Los Polvorines');
           }
+        } else if (status === 'ZERO_RESULTS') {
+          addToast('Dirección inválida. Por favor, verifica los datos ingresados.', 'error');
         } else {
           addToast('No se pudo verificar la dirección. Inténtalo de nuevo.', 'error');
         }

@@ -12,7 +12,7 @@
 }
 
 .modal-content {
-  background: var(--card-background);
+  background: linear-gradient(to right, #4facfe, #00f2fe);
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);

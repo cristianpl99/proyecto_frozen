@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import './RegisterForm.css';
 import { ToastContext } from '../context/ToastContext';
 import { AuthContext } from '../context/AuthContext';
+import { formatCuil } from '../utils/utils';
 
 const UserIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="darkgray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -51,7 +52,7 @@ const EditProfileForm = ({ onClose }) => {
       setFormData({
         nombre: user.nombre || '',
         apellido: user.apellido || '',
-        cuil: user.cuil || '',
+        cuil: user.cuil ? user.cuil.replace(/-/g, '') : '',
         password: '',
         newPassword: '',
       });
@@ -69,7 +70,8 @@ const EditProfileForm = ({ onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!/^\d{10,11}$/.test(formData.cuil)) {
+    const cleanedCuil = formData.cuil.replace(/-/g, '');
+    if (!/^\d{10,11}$/.test(cleanedCuil)) {
       addToast('El CUIL debe tener 10 u 11 dígitos', 'error');
       return;
     }
@@ -77,7 +79,7 @@ const EditProfileForm = ({ onClose }) => {
     const updatedData = {
       nombre: formData.nombre,
       apellido: formData.apellido,
-      cuil: formData.cuil,
+      cuil: formatCuil(formData.cuil),
       contraseña: formData.password,
     };
 
@@ -148,11 +150,12 @@ const EditProfileForm = ({ onClose }) => {
             <label htmlFor="cuil">CUIL</label>
             <div className="input-with-icon">
               <input
-                type="number"
+                type="text"
                 id="cuil"
                 name="cuil"
                 value={formData.cuil}
                 onChange={handleChange}
+                pattern="\d*"
                 required
               />
               <span className="icon"><CuitIcon /></span>
