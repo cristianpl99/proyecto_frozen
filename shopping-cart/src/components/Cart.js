@@ -65,9 +65,7 @@ const Cart = ({ products, fetchProducts }) => {
 
   const capitalizeWords = (str) => {
     if (!str) return '';
-    return str.replace(/\b(\w)(\w*)/g, function($0, $1, $2) {
-      return $1.toUpperCase() + $2.toLowerCase();
-    });
+    return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
   const { cart, getTotalPrice, clearCart, updateCartItemQuantity, street, setStreet, streetNumber, setStreetNumber, city, setCity, step, setStep } = useContext(CartContext);
