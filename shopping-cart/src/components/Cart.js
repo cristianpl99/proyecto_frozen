@@ -219,6 +219,9 @@ const Cart = ({ products, fetchProducts }) => {
             setStep(3);
           } else {
             addToast('La zona ingresada está por fuera del área de reparto', 'error');
+            setStreet('Juan María Gutiérrez');
+            setStreetNumber('1150');
+            setCity('Los Polvorines');
           }
         } else if (status === 'ZERO_RESULTS') {
           addToast('Dirección inválida. Por favor, verifica los datos ingresados.', 'error');
