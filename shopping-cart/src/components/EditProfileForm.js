@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import './RegisterForm.css';
 import { ToastContext } from '../context/ToastContext';
 import { AuthContext } from '../context/AuthContext';
+import { formatCuil } from '../utils/utils';
 
 const UserIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="darkgray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -74,16 +75,6 @@ const EditProfileForm = ({ onClose }) => {
       addToast('El CUIL debe tener 10 u 11 dígitos', 'error');
       return;
     }
-
-    const formatCuil = (cuil) => {
-      const cleanedCuil = cuil.replace(/-/g, '');
-      if (cleanedCuil.length === 11) {
-        return `${cleanedCuil.slice(0, 2)}-${cleanedCuil.slice(2, 10)}-${cleanedCuil.slice(10)}`;
-      } else if (cleanedCuil.length === 10) {
-        return `${cleanedCuil.slice(0, 2)}-${cleanedCuil.slice(2, 9)}-${cleanedCuil.slice(9)}`;
-      }
-      return cuil;
-    };
 
     const updatedData = {
       nombre: formData.nombre,

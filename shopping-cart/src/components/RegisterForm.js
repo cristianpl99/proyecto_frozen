@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import './RegisterForm.css';
 import { ToastContext } from '../context/ToastContext';
+import { formatCuil } from '../utils/utils';
 
 const UserIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="darkgray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -97,15 +98,6 @@ const RegisterForm = ({ onClose }) => {
           addToast('El email ya está registrado', 'error');
           return;
         }
-
-        const formatCuil = (cuil) => {
-          if (cuil.length === 11) {
-            return `${cuil.slice(0, 2)}-${cuil.slice(2, 10)}-${cuil.slice(10)}`;
-          } else if (cuil.length === 10) {
-            return `${cuil.slice(0, 2)}-${cuil.slice(2, 9)}-${cuil.slice(9)}`;
-          }
-          return cuil;
-        };
 
         const clientData = {
           nombre: formData.name,

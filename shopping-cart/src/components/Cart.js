@@ -222,6 +222,8 @@ const Cart = ({ products, fetchProducts }) => {
           } else {
             addToast('La zona ingresada está por fuera del área de reparto', 'error');
           }
+        } else if (status === 'ZERO_RESULTS') {
+          addToast('Dirección inválida. Por favor, verifica los datos ingresados.', 'error');
         } else {
           addToast('No se pudo verificar la dirección. Inténtalo de nuevo.', 'error');
         }
