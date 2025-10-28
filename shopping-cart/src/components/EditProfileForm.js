@@ -51,7 +51,7 @@ const EditProfileForm = ({ onClose }) => {
       setFormData({
         nombre: user.nombre || '',
         apellido: user.apellido || '',
-        cuil: user.cuil || '',
+        cuil: user.cuil ? user.cuil.replace(/-/g, '') : '',
         password: '',
         newPassword: '',
       });
@@ -69,15 +69,26 @@ const EditProfileForm = ({ onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!/^\d{10,11}$/.test(formData.cuil)) {
+    const cleanedCuil = formData.cuil.replace(/-/g, '');
+    if (!/^\d{10,11}$/.test(cleanedCuil)) {
       addToast('El CUIL debe tener 10 u 11 dígitos', 'error');
       return;
     }
 
+    const formatCuil = (cuil) => {
+      const cleanedCuil = cuil.replace(/-/g, '');
+      if (cleanedCuil.length === 11) {
+        return `${cleanedCuil.slice(0, 2)}-${cleanedCuil.slice(2, 10)}-${cleanedCuil.slice(10)}`;
+      } else if (cleanedCuil.length === 10) {
+        return `${cleanedCuil.slice(0, 2)}-${cleanedCuil.slice(2, 9)}-${cleanedCuil.slice(9)}`;
+      }
+      return cuil;
+    };
+
     const updatedData = {
       nombre: formData.nombre,
       apellido: formData.apellido,
-      cuil: formData.cuil,
+      cuil: formatCuil(formData.cuil),
       contraseña: formData.password,
     };
 
@@ -148,11 +159,12 @@ const EditProfileForm = ({ onClose }) => {
             <label htmlFor="cuil">CUIL</label>
             <div className="input-with-icon">
               <input
-                type="number"
+                type="text"
                 id="cuil"
                 name="cuil"
                 value={formData.cuil}
                 onChange={handleChange}
+                pattern="\d*"
                 required
               />
               <span className="icon"><CuitIcon /></span>

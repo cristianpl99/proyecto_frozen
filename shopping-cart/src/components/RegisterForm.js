@@ -98,11 +98,20 @@ const RegisterForm = ({ onClose }) => {
           return;
         }
 
+        const formatCuil = (cuil) => {
+          if (cuil.length === 11) {
+            return `${cuil.slice(0, 2)}-${cuil.slice(2, 10)}-${cuil.slice(10)}`;
+          } else if (cuil.length === 10) {
+            return `${cuil.slice(0, 2)}-${cuil.slice(2, 9)}-${cuil.slice(9)}`;
+          }
+          return cuil;
+        };
+
         const clientData = {
           nombre: formData.name,
           apellido: formData.lastName,
           email: formData.email,
-          cuil: formData.cuil,
+          cuil: formatCuil(formData.cuil),
           contraseña: formData.password,
           id_prioridad: 1,
         };
@@ -173,11 +182,12 @@ const RegisterForm = ({ onClose }) => {
             <label htmlFor="cuil">CUIL</label>
             <div className="input-with-icon">
               <input
-                type="number"
+                type="text"
                 id="cuil"
                 name="cuil"
                 value={formData.cuil}
                 onChange={handleChange}
+                pattern="\d*"
                 required
               />
               <span className="icon"><CuitIcon /></span>
