@@ -75,7 +75,7 @@ const Cart = ({ products, fetchProducts }) => {
     return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
-  const { cart, getTotalPrice, clearCart, updateCartItemQuantity, street, setStreet, streetNumber, setStreetNumber, city, setCity, step, setStep } = useContext(CartContext);
+  const { cart, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, step, setStep } = useContext(CartContext);
   const { addToast } = useContext(ToastContext);
   const { user } = useContext(AuthContext);
 
