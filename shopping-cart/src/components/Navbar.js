@@ -32,22 +32,11 @@ const Navbar = ({ onRegisterClick, onEditProfileClick, onComplaintClick, onSugge
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch('https://frozenback-test.up.railway.app/api/ventas/clientes/');
-      const data = await response.json();
-      const client = data.results.find(c => c.email === email);
-
-      if (client) {
-        login(client);
-        addToast(`Bienvenido, ${client.nombre}`, 'success');
-        setEmail('');
-        setPassword('');
-        setIsOpen(false);
-      } else {
-        addToast('Email o contraseña incorrectos', 'error');
-      }
-    } catch (error) {
-      addToast('Error al iniciar sesión', 'error');
+    const success = await login(email, password);
+    if (success) {
+      setEmail('');
+      setPassword('');
+      setIsOpen(false);
     }
   };
 

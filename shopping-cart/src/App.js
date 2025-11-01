@@ -88,8 +88,8 @@ function App() {
 
   return (
     <ToastProvider>
-      <CartProvider>
-        <AuthProvider>
+      <AuthProvider>
+        <CartProvider>
           <div className="App">
             <Navbar
               onRegisterClick={handleRegisterClick}
@@ -121,8 +121,8 @@ function App() {
               language-code="es"
             ></df-messenger>
           </div>
-        </AuthProvider>
-      </CartProvider>
+        </CartProvider>
+      </AuthProvider>
     </ToastProvider>
   );
 }

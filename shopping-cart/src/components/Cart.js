@@ -150,7 +150,6 @@ const Cart = ({ products, fetchProducts }) => {
 
   const handleSeguirComprando = () => {
     setStep(1);
-    fetchProducts();
   };
 
   const handlePlaceSelect = (place) => {
