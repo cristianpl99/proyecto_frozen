@@ -93,18 +93,14 @@ const Cart = ({ products, fetchProducts }) => {
     }
 
     try {
-      const response = await fetch('https://frozenback-test.up.railway.app/api/productos/productos/');
-      if (!response.ok) {
-        throw new Error('Failed to fetch latest product stock');
-      }
-      const latestProducts = await response.json();
+      await fetchProducts();
 
       let stockChanged = false;
       const updatedCart = [...cart];
 
       for (const item of updatedCart) {
-        const productInStock = latestProducts.find(p => p.id_producto === item.id_producto);
-        if (!productInStock || item.quantity > productInStock.stock.disponible) {
+        const productInStock = products.find(p => p.id_producto === item.id_producto);
+        if (!productInStock || item.quantity > productInStock.stock.cantidad_disponible) {
           stockChanged = true;
           updateCartItemQuantity(item.id_producto, 0);
         }
