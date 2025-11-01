@@ -97,14 +97,15 @@ const Cart = ({ products, fetchProducts }) => {
       if (!response.ok) {
         throw new Error('Failed to fetch latest product stock');
       }
-      const latestProducts = await response.json();
+      const latestProductsData = await response.json();
+      const latestProducts = latestProductsData.results;
 
       let stockChanged = false;
       const updatedCart = [...cart];
 
       for (const item of updatedCart) {
         const productInStock = latestProducts.find(p => p.id_producto === item.id_producto);
-        if (!productInStock || item.quantity > productInStock.stock.disponible) {
+        if (!productInStock || item.quantity > productInStock.stock.cantidad_disponible) {
           stockChanged = true;
           updateCartItemQuantity(item.id_producto, 0);
         }
