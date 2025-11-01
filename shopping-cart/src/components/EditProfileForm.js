@@ -33,7 +33,7 @@ const EyeClosedIcon = () => (
 );
 
 const EditProfileForm = ({ onClose }) => {
-  const { user } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
   const { addToast } = useContext(ToastContext);
 
   const [formData, setFormData] = useState({
@@ -70,9 +70,19 @@ const EditProfileForm = ({ onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (formData.password !== user.contraseña) {
+      addToast('La contraseña actual es incorrecta', 'error');
+      return;
+    }
+
     const cleanedCuil = formData.cuil.replace(/-/g, '');
     if (!/^\d{10,11}$/.test(cleanedCuil)) {
       addToast('El CUIL debe tener 10 u 11 dígitos', 'error');
+      return;
+    }
+
+    if (formData.newPassword && (formData.newPassword.length < 8 || formData.newPassword.length > 12)) {
+      addToast('La nueva contraseña debe tener entre 8 y 12 caracteres', 'error');
       return;
     }
 
@@ -97,6 +107,11 @@ const EditProfileForm = ({ onClose }) => {
       });
 
       if (response.ok) {
+        const updatedUser = await response.json();
+        if (formData.newPassword) {
+          updatedUser.contraseña = formData.newPassword;
+        }
+        setUser(updatedUser);
         addToast('Datos actualizados exitosamente', 'success');
         onClose();
       } else {

@@ -60,8 +60,15 @@ const ConfirmIcon = () => (
     </svg>
 );
 
+const Spinner = () => (
+    <svg className="spinner" viewBox="0 0 50 50">
+        <circle className="path" cx="25" cy="25" r="20" fill="none" strokeWidth="5"></circle>
+    </svg>
+);
+
 const Cart = ({ products, fetchProducts }) => {
   const [deliveryOption, setDeliveryOption] = useState('delivery');
+  const [isLoading, setIsLoading] = useState(false);
 
   const capitalizeWords = (str) => {
     if (!str) return '';
@@ -77,8 +84,10 @@ const Cart = ({ products, fetchProducts }) => {
   const total = subtotal + shippingCost;
 
   const handleHacerPedido = async () => {
+    setIsLoading(true);
     if (!user) {
       addToast('Debes iniciar sesión para realizar la compra', 'error');
+      setIsLoading(false);
       return;
     }
 
@@ -96,44 +105,37 @@ const Cart = ({ products, fetchProducts }) => {
       await fetchProducts();
 
       let stockChanged = false;
-      const updatedCart = [...cart];
-
-      for (const item of updatedCart) {
+      for (const item of cart) {
         const productInStock = products.find(p => p.id_producto === item.id_producto);
         if (!productInStock || item.quantity > productInStock.stock.cantidad_disponible) {
           stockChanged = true;
-          updateCartItemQuantity(item.id_producto, 0);
+          break;
         }
       }
 
       if (stockChanged) {
-        addToast('Hubo un cambio de stock de uno o más productos.', 'warning');
+        addToast('Hubo un cambio de stock de uno o más productos', 'error');
         setStep(1);
-        fetchProducts();
+        clearCart();
         return;
       }
-    } catch (error) {
-      addToast('Error al verificar el stock. Por favor, inténtalo de nuevo.', 'error');
-      return;
-    }
 
-    const orderData = {
-      id_cliente: user.id_cliente,
-      fecha_entrega: null,
-      id_prioridad: user.id_prioridad,
-      tipo_venta: "ONL",
-      calle: street,
-      altura: streetNumber,
-      localidad: city,
-      zona: 'N',
-      productos: cart.map(item => ({
-        id_producto: item.id_producto,
-        cantidad: item.quantity,
-      })),
-    };
+      const orderData = {
+        id_cliente: user.id_cliente,
+        fecha_entrega: null,
+        id_prioridad: user.id_prioridad,
+        tipo_venta: "ONL",
+        calle: street,
+        altura: streetNumber,
+        localidad: city,
+        zona: 'N',
+        productos: cart.map(item => ({
+          id_producto: item.id_producto,
+          cantidad: item.quantity,
+        })),
+      };
 
-    try {
-      const response = await fetch('https://frozenback-test.up.railway.app/api/ventas/ordenes-venta/crear/', {
+      const orderResponse = await fetch('https://frozenback-test.up.railway.app/api/ventas/ordenes-venta/crear/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -141,23 +143,23 @@ const Cart = ({ products, fetchProducts }) => {
         body: JSON.stringify(orderData),
       });
 
-      if (response.ok) {
+      if (orderResponse.ok) {
         addToast('Orden de venta creada con éxito', 'success');
         setStep(4);
         clearCart();
       } else {
-        addToast('Error al crear la orden de venta', 'error');
+        addToast('Error al crear la orden de venta. Por favor, inténtelo de nuevo.', 'error');
       }
     } catch (error) {
-      addToast('Error de red al crear la orden de venta', 'error');
+      addToast('Error de red al procesar el pedido. Por favor, inténtelo de nuevo.', 'error');
     } finally {
+      setIsLoading(false);
       fetchProducts();
     }
   };
 
   const handleSeguirComprando = () => {
     setStep(1);
-    fetchProducts();
   };
 
   const handlePlaceSelect = (place) => {
@@ -410,9 +412,17 @@ const Cart = ({ products, fetchProducts }) => {
               </div>
               <div className="pay-btn-container">
                 <button className="back-btn icon-btn" onClick={() => setStep(2)}><BackIcon /></button>
-                <button className="submit-button material-submit-button stepper-button" onClick={handleHacerPedido}>
-                  <span className="button-text">Confirmar Pedido</span>
-                  <span className="button-icon"><ConfirmIcon /></span>
+                <button
+                  className="submit-button material-submit-button stepper-button"
+                  onClick={handleHacerPedido}
+                  disabled={isLoading}
+                >
+                  {isLoading ? <Spinner /> : (
+                    <>
+                      <span className="button-text">Confirmar Pedido</span>
+                      <span className="button-icon"><ConfirmIcon /></span>
+                    </>
+                  )}
                 </button>
               </div>
             </div>
