@@ -93,47 +93,46 @@ const Cart = ({ products, fetchProducts }) => {
     }
 
     try {
-      await fetchProducts();
+      const stockResponse = await fetch('https://frozenback-test.up.railway.app/api/productos/productos/');
+      if (!stockResponse.ok) {
+        throw new Error('Error al obtener los datos de stock');
+      }
+      const stockData = await stockResponse.json();
+      const productsInStock = stockData.results;
 
       let stockChanged = false;
-      const updatedCart = [...cart];
-
-      for (const item of updatedCart) {
-        const productInStock = products.find(p => p.id_producto === item.id_producto);
+      for (const item of cart) {
+        const productInStock = productsInStock.find(p => p.id_producto === item.id_producto);
         if (!productInStock || item.quantity > productInStock.stock.cantidad_disponible) {
           stockChanged = true;
-          updateCartItemQuantity(item.id_producto, 0);
+          break;
         }
       }
 
       if (stockChanged) {
-        addToast('Hubo un cambio de stock de uno o más productos.', 'warning');
+        addToast('Hubo un cambio de stock de uno o más productos', 'error');
         setStep(1);
+        clearCart();
         fetchProducts();
         return;
       }
-    } catch (error) {
-      addToast('Error al verificar el stock. Por favor, inténtalo de nuevo.', 'error');
-      return;
-    }
 
-    const orderData = {
-      id_cliente: user.id_cliente,
-      fecha_entrega: null,
-      id_prioridad: user.id_prioridad,
-      tipo_venta: "ONL",
-      calle: street,
-      altura: streetNumber,
-      localidad: city,
-      zona: 'N',
-      productos: cart.map(item => ({
-        id_producto: item.id_producto,
-        cantidad: item.quantity,
-      })),
-    };
+      const orderData = {
+        id_cliente: user.id_cliente,
+        fecha_entrega: null,
+        id_prioridad: user.id_prioridad,
+        tipo_venta: "ONL",
+        calle: street,
+        altura: streetNumber,
+        localidad: city,
+        zona: 'N',
+        productos: cart.map(item => ({
+          id_producto: item.id_producto,
+          cantidad: item.quantity,
+        })),
+      };
 
-    try {
-      const response = await fetch('https://frozenback-test.up.railway.app/api/ventas/ordenes-venta/crear/', {
+      const orderResponse = await fetch('https://frozenback-test.up.railway.app/api/ventas/ordenes-venta/crear/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -141,15 +140,15 @@ const Cart = ({ products, fetchProducts }) => {
         body: JSON.stringify(orderData),
       });
 
-      if (response.ok) {
+      if (orderResponse.ok) {
         addToast('Orden de venta creada con éxito', 'success');
         setStep(4);
         clearCart();
       } else {
-        addToast('Error al crear la orden de venta', 'error');
+        addToast('Error al crear la orden de venta. Por favor, inténtelo de nuevo.', 'error');
       }
     } catch (error) {
-      addToast('Error de red al crear la orden de venta', 'error');
+      addToast('Error de red al procesar el pedido. Por favor, inténtelo de nuevo.', 'error');
     } finally {
       fetchProducts();
     }
