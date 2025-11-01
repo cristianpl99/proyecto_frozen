@@ -93,16 +93,11 @@ const Cart = ({ products, fetchProducts }) => {
     }
 
     try {
-      const stockResponse = await fetch('https://frozenback-test.up.railway.app/api/productos/productos/');
-      if (!stockResponse.ok) {
-        throw new Error('Error al obtener los datos de stock');
-      }
-      const stockData = await stockResponse.json();
-      const productsInStock = stockData.results;
+      await fetchProducts();
 
       let stockChanged = false;
       for (const item of cart) {
-        const productInStock = productsInStock.find(p => p.id_producto === item.id_producto);
+        const productInStock = products.find(p => p.id_producto === item.id_producto);
         if (!productInStock || item.quantity > productInStock.stock.cantidad_disponible) {
           stockChanged = true;
           break;
@@ -113,7 +108,6 @@ const Cart = ({ products, fetchProducts }) => {
         addToast('Hubo un cambio de stock de uno o más productos', 'error');
         setStep(1);
         clearCart();
-        fetchProducts();
         return;
       }
 
