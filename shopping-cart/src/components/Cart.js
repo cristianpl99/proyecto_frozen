@@ -60,8 +60,15 @@ const ConfirmIcon = () => (
     </svg>
 );
 
+const Spinner = () => (
+    <svg className="spinner" viewBox="0 0 50 50">
+        <circle className="path" cx="25" cy="25" r="20" fill="none" strokeWidth="5"></circle>
+    </svg>
+);
+
 const Cart = ({ products, fetchProducts }) => {
   const [deliveryOption, setDeliveryOption] = useState('delivery');
+  const [isLoading, setIsLoading] = useState(false);
 
   const capitalizeWords = (str) => {
     if (!str) return '';
@@ -77,8 +84,10 @@ const Cart = ({ products, fetchProducts }) => {
   const total = subtotal + shippingCost;
 
   const handleHacerPedido = async () => {
+    setIsLoading(true);
     if (!user) {
       addToast('Debes iniciar sesión para realizar la compra', 'error');
+      setIsLoading(false);
       return;
     }
 
@@ -144,6 +153,7 @@ const Cart = ({ products, fetchProducts }) => {
     } catch (error) {
       addToast('Error de red al procesar el pedido. Por favor, inténtelo de nuevo.', 'error');
     } finally {
+      setIsLoading(false);
       fetchProducts();
     }
   };
@@ -402,9 +412,17 @@ const Cart = ({ products, fetchProducts }) => {
               </div>
               <div className="pay-btn-container">
                 <button className="back-btn icon-btn" onClick={() => setStep(2)}><BackIcon /></button>
-                <button className="submit-button material-submit-button stepper-button" onClick={handleHacerPedido}>
-                  <span className="button-text">Confirmar Pedido</span>
-                  <span className="button-icon"><ConfirmIcon /></span>
+                <button
+                  className="submit-button material-submit-button stepper-button"
+                  onClick={handleHacerPedido}
+                  disabled={isLoading}
+                >
+                  {isLoading ? <Spinner /> : (
+                    <>
+                      <span className="button-text">Confirmar Pedido</span>
+                      <span className="button-icon"><ConfirmIcon /></span>
+                    </>
+                  )}
                 </button>
               </div>
             </div>

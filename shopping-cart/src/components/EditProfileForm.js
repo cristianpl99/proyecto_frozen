@@ -108,6 +108,9 @@ const EditProfileForm = ({ onClose }) => {
 
       if (response.ok) {
         const updatedUser = await response.json();
+        if (formData.newPassword) {
+          updatedUser.contraseña = formData.newPassword;
+        }
         setUser(updatedUser);
         addToast('Datos actualizados exitosamente', 'success');
         onClose();
