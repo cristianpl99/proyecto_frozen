@@ -2,6 +2,30 @@
   padding: 1rem 2rem;
   display: flex;
   justify-content: center;
+  position: relative;
+}
+
+.suggestions-list {
+  position: absolute;
+  top: 100%;
+  left: 25%;
+  width: 50%;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-top: none;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  z-index: 10;
+}
+
+.suggestions-list li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestions-list li:hover {
+  background-color: #f0f0f0;
 }
 
 .search-input {
