@@ -305,3 +305,24 @@
     width: 100%;
   }
 }
+
+.navbar-title-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#tsparticles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.navbar-title {
+  position: relative;
+  z-index: 2;
+}

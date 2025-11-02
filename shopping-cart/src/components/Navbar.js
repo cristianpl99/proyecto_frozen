@@ -1,4 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useCallback } from 'react';
+import Particles, { initParticlesEngine } from "@tsparticles/react";
+import { loadSlim } from "tsparticles-slim";
 import './Navbar.css';
 import { AuthContext } from '../context/AuthContext';
 import { ToastContext } from '../context/ToastContext';
@@ -25,6 +27,68 @@ const Navbar = ({ onRegisterClick, onEditProfileClick, onComplaintClick, onSugge
   const [password, setPassword] = useState('');
   const { user, login, logout } = useContext(AuthContext);
   const { addToast } = useContext(ToastContext);
+  const [init, setInit] = useState(false);
+
+  useEffect(() => {
+    initParticlesEngine(async (engine) => {
+      await loadSlim(engine);
+    }).then(() => {
+      setInit(true);
+    });
+  }, []);
+
+  const particlesLoaded = (container) => {
+    console.log(container);
+  };
+
+  const options = {
+    background: {
+        color: {
+            value: 'transparent',
+        },
+    },
+    fpsLimit: 60,
+    interactivity: {
+        events: {
+            onClick: {
+                enable: false,
+            },
+            onHover: {
+                enable: false,
+            },
+        },
+    },
+    particles: {
+        color: {
+            value: '#ffffff',
+        },
+        move: {
+            direction: 'bottom',
+            enable: true,
+            outModes: 'out',
+            random: false,
+            speed: 1,
+            straight: false,
+        },
+        number: {
+            density: {
+                enable: true,
+                area: 800,
+            },
+            value: 20,
+        },
+        opacity: {
+            value: 0.5,
+        },
+        shape: {
+            type: 'circle',
+        },
+        size: {
+            value: { min: 1, max: 3 },
+        },
+    },
+    detectRetina: true,
+  };
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -51,8 +115,11 @@ const Navbar = ({ onRegisterClick, onEditProfileClick, onComplaintClick, onSugge
         <div className="navbar-logo">
           <img src="/favicon_ice.png" alt="Frozen Pyme Logo" style={{ height: '73.6px' }} />
         </div>
-        <div className="navbar-title">
-          Frozen PyME
+        <div className="navbar-title-container">
+          {init && <Particles id="tsparticles" particlesLoaded={particlesLoaded} options={options} />}
+          <div className="navbar-title">
+            Frozen PyME
+          </div>
         </div>
         <div className="menu-icon" onClick={toggleMenu}>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
