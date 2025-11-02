@@ -1,4 +1,6 @@
 .product-card {
+  width: 300px;
+  height: 300px;
   border-radius: 10px;
   box-shadow: 0 4px 15px var(--card-shadow);
   margin: 1rem;
@@ -11,6 +13,8 @@
   overflow: hidden;
   position: relative;
   color: white;
+  background-size: cover;
+  background-position: center;
 }
 
 .product-card::before {
@@ -75,9 +79,19 @@
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 .product-card button.added {
   background-color: var(--pay-button-green);
   cursor: not-allowed;
+  animation: bounce 0.5s ease;
 }
 
 .product-card button.out-of-stock {

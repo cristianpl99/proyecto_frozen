@@ -1,4 +1,5 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import Confetti from 'react-confetti';
 import { CartContext } from '../context/CartContext';
 import { ToastContext } from '../context/ToastContext';
 import { AuthContext } from '../context/AuthContext';
@@ -69,6 +70,7 @@ const Spinner = () => (
 const Cart = ({ products, fetchProducts }) => {
   const [deliveryOption, setDeliveryOption] = useState('delivery');
   const [isLoading, setIsLoading] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const capitalizeWords = (str) => {
     if (!str) return '';
@@ -78,6 +80,16 @@ const Cart = ({ products, fetchProducts }) => {
   const { cart, getTotalPrice, clearCart, street, setStreet, streetNumber, setStreetNumber, city, setCity, step, setStep } = useContext(CartContext);
   const { addToast } = useContext(ToastContext);
   const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (step === 4) {
+      setShowConfetti(true);
+      const timer = setTimeout(() => {
+        setShowConfetti(false);
+      }, 10000); // Stop confetti after 10 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [step]);
 
   const subtotal = parseFloat(getTotalPrice());
   const shippingCost = subtotal > 5000 ? 0 : 1000;
@@ -430,6 +442,7 @@ const Cart = ({ products, fetchProducts }) => {
 
           {step === 4 && (
             <div className="order-summary-content">
+              {showConfetti && <Confetti recycle={false} />}
               <h2>¡Gracias por tu compra, {user?.nombre}!</h2>
               <div className="summary-info">
                 <p>📧 El resumen fue enviado a: <strong>{user?.email}</strong></p>

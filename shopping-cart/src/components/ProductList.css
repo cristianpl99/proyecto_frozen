@@ -3,6 +3,19 @@
   display: flex;
   justify-content: center;
   position: relative;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 26%;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+}
+
+.search-input {
+  padding-left: 35px;
 }
 
 .suggestions-list {

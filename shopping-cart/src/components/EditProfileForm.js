@@ -90,12 +90,11 @@ const EditProfileForm = ({ onClose }) => {
       nombre: formData.nombre,
       apellido: formData.apellido,
       cuil: formatCuil(formData.cuil),
+      contraseña: formData.password,
     };
 
     if (formData.newPassword) {
-      updatedData.contraseña = formData.newPassword;
-    } else {
-      updatedData.contraseña = formData.password;
+      updatedData.nueva_contraseña = formData.newPassword;
     }
 
     try {
@@ -109,9 +108,6 @@ const EditProfileForm = ({ onClose }) => {
 
       if (response.ok) {
         const updatedUser = await response.json();
-        if (formData.newPassword) {
-          updatedUser.contraseña = formData.newPassword;
-        }
         setUser(updatedUser);
         addToast('Datos actualizados exitosamente', 'success');
         onClose();
