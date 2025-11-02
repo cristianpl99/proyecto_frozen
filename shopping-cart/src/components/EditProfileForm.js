@@ -90,11 +90,12 @@ const EditProfileForm = ({ onClose }) => {
       nombre: formData.nombre,
       apellido: formData.apellido,
       cuil: formatCuil(formData.cuil),
-      contraseña: formData.password,
     };
 
     if (formData.newPassword) {
-      updatedData.nueva_contraseña = formData.newPassword;
+      updatedData.contraseña = formData.newPassword;
+    } else {
+      updatedData.contraseña = formData.password;
     }
 
     try {
