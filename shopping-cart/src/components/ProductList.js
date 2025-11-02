@@ -66,6 +66,12 @@ const ProductList = ({ products, isLoading }) => {
   return (
     <div>
       <div className="search-container">
+        <span className="search-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </span>
         <input
           type="text"
           placeholder="Buscar productos..."
@@ -87,7 +93,7 @@ const ProductList = ({ products, isLoading }) => {
         {isLoading ? (
           Array.from({ length: 8 }).map((_, index) => <SkeletonProductCard key={index} />)
         ) : (
-          filteredProducts.map(product => (
+          productsWithStock.map(product => (
             <Product
               key={product.id_producto}
               product={product}
