@@ -108,6 +108,7 @@ const ProductList = ({ products, isLoading }) => {
         onClose={closeModal}
         title={selectedProduct ? selectedProduct.nombre : ''}
         description={selectedProduct ? selectedProduct.descripcion : ''}
+        image={selectedProduct ? selectedProduct.imagen_base64 : ''}
       />
     </div>
   );
