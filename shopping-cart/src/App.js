@@ -21,38 +21,44 @@ function App() {
   const [showComplaintForm, setShowComplaintForm] = useState(false);
   const [showSuggestionForm, setShowSuggestionForm] = useState(false);
   const [products, setProducts] = useState([]);
+  const [combos, setCombos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchProductsAndStock = useCallback(async () => {
+  const fetchData = useCallback(async () => {
     setIsLoading(true);
     try {
+      // Fetch products
       const productResponse = await fetch('https://frozenback-test.up.railway.app/api/productos/productos/');
       const productData = await productResponse.json();
       const products = productData.results;
 
+      // Fetch stock for each product
       const stockPromises = products.map(product =>
         fetch(`https://frozenback-test.up.railway.app/api/stock/cantidad-disponible/${product.id_producto}/`)
           .then(res => res.json())
       );
-
       const stockData = await Promise.all(stockPromises);
-
       const productsWithStock = products.map((product, index) => ({
         ...product,
         stock: stockData[index]
       }));
-
       setProducts(productsWithStock);
+
+      // Fetch combos
+      const combosResponse = await fetch('https://frozenback-test.up.railway.app/api/productos/combos/');
+      const combosData = await combosResponse.json();
+      setCombos(combosData.results);
+
     } catch (error) {
-      console.error("Error fetching product or stock data:", error);
+      console.error("Error fetching data:", error);
     } finally {
       setIsLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchProductsAndStock();
-  }, [fetchProductsAndStock]);
+    fetchData();
+  }, [fetchData]);
 
   const handleRegisterClick = () => {
     setShowRegisterForm(true);
@@ -103,12 +109,12 @@ function App() {
             {showSuggestionForm && <SuggestionForm onClose={handleCloseSuggestionForm} />}
             <main className="main-content">
               <div className="product-list">
-                <ProductList products={products} isLoading={isLoading} />
+                <ProductList products={products} combos={combos} isLoading={isLoading} />
               </div>
               <aside className="cart">
                 {error && <div>Error al cargar el mapa.</div>}
                 {!isLoaded && !error && <div>Cargando mapa...</div>}
-                {isLoaded && !error && <Cart products={products} fetchProducts={fetchProductsAndStock} />}
+                {isLoaded && !error && <Cart products={products} fetchProducts={fetchData} />}
               </aside>
             </main>
             <ToastContainer />

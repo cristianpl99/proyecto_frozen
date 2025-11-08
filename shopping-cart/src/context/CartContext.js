@@ -14,17 +14,37 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = (product) => {
     setStep(1);
-    setCart((prevCart) => {
-      const existingProduct = prevCart.find(item => item.id_producto === product.id_producto);
-      if (existingProduct) {
-        return prevCart.map(item =>
-          item.id_producto === product.id_producto
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
-      return [...prevCart, { ...product, quantity: 1 }];
-    });
+
+    if (product.isCombo) {
+      setCart(prevCart => {
+        let updatedCart = [...prevCart];
+        product.products.forEach(comboProduct => {
+          const existingProduct = updatedCart.find(item => item.id_producto === comboProduct.id_producto);
+          if (existingProduct) {
+            updatedCart = updatedCart.map(item =>
+              item.id_producto === comboProduct.id_producto
+                ? { ...item, quantity: item.quantity + comboProduct.quantity }
+                : item
+            );
+          } else {
+            updatedCart.push({ ...comboProduct, quantity: comboProduct.quantity });
+          }
+        });
+        return updatedCart;
+      });
+    } else {
+      setCart((prevCart) => {
+        const existingProduct = prevCart.find(item => item.id_producto === product.id_producto);
+        if (existingProduct) {
+          return prevCart.map(item =>
+            item.id_producto === product.id_producto
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          );
+        }
+        return [...prevCart, { ...product, quantity: 1 }];
+      });
+    }
     addToast(`${product.nombre} agregado con éxito`, 'success');
   };
 

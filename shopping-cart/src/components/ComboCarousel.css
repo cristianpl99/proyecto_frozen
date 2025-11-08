@@ -1,0 +1,40 @@
+.combo-carousel-container {
+    margin-bottom: 2rem;
+  }
+
+  .combo-card {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 1rem;
+    margin: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+
+  .combo-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .combo-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  .add-to-cart-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .slick-prev:before,
+  .slick-next:before {
+    color: black;
+  }
