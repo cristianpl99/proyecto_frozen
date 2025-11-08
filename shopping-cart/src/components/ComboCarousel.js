@@ -1,46 +1,28 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import Slider from 'react-slick';
-import { CartContext } from '../context/CartContext';
-import Modal from './Modal';
+import axios from 'axios';
 import './ComboCarousel.css';
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
-const ComboCarousel = ({ combos, products }) => {
-  const { addToCart } = useContext(CartContext);
-  const [selectedCombo, setSelectedCombo] = useState(null);
+const ComboCarousel = () => {
+  const [combos, setCombos] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleComboClick = (combo) => {
-    setSelectedCombo(combo);
-  };
-
-  const closeModal = () => {
-    setSelectedCombo(null);
-  };
-
-  const handleAddToCart = (e, combo) => {
-    e.stopPropagation();
-    let comboPrice = 0;
-    const comboProducts = combo.products.map(comboProduct => {
-      const productInfo = products.find(p => p.id_producto === comboProduct.id_producto);
-      if (productInfo) {
-        comboPrice += productInfo.precio * comboProduct.cantidad;
-        return { ...productInfo, quantity: comboProduct.cantidad };
+  useEffect(() => {
+    const fetchCombos = async () => {
+      try {
+        const response = await axios.get('https://frozenback-test.up.railway.app/api/productos/combos');
+        setCombos(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching combos:', error);
+        setIsLoading(false);
       }
-      return null;
-    }).filter(p => p !== null);
-
-    const comboForCart = {
-      id_producto: `combo_${combo.id_combo}`,
-      nombre: combo.nombre,
-      precio: comboPrice,
-      quantity: 1,
-      isCombo: true,
-      products: comboProducts
     };
 
-    addToCart(comboForCart);
-  };
+    fetchCombos();
+  }, []);
 
   const settings = {
     dots: true,
@@ -68,25 +50,26 @@ const ComboCarousel = ({ combos, products }) => {
     ]
   };
 
+  if (isLoading) {
+    return <div>Loading combos...</div>;
+  }
+
   return (
     <div className="combo-carousel-container">
-      <h2>Combos</h2>
+      <h2 className="combo-carousel-title">Nuestros Combos</h2>
       <Slider {...settings}>
         {combos.map(combo => (
-          <div key={combo.id_combo} className="combo-card" onClick={() => handleComboClick(combo)}>
-            <h3>{combo.nombre}</h3>
-            <button className="add-to-cart-btn" onClick={(e) => handleAddToCart(e, combo)}>
-              Agregar
-            </button>
+          <div key={combo.id_combo} className="combo-card-wrapper">
+            <div className="product-card combo-card">
+              <div className="product-card-content">
+                <h3>{combo.nombre}</h3>
+                <p className="combo-description">{combo.descripcion}</p>
+                <button disabled>🛒 Agregar</button>
+              </div>
+            </div>
           </div>
         ))}
       </Slider>
-      <Modal
-        show={selectedCombo !== null}
-        onClose={closeModal}
-        title={selectedCombo ? selectedCombo.nombre : ''}
-        description={selectedCombo ? selectedCombo.descripcion : ''}
-      />
     </div>
   );
 };

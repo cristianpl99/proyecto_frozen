@@ -7,7 +7,7 @@ import SkeletonProductCard from './SkeletonProductCard';
 import ComboCarousel from './ComboCarousel';
 import './ProductList.css';
 
-const ProductList = ({ products, combos, isLoading }) => {
+const ProductList = ({ products, isLoading }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
@@ -66,9 +66,6 @@ const ProductList = ({ products, combos, isLoading }) => {
 
   return (
     <div>
-      {!isLoading && combos && combos.length > 0 && (
-        <ComboCarousel combos={combos} products={products} />
-      )}
       <div className="search-container">
         <span className="search-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -93,6 +90,7 @@ const ProductList = ({ products, combos, isLoading }) => {
           </ul>
         )}
       </div>
+      <ComboCarousel />
       <div className="product-list-container">
         {isLoading ? (
           Array.from({ length: 8 }).map((_, index) => <SkeletonProductCard key={index} />)
