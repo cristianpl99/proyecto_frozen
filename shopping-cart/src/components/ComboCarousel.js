@@ -13,7 +13,13 @@ const ComboCarousel = () => {
     const fetchCombos = async () => {
       try {
         const response = await axios.get('https://frozenback-test.up.railway.app/api/productos/combos');
-        setCombos(response.data);
+        const comboData = response.data.results;
+        if (Array.isArray(comboData)) {
+          setCombos(comboData);
+        } else {
+          console.error("Fetched combo data is not an array:", comboData);
+          setCombos([]);
+        }
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching combos:', error);
