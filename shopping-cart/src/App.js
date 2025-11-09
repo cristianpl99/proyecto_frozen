@@ -6,6 +6,7 @@ import EditProfileForm from './components/EditProfileForm';
 import ComplaintForm from './components/ComplaintForm';
 import SuggestionForm from './components/SuggestionForm';
 import ProductList from './components/ProductList';
+import ComboSection from './components/ComboSection';
 import Cart from './components/Cart';
 import { CartProvider } from './context/CartContext';
 import { ToastProvider } from './context/ToastContext';
@@ -103,6 +104,7 @@ function App() {
             {showSuggestionForm && <SuggestionForm onClose={handleCloseSuggestionForm} />}
             <main className="main-content">
               <div className="product-list">
+                <ComboSection />
                 <ProductList products={products} isLoading={isLoading} />
               </div>
               <aside className="cart">
