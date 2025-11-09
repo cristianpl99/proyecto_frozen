@@ -13,6 +13,7 @@ import { AuthProvider } from './context/AuthContext';
 import ToastContainer from './components/ToastContainer';
 import Footer from './components/Footer';
 import useGoogleMapsScript from './hooks/useGoogleMapsScript';
+import ComboCarousel from './components/ComboCarousel'; // 👈 agregado
 
 function App() {
   const { isLoaded, error } = useGoogleMapsScript();
@@ -54,37 +55,14 @@ function App() {
     fetchProductsAndStock();
   }, [fetchProductsAndStock]);
 
-  const handleRegisterClick = () => {
-    setShowRegisterForm(true);
-  };
-
-  const handleCloseRegisterForm = () => {
-    setShowRegisterForm(false);
-  };
-
-  const handleEditProfileClick = () => {
-    setShowEditProfile(true);
-  };
-
-  const handleCloseEditProfileForm = () => {
-    setShowEditProfile(false);
-  };
-
-  const handleComplaintClick = () => {
-    setShowComplaintForm(true);
-  };
-
-  const handleCloseComplaintForm = () => {
-    setShowComplaintForm(false);
-  };
-
-  const handleSuggestionClick = () => {
-    setShowSuggestionForm(true);
-  };
-
-  const handleCloseSuggestionForm = () => {
-    setShowSuggestionForm(false);
-  };
+  const handleRegisterClick = () => setShowRegisterForm(true);
+  const handleCloseRegisterForm = () => setShowRegisterForm(false);
+  const handleEditProfileClick = () => setShowEditProfile(true);
+  const handleCloseEditProfileForm = () => setShowEditProfile(false);
+  const handleComplaintClick = () => setShowComplaintForm(true);
+  const handleCloseComplaintForm = () => setShowComplaintForm(false);
+  const handleSuggestionClick = () => setShowSuggestionForm(true);
+  const handleCloseSuggestionForm = () => setShowSuggestionForm(false);
 
   return (
     <ToastProvider>
@@ -97,22 +75,31 @@ function App() {
               onComplaintClick={handleComplaintClick}
               onSuggestionClick={handleSuggestionClick}
             />
+
             {showRegisterForm && <RegisterForm onClose={handleCloseRegisterForm} />}
             {showEditProfile && <EditProfileForm onClose={handleCloseEditProfileForm} />}
             {showComplaintForm && <ComplaintForm onClose={handleCloseComplaintForm} />}
             {showSuggestionForm && <SuggestionForm onClose={handleCloseSuggestionForm} />}
+
             <main className="main-content">
               <div className="product-list">
+                {/* 👇 Carrusel de combos antes del buscador */}
+                <ComboCarousel />
+
+                {/* Lista de productos con buscador */}
                 <ProductList products={products} isLoading={isLoading} />
               </div>
+
               <aside className="cart">
                 {error && <div>Error al cargar el mapa.</div>}
                 {!isLoaded && !error && <div>Cargando mapa...</div>}
                 {isLoaded && !error && <Cart products={products} fetchProducts={fetchProductsAndStock} />}
               </aside>
             </main>
+
             <ToastContainer />
             <Footer />
+
             <df-messenger
               class="custom-dialogflow-icon"
               intent="WELCOME"
@@ -128,3 +115,4 @@ function App() {
 }
 
 export default App;
+

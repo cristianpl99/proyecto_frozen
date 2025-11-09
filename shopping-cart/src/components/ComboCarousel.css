@@ -1,7 +1,11 @@
 .combo-carousel-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
   margin-bottom: 2rem;
 }
 
+/* Título */
 .combo-carousel-title {
   text-align: center;
   font-size: 2rem;
@@ -10,24 +14,41 @@
   font-weight: 600;
 }
 
-.slick-slide > div {
-  padding: 0 10px;
+/* --- CONFIGURACIÓN SLICK --- */
+
+/* asegúrate de no forzar flex ni overflow aquí */
+.slick-list {
+  overflow: hidden !important;
 }
+
+.slick-track {
+  display: block !important;
+}
+
+/* centra cada slide, sin romper el scroll */
+.slick-slide > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/* --- TARJETAS --- */
 
 .combo-card-wrapper {
   padding: 1rem 0;
 }
 
 .combo-card {
-  width: 200px;
-  height: 200px;
+  width: 100%;
+  max-width: 220px;
+  aspect-ratio: 1 / 1;
   border-radius: 10px;
   box-shadow: 0 4px 15px var(--card-shadow);
-  margin: 0 auto;
   padding: 1.5rem;
   text-align: center;
   transition: transform 0.3s, box-shadow 0.3s;
-  display: flex !important;
+  display: flex;
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
@@ -39,10 +60,7 @@
 .combo-card::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background-color: rgba(0, 0, 0, 0.4);
   z-index: 1;
 }
@@ -97,3 +115,18 @@
   cursor: not-allowed;
   opacity: 0.7;
 }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1024px) {
+  .combo-card {
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 600px) {
+  .combo-card {
+    max-width: 90%;
+  }
+}
+
+

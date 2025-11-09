@@ -4,7 +4,6 @@ import { CartContext } from '../context/CartContext';
 import Product from './Product';
 import Modal from './Modal';
 import SkeletonProductCard from './SkeletonProductCard';
-import ComboCarousel from './ComboCarousel';
 import './ProductList.css';
 
 const ProductList = ({ products, isLoading }) => {
@@ -66,6 +65,7 @@ const ProductList = ({ products, isLoading }) => {
 
   return (
     <div>
+      {/* 🔍 Buscador */}
       <div className="search-container">
         <span className="search-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -90,7 +90,8 @@ const ProductList = ({ products, isLoading }) => {
           </ul>
         )}
       </div>
-      <ComboCarousel />
+
+      {/* 🧊 Lista de productos */}
       <div className="product-list-container">
         {isLoading ? (
           Array.from({ length: 8 }).map((_, index) => <SkeletonProductCard key={index} />)
@@ -105,6 +106,8 @@ const ProductList = ({ products, isLoading }) => {
           ))
         )}
       </div>
+
+      {/* Modal de detalle de producto */}
       <Modal
         show={selectedProduct !== null}
         onClose={closeModal}
@@ -116,3 +119,4 @@ const ProductList = ({ products, isLoading }) => {
 };
 
 export default ProductList;
+
